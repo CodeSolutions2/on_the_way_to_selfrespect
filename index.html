@@ -57,7 +57,8 @@ ImageArray.forEach(function(url, index) {
 	    const image = new Image();
 
 	    // Add 'crossorigin' attribute to bypass insecure error
-	    image.crossOrigin = "anonymous";
+	    // image.crossOrigin = "anonymous";
+	image.crossOrigin = "use-credentials"; // https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/crossorigin
 
 	    // PRINT
 	    // outp.innerHTML += 'image.complete: ' + image.complete + "<br/>";
