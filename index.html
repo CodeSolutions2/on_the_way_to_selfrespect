@@ -47,16 +47,23 @@ ImageArray.forEach(function(url, index) {
 	    const image = new Image();
 
 	    // Add 'crossorigin' attribute to bypass insecure error
-	    image.crossOrigin = "anonymous";
+	    //image.crossOrigin = "anonymous";
 
 	    // PRINT
 	    // outp.innerHTML += 'image.complete: ' + image.complete + "<br/>";
 
 	    image.onload = async () => {
 	
-		        // Draw image on canvas
-		        // canvasElement.style.display = "block";
-		        ctx.drawImage(image, 0,0);
+		    // Draw image on canvas
+		    // canvasElement.style.display = "block";
+		    ctx.drawImage(image, 0,0);
+
+		    // Write image name on canvas
+		    ctx.font = "bold 14px serif";
+		    let out = url.split("/")
+		    let image_name = out[out.length-1];
+		    ctx.fillStyle = "#ffffff";  // Font color = white, 
+		    ctx.fillText(image_name, 10, 15);
         
 	    };  // end of image.onload
 
@@ -105,8 +112,11 @@ function create_dynamic_canvasElement(index) {
 		canvasElement.style.left = tot+'px';
 	}
 
-//  ctx.fillStyle = '#999c98';
- // ctx.fillRect(0, 0, canvasElement.width, canvasElement.height);
+
+	// Make a square on half of the canvas
+	ctx.fillStyle = '#999c98';  // Background square over image = blue
+	ctx.fillRect(0, 0, canvasElement.width, 50);  // fillRect(x, y, width, height);
+	// ctx.fillRect(0, 0, canvasElement.width, canvasElement.height);
   
 	// Add the canvas to the document body or any other desired element
 	document.body.appendChild(canvasElement);
