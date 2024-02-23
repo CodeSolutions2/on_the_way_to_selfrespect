@@ -10,7 +10,7 @@
 <!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/div -->
 <!-- https://CodeSolutions2.github.io/on_the_way_to_selfrespect/index.html -->
 
-<button id="run_it_button" onclick="run_it()" style="display:none">run_it</button>
+<button id="run_it_button" onclick="run_it()" style="display:block">run_it</button>
 
 	
 
@@ -24,7 +24,7 @@
   <script>
 
   // -------------------------------------------------
-
+// <img src="http://<bucket>.storage.googleapis.com/<object>">
 // const ImageArray = ["https://storage.googleapis.com/on-the-way2selfrespect/red.png", 
 //                      "https://storage.googleapis.com/on-the-way2selfrespect/green.png",
  //                     "https://storage.googleapis.com/on-the-way2selfrespect/blue.png", 
@@ -33,8 +33,10 @@
 //                      "https://storage.googleapis.com/on-the-way2selfrespect/magenta.png",
 //                      "https://storage.googleapis.com/on-the-way2selfrespect/orange.png"];
 
-  const ImageArray = ["https://github.com/CodeSolutions2/test_4_webapps/blob/main/apple3D.png", 
-                     "https://github.com/CodeSolutions2/test_4_webapps/blob/main/apple3D_1.png"];
+//  const ImageArray = ["https://github.com/CodeSolutions2/test_4_webapps/blob/main/apple3D.png", 
+//                     "https://github.com/CodeSolutions2/test_4_webapps/blob/main/apple3D_1.png"];
+
+	  const ImageArray = [https://storage.googleapis.com/on-the-way2selfrespect/red.png"];
 
 
 
@@ -60,6 +62,7 @@ ImageArray.forEach(function(url, index) {
 	    // PRINT
 	    // outp.innerHTML += 'image.complete: ' + image.complete + "<br/>";
 
+
 	    image.onload = async () => {
 	
 		    // Draw image on canvas
@@ -74,6 +77,8 @@ ImageArray.forEach(function(url, index) {
 		    ctx.fillText(image_name, 10, 15);
         
 	    };  // end of image.onload
+
+	    image.src = url;
 
   	});  // end of image.forEach
   
