@@ -3,20 +3,27 @@
 <head></head>
 <body>
 
+<h1 style='text-align: center; margin-bottom: -35px;'>On the way to self-respect webapp</h1>
+  <br><br>
 
+	
 <!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/div -->
 <!-- https://CodeSolutions2.github.io/on_the_way_to_selfrespect/index.html -->
 
-	
-<div id="main"></div>
+<button id="run_it_button" onclick="run_it()" style="display:none">run_it</button>
 
+	
+
+
+	
+<style>
+      canvas {border: 1px solid black;}
+    </style>
+	
   
   <script>
 
   // -------------------------------------------------
-  const main_display = document.getElementById('main');
-
-  const canvasElement = document.getElementById('canvas');
 
 // const ImageArray = ["https://storage.googleapis.com/on-the-way2selfrespect/red.png", 
 //                      "https://storage.googleapis.com/on-the-way2selfrespect/green.png",
@@ -33,13 +40,10 @@
 
 var squarelocation = [0, 1, 2, 3, 4, 5, 6];
 
-// -------------------------------------------------
-	  
-main();
 	  
 // -------------------------------------------------
     
-function main() {
+function run_it() {
   
 ImageArray.forEach(function(url, index) {
         
@@ -51,7 +55,7 @@ ImageArray.forEach(function(url, index) {
 	    const image = new Image();
 
 	    // Add 'crossorigin' attribute to bypass insecure error
-	    //image.crossOrigin = "anonymous";
+	    image.crossOrigin = "anonymous";
 
 	    // PRINT
 	    // outp.innerHTML += 'image.complete: ' + image.complete + "<br/>";
@@ -132,7 +136,7 @@ function create_dynamic_canvasElement(index) {
 
 
 
-	  // -------------------------------------------------
+// -------------------------------------------------
 
 	
 </script>
