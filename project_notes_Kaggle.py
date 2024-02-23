@@ -244,15 +244,155 @@ create_a_background(rgb_value, save_img_name, phrase, dict_font)
 
 # -------------------------------------------------
 
+# Determine what project to put the files
+gcloud projects list
+
+PROJECT_ID="webapps-codesolutions2"
+
+# Create a new project
+gcloud projects create $PROJECT_ID
+
+# Set the project
+gcloud config set project $PROJECT_ID
+
+# -------------------------------------------------
+
+# List project billing ACCOUNT_ID
+gcloud alpha billing accounts list
+
+ACCOUNT_ID=""
+clear
+
+# Enable project billing
+gcloud alpha billing accounts projects link $PROJECT_ID --billing-account=$ACCOUNT_ID
+
+# -------------------------------------------------
+
+# Create storage bucket parameters
+BUCKET_NAME="on-the-way2selfrespect"
+LOCATION="europe-west9"
+
+# Create a storage bucket
+gcloud storage buckets create gs://$BUCKET_NAME --project=$PROJECT_ID --default-storage-class=STANDARD --location=$LOCATION --uniform-bucket-level-access
+
+gcloud storage ls
+
+# -------------------------------------------------
+
+export SERVICE_ACCOUNT_ID=$(echo "sendData2bucket")
+export SERVICE_ACCOUNT_EMAIL=$(echo "j622amilah@gmail.com")
+export SERVICE_ACCOUNT=$SERVICE_ACCOUNT_ID@$PROJECT_ID.iam.gserviceaccount.com 
+
+# -------------------------------------------------
+
+# [0] Create a custom service account (ONLY HAVE TO DO ONCE)
+gcloud iam service-accounts create $SERVICE_ACCOUNT_ID --description="SVC" --display-name="sendData2bucket"
+
+# -------------------------------------------------
+
+# Add roles to serviceaccount
+
+# storage.objectAdmin - serviceaccount
+gcloud projects add-iam-policy-binding $PROJECT_ID --member=serviceAccount:$SERVICE_ACCOUNT --role="roles/storage.objectAdmin"
+
+# -------------------------------------------------
+
+# Create a service account key
+gcloud iam service-accounts keys create key.json --iam-account=$SERVICE_ACCOUNT
+
+# -------------------------------------------------
+
+# List existing service account keys
+gcloud iam service-accounts keys list --iam-account=$SERVICE_ACCOUNT
+
+# -------------------------------------------------
+
+cat key.json
+
+# -------------------------------------------------
+
+# ---------------------------
+# On Kaggle run three cells
+# ---------------------------
+%%bash --err null
+cat > key.json <<EOF
+{
+  "type": "service_account",
+  "project_id": "webapps-codesolutions2",
+  "private_key_id": "e9decbe52d4441d6577fddb6f0192bfd540f142d",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCO61nnEYYuHFF8\nLWPaUaumSr9ePi3YdzJHu8j1OoVRaWlxLM061w0oDdvk3d/5c60oZMXiSQNTA4O0\ns+2Hy6jQThv5kKwMXzwrvRvnOaUVM6VdiPkwm8J1i43HUSJ6xJEhWKGhZ/kL6OO9\n3w3W2jOzThv4SksLTHONFKnQ4ni9JsdMAaZ4El740/UElBiDojlGin1q6uDdW5nT\n5750l/ddbUW999TUq+IBRLDSJkzhW8nfOf7hcdUVy2sm/Vy3CRRVCWTgZgR2mS6R\nXeOc8fPJgoQ+A0ySzYqp2tpy5hthDUM0nPxUNkZD2rUErufFq0kaMPFXmwFCcLJa\nrlBiPpdFAgMBAAECggEACEmQ78N2IKffOMBoDSGVvsGQWb5oyafVyE+VDlVLpEYk\nyV2D9BDC0EsHcHzGL1CcHp7DU8UQloh6Y2jYkfqHCjcxS5YuR9Rg6JdhbhXLYxCY\n2vTloEIz8z15pfBoO664zLJ3QuUEzcI+LIUp6AbEnzXdDNeABQJ0o95qH3T2c99c\n2YQktYJr3LZkHrp/NjZGxe6FeYQEW+HZN3fT8ptTZddoCTbEi5ANma1g9ccPyTrR\nln8s1iUUgx7MuUjt2nRdLob7lWHLcjw1WNDXre8SY6hgoShTVAHIshwCxJxT6KYM\no3XLwP7316pqlZhXeHfBKO6UHbuCNqJd7G30wjTxoQKBgQDA0tO2lnWBceTU70ka\nFVrAHlq6UKJI+nm5ka1AxAhhBqn7oVQEtRftFETowe+KGbdw3KvhTpbHdJ/wM3xh\nr28M9N10FY83hHVHvzctPHkflU4MxVcbYMHd7Qu6weoIuNB8okWatxOSpTYeKakM\nCHwvzUifs1aiNaIyd6/Xs1jQJQKBgQC9vsij3hneLMRk536Qpac3IFGea6Sap6wY\nllz0DXiZV5nrX4dZ4JYEZ2ryx0YqhIG30gS85tBMUKpr32+XY6xxlRMxlrlxAkN0\nxaR25r7DwGwFytN3YhotlA6J1Pv4dETXCp/Ifh3HMl8ewvqaqVAzGuhIMJPuiuPI\nXgI/eu3woQKBgGnBN6ykyL2+IatHsehEXgmQnGIjZ15vQeOtKkCjQ5Uzencv/Ey4\npe65dzHRa/dqM1oLLZnc6IVsSWwMUOOivF12zx6j1HC2jTxUe4ar7CKOWMhYU3YI\nk0uMfypmwF0YQACbX2GDl5COXCge4UBgRvxQsswkKBe/Ir5bNm4vRz6hAoGAUtvc\nbErSCwaLoPDCgVIFinovijnBgNPVwErxPpYfYv8xNOrbhXEgsb2jo29IAcsphmdN\nMFyu+5SCR2ckKP0a0eLipdYHFwWBBZ5FarLq/TqrMYBYBhsuCVdNXf1HJ0FGyo1W\nJ0yDnngtt5Y3r5BeeGK4qsWj5Bh8zgPXgXciLuECgYEAqX4geM4DovXsEufOb/k2\n0APvz0mzTj1kAJNZO2AaHPaZeSXwUuTQLawF3ysaa2/1djA4wH9XRh2rPcWczjYG\nMJbaq4JZkUcqDIFqA/wzQNmESFYgXi+a/XBj9tNdOu5tSZreoLjvkmFnEFD2HBhG\nNBtQdFu4nzkaNbF8vGcG/ac=\n-----END PRIVATE KEY-----\n",
+  "client_email": "sendData2bucket@webapps-codesolutions2.iam.gserviceaccount.com",
+  "client_id": "115611473637861486610",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/sendData2bucket%40webapps-codesolutions2.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
+
+# -------------------------------------------------
+
+# Log into GCP
+!gcloud auth login --quiet --cred-file=key.json --force
+
+# -------------------------------------------------
+
+# Remove the credential key
+!rm -rf key.json
+
+# -------------------------------------------------
+
+# Upload an object to a bucket: an error will be created but it still runs
+%%bash --err null
+declare -a files=('red_dark.png' 'red.png' 'red_light.png' 'green_dark.png' 'green.png' 'green_light.png' 'blue_dark.png' 'blue.png' 'blue_light.png' 'cyan_dark.png' 'cyan.png' 'cyan_light.png' 'yellow_dark.png' 'yellow.png' 'yellow_light.png' 'magenta_dark.png' 'magenta.png' 'magenta_light.png' 'orange_dark.png' 'orange.png' 'orange_light.png');
+
+# Get the length of the array
+export N=$(echo ${#files[@]})
+
+echo 'N'
+echo $N
+
+for r in $( seq 0 $N )
+do
+    echo ${files[$r]}
+    gcloud storage cp ${files[$r]} gs://on-the-way2selfrespect/
+    
+done
+
+# -------------------------------------------------
+
+# List the contents of a storage buckets GCP to see that the images arrived
+gcloud storage ls --recursive gs://$BUCKET_NAME/**
 
 # -------------------------------------------------
 
 
 
 # -------------------------------------------------
+# Go back to GCP
+# -------------------------------------------------
 
+# https://cloud.google.com/storage/docs/access-control/making-data-public#permissions-cli
+
+# Make individual objects publicly readable
+gcloud storage objects update gs://$BUCKET_NAME/image2.png --add-acl-grant=entity=AllUsers,role=READER
+
+# Make all objects in a bucket publicly readable 
+gcloud storage buckets add-iam-policy-binding gs://$BUCKET_NAME --member=allUsers --role=roles/storage.objectViewer
 
 # -------------------------------------------------
 
+# Check if the image can be viewed in the browser
+https://storage.googleapis.com/on-the-way2selfrespect/red.png
 
 # -------------------------------------------------
+
+# Use storage path to refer to image
+gs://on-the-way2selfrespect/red.png
+
+# -------------------------------------------------
+
+# -------------------------------------------------
+
+# -------------------------------------------------
+
