@@ -1,1 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
 
+
+<!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/div -->
+<div id="main"></div>
+
+  
+  <script>
+
+  // -------------------------------------------------
+  const main_display = document.getElementById('main');
+
+  const canvasElement = document.getElementById('canvas');
+
+  const ImageArray = ["https://storage.googleapis.com/on-the-way2selfrespect/red.png", 
+                     "https://storage.googleapis.com/on-the-way2selfrespect/green.png",
+                     "https://storage.googleapis.com/on-the-way2selfrespect/blue.png", 
+                     "https://storage.googleapis.com/on-the-way2selfrespect/cyan.png",
+                     "https://storage.googleapis.com/on-the-way2selfrespect/yellow.png", 
+                     "https://storage.googleapis.com/on-the-way2selfrespect/magenta.png",
+                     "https://storage.googleapis.com/on-the-way2selfrespect/orange.png"];
+
+
+var squarelocation = [0, 1, 2, 3, 4, 5, 6];
+
+// -------------------------------------------------
+    
+function main() {
+  
+ImageArray.forEach(function(url, index) {
+        
+	    // ---------------------------
+	    // Create a canvas for first image
+	    var ctx = create_dynamic_canvasElement(index);
+	    // ---------------------------
+        
+	    const image = new Image();
+
+	    // Add 'crossorigin' attribute to bypass insecure error
+	    image.crossOrigin = "anonymous";
+
+	    // PRINT
+	    // outp.innerHTML += 'image.complete: ' + image.complete + "<br/>";
+
+	    image.onload = async () => {
+	
+		        // Draw image on canvas
+		        // canvasElement.style.display = "block";
+		        ctx.drawImage(image, 0,0);
+        
+	    };  // end of image.onload
+
+  	});  // end of image.forEach
+  
+}  // end of main
+    
+// -------------------------------------------------
+
+# Tutorial script: idea is to create 
+function create_CanvasElements_per_square() {
+    squarelocation.forEach((val, index) => {
+
+      // Create a canvas element
+      var img = document.createElement('img');
+      
+      const img = document.createElement('img');
+
+      img.classList.add('main')
+
+      img.setAttribute('src', canvas.toDataURL())
+      img.setAttribute('data-id', val);
+      
+      // img.addEventListener('click', show_img)
+      
+      main_display.appendChild(img);
+    })
+}
+
+// -------------------------------------------------
+    
+function create_dynamic_canvasElement(index) {
+	
+	// Create a canvas element
+	var canvasElement = document.createElement('canvas');
+
+	// Set the width and height of the canvas
+	canvasElement.width = 224;
+	canvasElement.height = canvasElement.width;
+	      
+	// Get the 2D rendering context of the canvas
+	var ctx = canvasElement.getContext("2d");
+	
+	if (index == 0) {
+		canvasElement.style.left = 40+'px';
+	} else {
+		let tot = index*canvasElement.width + 40;
+		canvasElement.style.left = tot+'px';
+	}
+
+  ctx.fillStyle = '#999c98';
+  ctx.fillRect(0, 0, canvasElement.width, canvasElement.height);
+  
+	// Add the canvas to the document body or any other desired element
+	document.body.appendChild(canvasElement);
+
+	return ctx;
+}
+
+// -------------------------------------------------
+
+	
+</script>
+</body>
+</html>
