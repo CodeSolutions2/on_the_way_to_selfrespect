@@ -243,6 +243,7 @@ create_a_background(rgb_value, save_img_name, phrase, dict_font)
 
 
 # -------------------------------------------------
+# https://console.cloud.google.com/
 
 # Determine what project to put the files
 gcloud projects list
@@ -393,6 +394,34 @@ gs://on-the-way2selfrespect/red.png
 # -------------------------------------------------
 
 # -------------------------------------------------
+
+
+touch cors.json
+
+echo '[{"origin": ["https://yourdomain.com"],"responseHeader": ["Content-Type"],"method": ["GET", "HEAD"],"maxAgeSeconds": 3600}]' > cors.json
+
+# OR
+
+%%bash --err null
+cat > cors.json <<EOF
+[
+    {
+      "origin": ["https://CodeSolutions2.github.io"],
+      "responseHeader": ["Content-Type"],
+      "method": ["GET", "HEAD"],
+      "maxAgeSeconds": 3600
+    }
+]
+EOF
+
+# Set CORS settings
+gsutil cors set cors.json gs://$BUCKET_NAME
+
+# ---------------------------------------------
+
+# View saved CORS settings
+gsutil cors get gs://$BUCKET_NAME
+
 
 # -------------------------------------------------
 
