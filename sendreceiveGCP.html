@@ -165,7 +165,7 @@ async function sendreceive_files_GCP_form() {
 // 	event.preventDefault();
 
 	  // https://stackoverflow.com/questions/30601620/adding-an-event-listener-to-an-element-that-doesnt-exist-yet-in-vanilla-javascr
-document.addEventListener('click', sendreceive_files_GCP_form(event) => {
+document.addEventListener('click', (event) => {
 	// Print returned form element
 	var element = event.target;
 	if(element.classList.contains("sendreceive_files_GCP_form")){
