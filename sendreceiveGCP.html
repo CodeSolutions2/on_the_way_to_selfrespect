@@ -13,11 +13,9 @@
 <button id="sendreceive_files_GCP_image" onclick="sendreceive_files_GCP_image()" style="display:block">sendreceive_files_GCP_image</button>
 	
 <button id="sendreceive_files_GCP_form" onclick="sendreceive_files_GCP_form()" style="display:block">sendreceive_files_GCP_form</button>
+<button id="onsubmit_get_result" onclick="onsubmit_get_result()" style="display:block">onsubmit_get_result</button>
 
 <button id="sendreceive_files_GCP_fetch_forIMAGES" onclick="sendreceive_files_GCP_fetch_forIMAGES()" style="display:block">sendreceive_files_GCP_fetch_forIMAGES</button>
-
-<button id="sendreceive_files_GCP_fetch_forTEXT" onclick="sendreceive_files_GCP_fetch_forTEXT()" style="display:block">sendreceive_files_GCP_fetch_forTEXT</button>
-
 <!-- View results -->
 <div id="output" style="font-family:courier;font-size:24px;height:300px"></div>
 	
@@ -140,7 +138,6 @@ async function sendreceive_files_GCP_form() {
 // Do not redirect page to the page that we want to perform GET,POST requests with
 document.getElementById("sendreceive_files_GCP_form").addEventListener("click", (event) => {
 	event.preventDefault();
-	onsubmit_get_result();
 });
 	  
 // OR
@@ -227,47 +224,6 @@ async function sendreceive_files_GCP_fetch_forIMAGES() {
 
 }  // end of sendreceive_files_GCP_fetch_forIMAGES
 
-// -------------------------------------------------
-
-// Way 2: Use a fetch to perform GET to obtain an image from GCP
-async function sendreceive_files_GCP_fetch_forTEXT() {
-
-	let url = 'https://storage.googleapis.com/textclassification-w-labeled-data/train_dataset0.csv';
-
-	// The server should set this , "Access-Control-Allow-Credentials": true
-	let headers = {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Credentials": true};
-
-
-	// referrerPolicy: 
-	// "origin"    // failed to do Cross-Origin Request
-	// "unsafe-url"  //Ignoring the less restricted referrer policy “unsafe-url” for the cross-site request (failed to do Cross-Origin Request)
-	// "cross-origin"
-	// 
-	//Connection': 'keep-alive'
-	
-	let options = {method : 'GET', 
-		       headers: headers, 
-		       mode: 'cors', 
-		       cache: "no-cache", 
-		       credentials: "include", 
-		       redirect: "follow", 
-		       referrerPolicy: "origin"};
-
-
-	try {
-		await fetch(url, options).then(res => res.json()).then(csvdata => {
-	
-			console.log('csvdata:', csvdata);
-	
-		  }).catch(error => { outp.innerHTML += error; });
-
-	} catch (error) {
-      document.getElementById("outData").innerHTML = error; 
-      // return error
-    }
-	 
-
-}  // end of sendreceive_files_GCP_fetch_forTEXT
 
 // -------------------------------------------------
 
