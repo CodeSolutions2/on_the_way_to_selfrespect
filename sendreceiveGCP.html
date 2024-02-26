@@ -49,6 +49,10 @@ async function sendreceive_files_GCP_image() {
 
 		// -------------------------------------------------
 
+	var url = 'https://storage.googleapis.com/on-the-way2selfrespect';
+
+	// -------------------------------------------------
+
 		const image = new Image();
 		
 		image.setAttribute('crossOrigin', "");
@@ -124,7 +128,7 @@ async function sendreceive_files_GCP_fetch() {
 	
 	let headers = {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"};
 	
-	let options = {method : 'post', headers: headers, mode: 'cors', cache: "no-cache", redirect: "follow", referrerPolicy: "no-referrer"};
+	let options = {method : 'post', headers: headers, mode: 'cors', cache: "no-cache", redirect: "follow", referrerPolicy: "origin"};
 
 	try {
 		await fetch(url, options).then(res => res.json()).then(imageout => {
