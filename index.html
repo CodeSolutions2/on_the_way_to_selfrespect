@@ -68,6 +68,10 @@ ImageArray.forEach(function(url, index) {
 		    // canvasElement.style.display = "block";
 		    ctx.drawImage(image, 0,0);
 
+		    ctx.fillStyle = '#999c98';  // Background square over image = blue
+	// ctx.fillRect(0, 0, canvasElement.width, 50);  // fillRect(x, y, width, height);
+	ctx.fillRect(0, 0, canvasElement.width, canvasElement.height);
+
 		    // Write image name on canvas
 		    //ctx.font = "bold 14px serif";
 		    //let out = url.split("/")
