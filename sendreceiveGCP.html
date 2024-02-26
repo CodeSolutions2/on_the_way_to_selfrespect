@@ -91,15 +91,20 @@ async function sendreceive_files_GCP_form() {
 	
   form.setAttribute('method', 'GET'); 
 
-  // var url = 'https://storage.googleapis.com/on-the-way2selfrespect';  // Using this returned a list of all the bucket items, but I only want to GET one bucket item
-  var url = 'https://storage.googleapis.com/on-the-way2selfrespect/blue.png';
-  
+  // Step 0: The browser navigates to the URL given in the action attribute : the user is taken away from the current page and redirected to a new page.
+  // The action attribute is used to indicate where the form’s data is sent to when it is submitted.
+  var url = 'https://storage.googleapis.com/on-the-way2selfrespect';
   form.setAttribute('action', url);
 
-  // , Connection': 'keep-alive',
+
+  // The form submission result will open in a new tab or window, depending on the user's browser settings.
+  // form.setAttribute('target', "_blank");
+	
   form.setAttribute('headers', {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"});
+
+	preventDefault
   
-  // Just use arrays
+  // Just use arrays: each column is a form variable
   let type_parameters = ['text', 'submit'];
   var name_parameters = ['key', 'confirm_submit'] 
   var value_parameters = ['blue.png', 'Submit'];
@@ -127,19 +132,22 @@ async function sendreceive_files_GCP_form() {
 
 // -----------------------------------
 
+function dontGo(event) {
+    event.preventDefault();
+}
 
-// Problem: form_id does not exist yet
-// const formObject = document.querySelector('form');
-// 	formObject.addEventListener('submit', (event) => {
-// 		onsubmit_get_result();
-// });
 
-	  // https://stackoverflow.com/questions/30601620/adding-an-event-listener-to-an-element-that-doesnt-exist-yet-in-vanilla-javascr
-document.addEventListener('click', (event) => {
+// https://stackoverflow.com/questions/30601620/adding-an-event-listener-to-an-element-that-doesnt-exist-yet-in-vanilla-javascr
+// https://stackoverflow.com/questions/42542300/how-to-stay-on-the-same-page-after-clicking-submit-button
+//document.getElementById("sendreceive_files_GCP_form").addEventListener("click", dontGo);
+// OR
+document.addEventListener('click', sendreceive_files_GCP_form(event) => {
+	// Do not redirect page
+	event.preventDefault();
+
+	// Print returned form element
 	var element = event.target;
-	if(element.classList.contains("sendreceive_files_GCP_form")){
-		onsubmit_get_result();
-	}
+	if(element.classList.contains("sendreceive_files_GCP_form")){ onsubmit_get_result(); }
 });
 
 // -----------------------------------
@@ -164,6 +172,12 @@ function onsubmit_get_result() {
 	// https://storage.googleapis.com/on-the-way2selfrespect/blue.png?keyvalue%3Dblue.png=
 }
 
+// -------------------------------------------------
+
+
+// Uses formData and fetch to contact the server - but I am trying to get form to work in the first place, because I can not get fetch to work. If fetch worked, I would just use fetch.
+	  
+// https://www.javascript-coder.com/javascript-form/javascript-submit-form-stay-on-page/
 
 // -------------------------------------------------
 
@@ -181,7 +195,15 @@ async function sendreceive_files_GCP_fetch() {
 	// "unsafe-url"  //Ignoring the less restricted referrer policy “unsafe-url” for the cross-site request (failed to do Cross-Origin Request)
 	// "cross-origin"
 	// 
-	let options = {method : 'GET', headers: headers, mode: 'cors', cache: "no-cache", credentials: "include", redirect: "follow", referrerPolicy: "origin"};
+	//Connection': 'keep-alive'
+	
+	let options = {method : 'GET', 
+		       headers: headers, 
+		       mode: 'cors', 
+		       cache: "no-cache", 
+		       credentials: "include", 
+		       redirect: "follow", 
+		       referrerPolicy: "origin"};
 
 
 	try {
