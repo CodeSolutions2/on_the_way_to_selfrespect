@@ -3,7 +3,7 @@
 <head></head>
 <body>
 
-<h1 style='text-align: center; margin-bottom: -35px;'>Test to receive and send files</h1>
+<h1 style='text-align: center; margin-bottom: -35px;'>Test to receive and send image files</h1>
   <br><br>
 
 	
@@ -114,9 +114,6 @@ async function sendreceive_files_GCP_form() {
 	  
     var input = document.createElement('input');
     input.innerHTML = '<input style="display:none;" type=' +type+ ' name=' +name+ 'value=' +value+ '>';
-
-		// https://storage.googleapis.com/textclassification-w-labeled-data?keytype%3D%22text%22=train_dataset0.csv
-		// https://storage.googleapis.com/textclassification-w-labeled-data?keyvalue%3Dtrain_dataset0.csv=
           
      form.appendChild(input);
     });
@@ -190,15 +187,18 @@ async function sendreceive_files_GCP_fetch_forIMAGES() {
 	let url = 'https://storage.googleapis.com/on-the-way2selfrespect/blue.png';
 
 	// The server should set this , "Access-Control-Allow-Credentials": true
-	let headers = {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Credentials": true};
+	let headers = {"Content-Type": "image/png", 
+		       "Access-Control-Allow-Origin": "*", 
+		       "Access-Control-Allow-Credentials": true,
+		       "Connection": "keep-alive"};
 
 
 	// referrerPolicy: 
-	// "origin"    // failed to do Cross-Origin Request
+	// "origin"    // for cross origin url
 	// "unsafe-url"  //Ignoring the less restricted referrer policy “unsafe-url” for the cross-site request (failed to do Cross-Origin Request)
 	// "cross-origin"
 	// 
-	//Connection': 'keep-alive'
+	// Sec-Fetch-Site
 	
 	let options = {method : 'GET', 
 		       headers: headers, 
