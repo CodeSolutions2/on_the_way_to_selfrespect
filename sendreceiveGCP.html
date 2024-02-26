@@ -82,6 +82,8 @@ async function sendreceive_files_GCP_image() {
 
 // Way 1: Use a form to perform GET to obtain an image from GCP
 // Form has to be called with one level from main page - can not be called in a function-in-a-function
+
+// https://developer.mozilla.org/en-US/docs/Learn/Forms/Sending_and_retrieving_form_data
 async function sendreceive_files_GCP_form() {
 	
   // Create <form> element to submit parameters to endpoint
@@ -97,21 +99,16 @@ async function sendreceive_files_GCP_form() {
   // , Connection': 'keep-alive',
   form.setAttribute('headers', {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"});
   
-  // Parameters to pass to endpoint.
-  var params = {'key': 'blue.png', 'confirm_submit': 'Submit'};
-  let type_val = ['text', 'submit'];
-
-  // Add form parameters as hidden input values.
-  // for (var p in params) {  
-  params.forEach(async function(row, index) {
-	  let currentkey = Object.keys(row);
-	  console.log("currentvalue: ", currentvalue);
-	  let currentvalue = Object.values(row);
-	  console.log("currentvalue: ", currentvalue);
-	  let value = currentvalue;  // params[p]
-	  let name = currentkey;  // p
-	  let type = type_val[index];
-		  
+  // Just use arrays
+  let type_parameters = ['text', 'submit'];
+  var name_parameters = ['key', 'confirm_submit'] 
+  var value_parameters = ['blue.png', 'Submit'];
+	
+  type_parameters.forEach(async function(type_val, index) {
+	  let type = type_val;
+	  let name = name_parameters[index];
+	  let value = value_parameters[index];
+	  
     var input = document.createElement('input');
     input.innerHTML = '<input style="display:none;" type=' +type+ ' name=' +name+ 'value=' +value+ '>';
 
@@ -129,12 +126,21 @@ async function sendreceive_files_GCP_form() {
 }  // end of sendreceive_files_GCP_form
 
 // -----------------------------------
-	  
-const formObject = document.querySelector('form_id');
-	formObject.addEventListener('submit', (event) => {
-		onsubmit_get_result();
 
-});
+
+// Problem: form_id does not exist yet
+// const formObject = document.querySelector('form_id');
+// 	formObject.addEventListener('submit', (event) => {
+// 		onsubmit_get_result();
+// });
+
+	  // https://stackoverflow.com/questions/30601620/adding-an-event-listener-to-an-element-that-doesnt-exist-yet-in-vanilla-javascr
+document.addEventListener('click', (event) => {
+	var element = event.target;
+	if(element.classList.contains("sendreceive_files_GCP_form")){
+		onsubmit_get_result();
+	}
+}
 
 // -----------------------------------
 
@@ -169,8 +175,10 @@ async function sendreceive_files_GCP_fetch() {
 	let headers = {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"};
 
 
-	// referrerPolicy: "origin"    // failed to do Cross-Origin Request
-	// referrerPolicy: "unsafe-url"  //Ignoring the less restricted referrer policy “unsafe-url” for the cross-site request (failed to do Cross-Origin Request)
+	// referrerPolicy: 
+	// "origin"    // failed to do Cross-Origin Request
+	// "unsafe-url"  //Ignoring the less restricted referrer policy “unsafe-url” for the cross-site request (failed to do Cross-Origin Request)
+	//
 	// 
 	let options = {method : 'GET', headers: headers, mode: 'cors', cache: "no-cache", redirect: "follow", referrerPolicy: "origin-when-cross-origin"};
 
