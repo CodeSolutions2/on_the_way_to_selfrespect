@@ -125,6 +125,59 @@ async function sendreceive_files_GCP_form() {
   
 }  // end of sendreceive_files_GCP_form
 
+// https://cloud.google.com/storage/docs/using-cors#command-line
+// https://tr.javascript.info/fetch-crossorigin
+// https://html.form.guide/html-form/form-action-using-javascript-function/
+
+//  Successful form response
+// Disable Cache
+// 3 requests
+// 2.18 kB / 3.72 kB transferred
+// Finish: 364 ms
+// DOMContentLoaded: 163 ms
+// load: 254 ms
+	
+// GET
+	
+// scheme 	https
+// host		www.google.com
+// filename 		/images/icons/product/cloud_storage-32.png
+// Address 		[2a00:1450:4007:810::2004]:443
+// Status 		200
+// VersionHTTP/3
+// Transferred1.50 kB (850 B size)
+// Referrer Policystrict-origin-when-cross-origin
+// DNS ResolutionSystem
+	  
+// accept-ranges 		bytes
+// alt-svc 		h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+// cache-control 	private, max-age=31536000
+// content-length 		850
+// content-type 		image/png
+// cross-origin-opener-policy-report-only 	same-origin; report-to="static-on-bigtable"
+// cross-origin-resource-policy: cross-origin
+// date 		Mon, 26 Feb 2024 17:27:10 GMT
+// expires 		Mon, 26 Feb 2024 17:27:10 GMT
+// last-modified 	Tue, 22 Oct 2019 18:30:00 GMT
+// report-to 	{"group":"static-on-bigtable","max_age":2592000,"endpoints":[{"url":"https://csp.withgoogle.com/csp/report-to/static-on-bigtable"}]}
+// server 	sffe
+// x-content-type-options 		nosniff
+// x-xss-protection 		0
+// Accept 		image/avif,image/webp,*/*
+// Accept-Encoding 		gzip, deflate, br
+// Accept-Language 		en-US,en;q=0.5
+// Connection 			keep-alive
+// DNT 			1
+// Host 		www.google.com
+// Referer 		https://storage.googleapis.com/
+// Sec-Fetch-Dest 		image
+// Sec-Fetch-Mode 		no-cors
+// Sec-Fetch-Site 		cross-site
+// Sec-GPC 		1
+// TE 		trailers
+// User-Agent 		Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0
+
+
 // -----------------------------------
 
 
@@ -198,7 +251,10 @@ async function sendreceive_files_GCP_fetch_forIMAGES() {
 	// "unsafe-url"  //Ignoring the less restricted referrer policy “unsafe-url” for the cross-site request (failed to do Cross-Origin Request)
 	// "cross-origin"
 	// 
-	// Sec-Fetch-Site
+	// Sec-Fetch-Site 		cross-site
+	// https://fetch.spec.whatwg.org/#http-cors-protocol
+	// https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image
+	// https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/crossorigin
 	
 	let options = {method : 'GET', 
 		       headers: headers, 
