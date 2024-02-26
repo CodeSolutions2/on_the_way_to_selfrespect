@@ -10,6 +10,8 @@
 <!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/div -->
 <!-- https://CodeSolutions2.github.io/on_the_way_to_selfrespect/index.html -->
 
+<button id="sendreceive_files_GCP_image" onclick="sendreceive_files_GCP_image()" style="display:block">sendreceive_files_GCP_image</button>
+	
 <button id="sendreceive_files_GCP_form" onclick="sendreceive_files_GCP_form()" style="display:block">sendreceive_files_GCP_form</button>
 
 <button id="sendreceive_files_GCP_fetch" onclick="sendreceive_files_GCP_fetch()" style="display:block">sendreceive_files_GCP_fetch</button>
@@ -27,9 +29,54 @@
 // -------------------------------------------------
 	  
 const outp = document.getElementById('output');
+
+
+
+// -------------------------------------------------
+
+// Way 0: Use image.onload to perform GET to obtain an image from GCP
+async function sendreceive_files_GCP_image() {
+	
+		// -------------------------------------------------
+
+		var canvasElement = document.createElement('canvas');
+		canvasElement.width = 100;
+		canvasElement.height = canvasElement.width;
+		var ctx = canvasElement.getContext("2d");
+		ctx.fillStyle = '#999c98';  // Background square over image = blue
+		ctx.fillRect(0, 0, canvasElement.width, 50);  // fillRect(x, y, width, height);
+		document.body.appendChild(canvasElement);
+
+		// -------------------------------------------------
+
+		const image = new Image();
+		
+		image.setAttribute('crossOrigin', "");
+
+		// This works
+		image.setAttribute('headers', {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"});
+
+		// image.setAttribute('headers', {"Content-Type": "application/json"});
+	
+		image.onload = async () => {
+	
+		// Draw image on canvas
+		ctx.drawImage(image, 0,0);
+
+		    // Write image name on canvas
+		    ctx.font = "bold 14px serif";
+		    let out = url.split("/")
+		    let image_name = out[out.length-1];
+		    ctx.fillStyle = "#ffffff";  // Font color = white, 
+		    ctx.fillText(image_name, 10, 15);
+        
+		};  // end of image.onload
+
+		image.src = url;
 	  
 // -------------------------------------------------
-    
+
+// Way 1: Use a form to perform GET to obtain an image from GCP
 async function sendreceive_files_GCP_form() {
 
   // Create <form> element to submit parameters to endpoint
@@ -68,6 +115,7 @@ async function sendreceive_files_GCP_form() {
 
 // -------------------------------------------------
 
+// Way 2: Use a fetch to perform GET to obtain an image from GCP
 async function sendreceive_files_GCP_fetch() {
 
 	let url = 'https://storage.googleapis.com/on-the-way2selfrespect/blue.png';
@@ -75,43 +123,18 @@ async function sendreceive_files_GCP_fetch() {
 	let headers = {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"};
 	
 	let options = {method : 'post', headers: headers, mode: 'cors', cache: "no-cache", redirect: "follow", referrerPolicy: "no-referrer"};
+
+	try {
+		await fetch(url, options).then(res => res.json()).then(imageout => {
 	
-	await fetch(url, options).then(res => res.json()).then(imageout => {
-
-		console.log('imageout:', imageout);
-		
-		// -------------------------------------------------
-
-		var canvasElement = document.createElement('canvas');
-		canvasElement.width = 100;
-		canvasElement.height = canvasElement.width;
-		var ctx = canvasElement.getContext("2d");
-		ctx.fillStyle = '#999c98';  // Background square over image = blue
-		ctx.fillRect(0, 0, canvasElement.width, 50);  // fillRect(x, y, width, height);
-		document.body.appendChild(canvasElement);
-
-		// -------------------------------------------------
-
-		const image = new Image();
-		image.crossOrigin = "anonymous";
-		image.onload = async () => {
+			console.log('imageout:', imageout);
 	
-		// Draw image on canvas
-		ctx.drawImage(image, 0,0);
+		  }).catch(error => { outp.innerHTML += error; });
 
-		    // Write image name on canvas
-		    ctx.font = "bold 14px serif";
-		    let out = url.split("/")
-		    let image_name = out[out.length-1];
-		    ctx.fillStyle = "#ffffff";  // Font color = white, 
-		    ctx.fillText(image_name, 10, 15);
-        
-		};  // end of image.onload
-
-		image.src = url;
-
-	  }).catch(error => { outp.innerHTML += error; });
-	
+	} catch (error) {
+      document.getElementById("outData").innerHTML = error; 
+      // return error
+    }
 	 
 
 }  // end of sendreceive_files_GCP_fetch
