@@ -87,7 +87,7 @@ async function sendreceive_files_GCP_image() {
 async function sendreceive_files_GCP_form() {
 	
   // Create <form> element to submit parameters to endpoint
-  var form = document.createElement('form_id');
+  var form = document.createElement('form');
 	
   form.setAttribute('method', 'GET'); 
 
@@ -129,7 +129,7 @@ async function sendreceive_files_GCP_form() {
 
 
 // Problem: form_id does not exist yet
-// const formObject = document.querySelector('form_id');
+// const formObject = document.querySelector('form');
 // 	formObject.addEventListener('submit', (event) => {
 // 		onsubmit_get_result();
 // });
@@ -154,7 +154,7 @@ function onsubmit_get_result() {
 
       // Read from the submitted form
       // Display the key/value pairs on the form before and AFTER the GET/POST
-      var formObject = document.getElementById("form_id");
+      var formObject = document.getElementById("form");
       var form_elements = formObject.elements;
 
       for (var i=0; i<form_elements.length; i++){
