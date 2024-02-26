@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+
+<h1 style='text-align: center; margin-bottom: -35px;'>On the way to self-respect webapp</h1>
+  <br><br>
+
+	
+<!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/div -->
+<!-- https://CodeSolutions2.github.io/on_the_way_to_selfrespect/index.html -->
+
+<button id="run_it_button" onclick="run_it()" style="display:block">run_it</button>
+
+	
+
+
+	
+<style>
+      canvas {border: 1px solid black;}
+    </style>
+	
+  
+  <script>
+
+    
+	  
+// -------------------------------------------------
+    
+async function sendreceive_files_GCP() {
+
+  // Create <form> element to submit parameters to endpoint
+  var form = document.createElement('form');
+  
+  form.setAttribute('method', 'GET'); 
+  
+  var url = 'https://storage.googleapis.com/on-the-way2selfrespect';
+  
+  form.setAttribute('action', url);
+
+  // , Connection': 'keep-alive',
+  form.setAttribute('headers', {'Content-Type': 'application/json', 'Access-Control-Allow-Origin', '*'});
+  
+  // Parameters to pass to endpoint.
+  var params = {'key': 'blue.png'};
+
+  // Add form parameters as hidden input values.
+  for (var p in params) {  
+    var input = document.createElement('input');
+    input.innerHTML = '<input style="display:none;" name=' +p+ 'value=' +params[p]+ '>';
+
+		// https://storage.googleapis.com/textclassification-w-labeled-data?keytype%3D%22text%22=train_dataset0.csv
+		// https://storage.googleapis.com/textclassification-w-labeled-data?keyvalue%3Dtrain_dataset0.csv=
+          
+     form.appendChild(input);
+    }
+
+  // Add form to page and submit it to open the endpoint.
+  document.body.appendChild(form);
+
+  form.submit();
+	
+  
+  
+}  // end of main
+
+
+// -------------------------------------------------
+
+
+
+// -------------------------------------------------
+
+	
+</script>
+</body>
+</html>
