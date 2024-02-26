@@ -11,6 +11,8 @@
 <!-- https://CodeSolutions2.github.io/on_the_way_to_selfrespect/index.html -->
 
 <button id="run_it_button" onclick="run_it()" style="display:block">run_it</button>
+<button id="cover_images_button" onclick="cover_images()" style="display:block">cover_images</button>
+<button id="uncover_images_button" onclick="uncover_images()" style="display:block">uncover_images</button>
 
 	
 
@@ -67,11 +69,11 @@ ImageArray.forEach(function(url, index) {
 		    ctx.drawImage(image, 0,0);
 
 		    // Write image name on canvas
-		    ctx.font = "bold 14px serif";
-		    let out = url.split("/")
-		    let image_name = out[out.length-1];
-		    ctx.fillStyle = "#ffffff";  // Font color = white, 
-		    ctx.fillText(image_name, 10, 15);
+		    //ctx.font = "bold 14px serif";
+		    //let out = url.split("/")
+		    //let image_name = out[out.length-1];
+		    //ctx.fillStyle = "#ffffff";  // Font color = white, 
+		    //ctx.fillText(image_name, 10, 15);
         
 	    };  // end of image.onload
 
@@ -83,24 +85,23 @@ ImageArray.forEach(function(url, index) {
 	  
 // -------------------------------------------------
 
-// Tutorial script: idea is to create 
-//function create_CanvasElements_per_square() {
-  //  squarelocation.forEach((val, index) => {
+function cover_images(){
+	// Cover all images with a grey square
+	ctx.fillStyle = '#999c98';  // Background square over image = blue
+	// ctx.fillRect(0, 0, canvasElement.width, 50);  // fillRect(x, y, width, height);
+	ctx.fillRect(0, 0, canvasElement.width, canvasElement.height);
+}
 
-      // Create a canvas element
-  //    var img = document.createElement('img');
-      
-   //   const img = document.createElement('img');
-//     img.classList.add('main')
- //     img.setAttribute('src', canvas.toDataURL())
-     // img.setAttribute('data-id', val);
-      
-      // img.addEventListener('click', show_img)
-      
-  //   main_display.appendChild(img);
-//   })
-//}
+	  	  
+// -------------------------------------------------
 
+function uncover_images(){
+	// Cover all images with a grey square
+	ctx.fillStyle = '#999c98';  // Background square over image = blue
+	// ctx.fillRect(0, 0, canvasElement.width, 50);  // fillRect(x, y, width, height);
+	ctx.fillRect(0, 0, 0, 0);
+}
+	  
 // -------------------------------------------------
     
 function create_dynamic_canvasElement(index) {
@@ -121,12 +122,6 @@ function create_dynamic_canvasElement(index) {
 		let tot = index*canvasElement.width + 40;
 		canvasElement.style.left = tot+'px';
 	}
-
-
-	// Make a square on half of the canvas
-	ctx.fillStyle = '#999c98';  // Background square over image = blue
-	ctx.fillRect(0, 0, canvasElement.width, 50);  // fillRect(x, y, width, height);
-	// ctx.fillRect(0, 0, canvasElement.width, canvasElement.height);
   
 	// Add the canvas to the document body or any other desired element
 	document.body.appendChild(canvasElement);
