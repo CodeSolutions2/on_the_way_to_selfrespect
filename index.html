@@ -71,8 +71,14 @@ ImageArray.forEach(function(url, index) {
 		    // canvasElement.style.display = "block";
 		    ctx.drawImage(image, 0,0);
 
-		    ctx.fillStyle = '#999c98';  // Background square over image = blue
-		    ctx.fillRect(0, 0, canvasElement_width, canvasElement_height);
+		    cover_images();
+
+		    if (index == 4 || index == 2){
+			    uncover_images();
+
+			    await new Promise(r => setTimeout(r, 2000));
+			    
+		    }
 
 		    // Write image name on canvas
 		    //ctx.font = "bold 14px serif";
