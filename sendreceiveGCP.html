@@ -10,24 +10,22 @@
 <!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/div -->
 <!-- https://CodeSolutions2.github.io/on_the_way_to_selfrespect/index.html -->
 
-<button id="run_it_button" onclick="sendreceive_files_GCP()" style="display:block">sendreceive_files_GCP</button>
+<button id="sendreceive_files_GCP_form" onclick="sendreceive_files_GCP_form()" style="display:block">sendreceive_files_GCP_form</button>
 
-	
+<button id="sendreceive_files_GCP_fetch" onclick="sendreceive_files_GCP_fetch()" style="display:block">sendreceive_files_GCP_fetch</button>
 
 
 	
 <style>
       canvas {border: 1px solid black;}
-    </style>
+</style>
 	
   
   <script>
-
-    
 	  
 // -------------------------------------------------
     
-async function sendreceive_files_GCP() {
+async function sendreceive_files_GCP_form() {
 
   // Create <form> element to submit parameters to endpoint
   var form = document.createElement('form');
@@ -39,7 +37,7 @@ async function sendreceive_files_GCP() {
   form.setAttribute('action', url);
 
   // , Connection': 'keep-alive',
-  //form.setAttribute('headers', {'Content-Type': 'application/json', 'Access-Control-Allow-Origin: '*'});
+  form.setAttribute('headers', {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"});
   
   // Parameters to pass to endpoint.
   var params = {'key': 'blue.png'};
@@ -59,15 +57,59 @@ async function sendreceive_files_GCP() {
   document.body.appendChild(form);
 
   form.submit();
-	
   
-  
-}  // end of main
+}  // end of sendreceive_files_GCP_form
 
 
 // -------------------------------------------------
 
+async function sendreceive_files_GCP_fetch() {
 
+	let url = 'https://storage.googleapis.com/on-the-way2selfrespect/blue.png';
+	
+	let headers = {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"};
+	
+	let options = {method : 'post', headers: headers, mode: 'cors', cache: "no-cache", redirect: "follow", referrerPolicy: "no-referrer"};
+	
+	await fetch(url, options).then(res => res.json()).then(imageout => {
+
+		console.log('imageout:', imageout);
+		
+		// -------------------------------------------------
+
+		var canvasElement = document.createElement('canvas');
+		canvasElement.width = 100;
+		canvasElement.height = canvasElement.width;
+		var ctx = canvasElement.getContext("2d");
+		ctx.fillStyle = '#999c98';  // Background square over image = blue
+		ctx.fillRect(0, 0, canvasElement.width, 50);  // fillRect(x, y, width, height);
+		document.body.appendChild(canvasElement);
+
+		// -------------------------------------------------
+
+		const image = new Image();
+		image.crossOrigin = "anonymous";
+		image.onload = async () => {
+	
+		// Draw image on canvas
+		ctx.drawImage(image, 0,0);
+
+		    // Write image name on canvas
+		    ctx.font = "bold 14px serif";
+		    let out = url.split("/")
+		    let image_name = out[out.length-1];
+		    ctx.fillStyle = "#ffffff";  // Font color = white, 
+		    ctx.fillText(image_name, 10, 15);
+        
+		};  // end of image.onload
+
+		image.src = url;
+
+	  }).catch(error => { outp.innerHTML += error; });
+	
+	 
+
+}  // end of sendreceive_files_GCP_fetch
 
 // -------------------------------------------------
 
