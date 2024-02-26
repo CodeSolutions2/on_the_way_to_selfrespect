@@ -37,6 +37,9 @@ const ImageArray = ["https://storage.googleapis.com/on-the-way2selfrespect/red.p
 
 var squarelocation = [0, 1, 2, 3, 4, 5, 6];
 
+// Set the width and height of the canvas
+canvasElement_width = 150;
+canvasElement_height = canvasElement_width;
 	  
 // -------------------------------------------------
     
@@ -70,7 +73,7 @@ ImageArray.forEach(function(url, index) {
 
 		    ctx.fillStyle = '#999c98';  // Background square over image = blue
 	// ctx.fillRect(0, 0, canvasElement.width, 50);  // fillRect(x, y, width, height);
-	ctx.fillRect(0, 0, canvasElement.width, canvasElement.height);
+	ctx.fillRect(0, 0, canvasElement_width, canvasElement_height);
 
 		    // Write image name on canvas
 		    //ctx.font = "bold 14px serif";
@@ -93,7 +96,7 @@ function cover_images(){
 	// Cover all images with a grey square
 	ctx.fillStyle = '#999c98';  // Background square over image = blue
 	// ctx.fillRect(0, 0, canvasElement.width, 50);  // fillRect(x, y, width, height);
-	ctx.fillRect(0, 0, canvasElement.width, canvasElement.height);
+	ctx.fillRect(0, 0, canvasElement_width, canvasElement_height);
 }
 
 	  	  
@@ -113,9 +116,7 @@ function create_dynamic_canvasElement(index) {
 	// Create a canvas element
 	var canvasElement = document.createElement('canvas');
 
-	// Set the width and height of the canvas
-	canvasElement.width = 150;
-	canvasElement.height = canvasElement.width;
+	
 	      
 	// Get the 2D rendering context of the canvas
 	var ctx = canvasElement.getContext("2d");
