@@ -161,7 +161,7 @@ function onsubmit_get_result() {
         var key_value_pair = form_elements[i]; 
         console.log(key_value_pair.name, key_value_pair.value);
       }
-	
+	// https://storage.googleapis.com/on-the-way2selfrespect/blue.png?keyvalue%3Dblue.png=
 }
 
 
@@ -179,9 +179,10 @@ async function sendreceive_files_GCP_fetch() {
 	// referrerPolicy: 
 	// "origin"    // failed to do Cross-Origin Request
 	// "unsafe-url"  //Ignoring the less restricted referrer policy “unsafe-url” for the cross-site request (failed to do Cross-Origin Request)
-	//
+	// "cross-origin"
 	// 
-	let options = {method : 'GET', headers: headers, mode: 'cors', cache: "no-cache", credentials: "include", redirect: "follow", referrerPolicy: "Origin"};
+	let options = {method : 'GET', headers: headers, mode: 'cors', cache: "no-cache", credentials: "include", redirect: "follow", referrerPolicy: "origin"};
+
 
 	try {
 		await fetch(url, options).then(res => res.json()).then(imageout => {
