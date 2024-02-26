@@ -30,8 +30,6 @@
 	  
 const outp = document.getElementById('output');
 
-
-
 // -------------------------------------------------
 
 // Way 0: Use image.onload to perform GET to obtain an image from GCP
@@ -86,11 +84,12 @@ async function sendreceive_files_GCP_image() {
 async function sendreceive_files_GCP_form() {
 
   // Create <form> element to submit parameters to endpoint
-  var form = document.createElement('id_of_form');
+  var form = document.createElement('form_id');
   
   form.setAttribute('method', 'GET'); 
-  
-  var url = 'https://storage.googleapis.com/on-the-way2selfrespect';
+
+  // var url = 'https://storage.googleapis.com/on-the-way2selfrespect';  // Using this returned a list of all the bucket items, but I only want to GET one bucket item
+  var url = 'https://storage.googleapis.com/on-the-way2selfrespect/blue.png';
   
   form.setAttribute('action', url);
 
@@ -113,8 +112,6 @@ async function sendreceive_files_GCP_form() {
 
   // Add form to page and submit it to open the endpoint.
   document.body.appendChild(form);
-
-	form.onsubmit("return checkForm(this)");
 	
   form.submit();
   
@@ -122,17 +119,19 @@ async function sendreceive_files_GCP_form() {
 
 
 
-function checkForm(thisForm){
+function logSubmit(event) {
+  log.textContent = `Form Submitted! Timestamp: ${event.timeStamp}`;
+  event.preventDefault();
 
-      outp.innerHTML += "data sent";
+	outp.innerHTML += "data sent";
 
-      // -------------------
+ // -------------------
       // Save form data AFTER the GET request
       // -------------------
 
       // Read from the submitted form
       // Display the key/value pairs on the form before and AFTER the GET/POST
-      var formObject = document.getElementById("id_of_form");
+      var formObject = document.getElementById("form_id");
       var form_elements = formObject.elements;
 
       for (var i=0; i<form_elements.length; i++){
@@ -141,6 +140,10 @@ function checkForm(thisForm){
         localStorage.setItem(key_value_pair.name, key_value_pair.value)
       }
 }
+
+const form = document.getElementById("form_id");
+const log = document.getElementById("log");
+form.addEventListener("submit", logSubmit);
 
 
 // -------------------------------------------------
