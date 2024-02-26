@@ -84,7 +84,7 @@ async function sendreceive_files_GCP_image() {
 
 async function sendreceive_files_GCP_form() {
 	
-	let out = await create_form().then(async function(res){ 
+	let out = await create_form().then(async function(){ 
 		await onsubmit_get_result();
 		console.log('res: ', res); console.log('onsubmit_get_result finished!'); return 'all done'; });
 	
@@ -125,8 +125,6 @@ async function create_form() {
   document.body.appendChild(form);
 	
   form.submit();
-
-  return 'return of create_form';
   
 }  // end of sendreceive_files_GCP_form
 
