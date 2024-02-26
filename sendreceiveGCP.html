@@ -171,8 +171,9 @@ function onsubmit_get_result() {
 async function sendreceive_files_GCP_fetch() {
 
 	let url = 'https://storage.googleapis.com/on-the-way2selfrespect/blue.png';
-	
-	let headers = {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"};
+
+	// The server should set this , "Access-Control-Allow-Credentials": true
+	let headers = {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Credentials": true};
 
 
 	// referrerPolicy: 
@@ -180,7 +181,7 @@ async function sendreceive_files_GCP_fetch() {
 	// "unsafe-url"  //Ignoring the less restricted referrer policy “unsafe-url” for the cross-site request (failed to do Cross-Origin Request)
 	//
 	// 
-	let options = {method : 'GET', headers: headers, mode: 'cors', cache: "no-cache", redirect: "follow", referrerPolicy: "origin-when-cross-origin"};
+	let options = {method : 'GET', headers: headers, mode: 'cors', cache: "no-cache", credentials: "include", redirect: "follow", referrerPolicy: "Origin"};
 
 	try {
 		await fetch(url, options).then(res => res.json()).then(imageout => {
