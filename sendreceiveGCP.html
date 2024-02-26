@@ -84,9 +84,7 @@ async function sendreceive_files_GCP_image() {
 
 async function sendreceive_files_GCP_form() {
 
-	await create_form().then(async onsubmit_get_result() {
-		console.log('onsubmit_get_result finished!');
-	});
+	await create_form().then(async onsubmit_get_result(){ console.log('onsubmit_get_result finished!'); });
 	
 }
 	  
