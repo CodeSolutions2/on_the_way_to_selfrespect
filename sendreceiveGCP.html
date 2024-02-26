@@ -142,30 +142,9 @@ async function sendreceive_files_GCP_form() {
 //document.getElementById("sendreceive_files_GCP_form").addEventListener("click", dontGo);
 // OR
 	  
-// document.addEventListener('click', sendreceive_files_GCP_form(event) => {
-	//event.preventDefault(); // Do not redirect page
-	// var element = event.target;
-	// if(element.classList.contains("sendreceive_files_GCP_form")){ onsubmit_get_result(); }
-// });
-
-// -----------------------------------
-
-
-// Problem: form_id does not exist yet
-// const formObject = document.querySelector('form');
-// 	formObject.addEventListener('submit', (event) => {
-// 		onsubmit_get_result();
-// });
-// https://stackoverflow.com/questions/30601620/adding-an-event-listener-to-an-element-that-doesnt-exist-yet-in-vanilla-javascr
-// https://stackoverflow.com/questions/42542300/how-to-stay-on-the-same-page-after-clicking-submit-button
-//document.getElementById("sendreceive_files_GCP_form").addEventListener("click", dontGo);
-// OR
-// document.addEventListener('click', sendreceive_files_GCP_form(event) => {
-	// Do not redirect page
-// 	event.preventDefault();
-
-	  // https://stackoverflow.com/questions/30601620/adding-an-event-listener-to-an-element-that-doesnt-exist-yet-in-vanilla-javascr
 document.addEventListener('click', (event) => {
+	// Do not redirect page
+	event.preventDefault();
 	// Print returned form element
 	var element = event.target;
 	if(element.classList.contains("sendreceive_files_GCP_form")){
@@ -173,8 +152,10 @@ document.addEventListener('click', (event) => {
 	}
 });
 
+	  
 // -----------------------------------
 
+	  
 function onsubmit_get_result() {
 
 	outp.innerHTML += "data sent";
