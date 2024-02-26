@@ -81,10 +81,21 @@ async function sendreceive_files_GCP_image() {
 // -------------------------------------------------
 
 // Way 1: Use a form to perform GET to obtain an image from GCP
+
 async function sendreceive_files_GCP_form() {
 
+	await create_form().then(async onsubmit_get_result() {
+		console.log('onsubmit_get_result finished!');
+	});
+	
+}
+	  
+
+async function create_form() {
+	
   // Create <form> element to submit parameters to endpoint
   var form = document.createElement('form_id');
+	
   
   form.setAttribute('method', 'GET'); 
 
@@ -119,13 +130,11 @@ async function sendreceive_files_GCP_form() {
 
 
 
-function logSubmit(event) {
-  log.textContent = `Form Submitted! Timestamp: ${event.timeStamp}`;
-  event.preventDefault();
+function onsubmit_get_result() {
 
 	outp.innerHTML += "data sent";
 
- // -------------------
+      // -------------------
       // Save form data AFTER the GET request
       // -------------------
 
@@ -136,14 +145,9 @@ function logSubmit(event) {
 
       for (var i=0; i<form_elements.length; i++){
         var key_value_pair = form_elements[i]; 
-
-        localStorage.setItem(key_value_pair.name, key_value_pair.value)
+        console.log(key_value_pair.name, key_value_pair.value);
       }
 }
-
-
-const log = document.getElementById("log");
-form.addEventListener("submit", logSubmit);
 
 
 // -------------------------------------------------
