@@ -132,25 +132,27 @@ async function sendreceive_files_GCP_form() {
 
 // -----------------------------------
 
-//function dontGo(event) {
-//    event.preventDefault();
-//}
-
 
 // https://stackoverflow.com/questions/30601620/adding-an-event-listener-to-an-element-that-doesnt-exist-yet-in-vanilla-javascr
 // https://stackoverflow.com/questions/42542300/how-to-stay-on-the-same-page-after-clicking-submit-button
-//document.getElementById("sendreceive_files_GCP_form").addEventListener("click", dontGo);
-// OR
-	  
-document.addEventListener('click', (event) => {
-	// Do not redirect page
+
+// Add an eventlistener to a button, when the button is clicked, do not redirect AND output the form results
+// Do not redirect page to the page that we want to perform GET,POST requests with
+document.getElementById("sendreceive_files_GCP_form").addEventListener("click", (event) => {
 	event.preventDefault();
-	// Print returned form element
-	var element = event.target;
-	if(element.classList.contains("sendreceive_files_GCP_form")){
-		onsubmit_get_result();
-	}
+	onsubmit_get_result();
 });
+	  
+// OR
+
+// It is listening for any clicks on the page now, and if it receives a click on 
+// document.addEventListener('click', (event) => {
+	// Check if the page click is on a certain element
+// 	var element = event.target;
+// 	if(element.classList.contains("sendreceive_files_GCP_form")){
+// 		onsubmit_get_result();
+// 	}
+// });
 
 	  
 // -----------------------------------
