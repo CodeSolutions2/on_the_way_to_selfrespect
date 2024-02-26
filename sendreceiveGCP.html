@@ -84,7 +84,9 @@ async function sendreceive_files_GCP_image() {
 
 async function sendreceive_files_GCP_form() {
 	
-	let out = await create_form().then(async onsubmit_get_result(res){ console.log('res: ', res); console.log('onsubmit_get_result finished!'); return 'all done'; });
+	let out = await create_form().then(async function(res){ 
+		await onsubmit_get_result();
+		console.log('res: ', res); console.log('onsubmit_get_result finished!'); return 'all done'; });
 	
 }
 	  
@@ -124,13 +126,14 @@ async function create_form() {
 	
   form.submit();
 
-  return 'done';
+  return 'return of create_form';
   
 }  // end of sendreceive_files_GCP_form
 
 
 
-function onsubmit_get_result() {
+
+async function onsubmit_get_result() {
 
 	outp.innerHTML += "data sent";
 
@@ -147,8 +150,7 @@ function onsubmit_get_result() {
         var key_value_pair = form_elements[i]; 
         console.log(key_value_pair.name, key_value_pair.value);
       }
-
-    return 'done';
+	
 }
 
 
