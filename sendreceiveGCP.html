@@ -81,22 +81,12 @@ async function sendreceive_files_GCP_image() {
 // -------------------------------------------------
 
 // Way 1: Use a form to perform GET to obtain an image from GCP
-
+// Form has to be called with one level from main page - can not be called in a function-in-a-function
 async function sendreceive_files_GCP_form() {
-	
-	await create_form();  // chaining the functions do not work for forms
-	
-	await onsubmit_get_result();
-	
-}
-	  
-
-async function create_form() {
 	
   // Create <form> element to submit parameters to endpoint
   var form = document.createElement('form_id');
 	
-  
   form.setAttribute('method', 'GET'); 
 
   // var url = 'https://storage.googleapis.com/on-the-way2selfrespect';  // Using this returned a list of all the bucket items, but I only want to GET one bucket item
@@ -108,18 +98,28 @@ async function create_form() {
   form.setAttribute('headers', {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"});
   
   // Parameters to pass to endpoint.
-  var params = {'key': 'blue.png'};
+  var params = {'key': 'blue.png', 'confirm_submit': 'Submit'};
+  let type_val = ['text', 'submit'];
 
   // Add form parameters as hidden input values.
-  for (var p in params) {  
+  // for (var p in params) {  
+  params.forEach(async function(row, index) {
+	  let currentkey = Object.keys(row);
+	  console.log("currentvalue: ", currentvalue);
+	  let currentvalue = Object.values(row);
+	  console.log("currentvalue: ", currentvalue);
+	  let value = currentvalue;  // params[p]
+	  let name = currentkey;  // p
+	  let type = type_val[index];
+		  
     var input = document.createElement('input');
-    input.innerHTML = '<input style="display:none;" name=' +p+ 'value=' +params[p]+ '>';
+    input.innerHTML = '<input style="display:none;" type=' +type+ ' name=' +name+ 'value=' +value+ '>';
 
 		// https://storage.googleapis.com/textclassification-w-labeled-data?keytype%3D%22text%22=train_dataset0.csv
 		// https://storage.googleapis.com/textclassification-w-labeled-data?keyvalue%3Dtrain_dataset0.csv=
           
      form.appendChild(input);
-    }
+    });
 
   // Add form to page and submit it to open the endpoint.
   document.body.appendChild(form);
@@ -128,10 +128,17 @@ async function create_form() {
   
 }  // end of sendreceive_files_GCP_form
 
+// -----------------------------------
+	  
+const formObject = document.querySelector('form_id');
+	formObject.addEventListener('submit', (event) => {
+		onsubmit_get_result();
 
+});
 
+// -----------------------------------
 
-async function onsubmit_get_result() {
+function onsubmit_get_result() {
 
 	outp.innerHTML += "data sent";
 
