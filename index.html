@@ -57,6 +57,7 @@ ImageArray.forEach(function(url, index) {
 	    // PRINT
 	    // outp.innerHTML += 'image.complete: ' + image.complete + "<br/>";
 
+	    image.setAttribute('crossOrigin', "");
 
 	    image.onload = async () => {
 	
@@ -78,7 +79,7 @@ ImageArray.forEach(function(url, index) {
   	});  // end of image.forEach
   
 }  // end of main
-    https://console.cloud.google.com/
+	  
 // -------------------------------------------------
 
 // Tutorial script: idea is to create 
