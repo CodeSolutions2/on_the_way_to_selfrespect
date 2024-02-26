@@ -127,8 +127,10 @@ async function sendreceive_files_GCP_fetch() {
 	let url = 'https://storage.googleapis.com/on-the-way2selfrespect/blue.png';
 	
 	let headers = {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"};
-	
-	let options = {method : 'GET', headers: headers, mode: 'cors', cache: "no-cache", redirect: "follow", referrerPolicy: "origin"};
+
+
+	// referrerPolicy: "origin"
+	let options = {method : 'GET', headers: headers, mode: 'cors', cache: "no-cache", redirect: "follow", referrerPolicy: "unsafe-url"};
 
 	try {
 		await fetch(url, options).then(res => res.json()).then(imageout => {
