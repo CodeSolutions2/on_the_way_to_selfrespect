@@ -86,7 +86,7 @@ async function sendreceive_files_GCP_image() {
 async function sendreceive_files_GCP_form() {
 
   // Create <form> element to submit parameters to endpoint
-  var form = document.createElement('form');
+  var form = document.createElement('id_of_form');
   
   form.setAttribute('method', 'GET'); 
   
@@ -114,9 +114,33 @@ async function sendreceive_files_GCP_form() {
   // Add form to page and submit it to open the endpoint.
   document.body.appendChild(form);
 
+	form.onsubmit("return checkForm(this)");
+	
   form.submit();
   
 }  // end of sendreceive_files_GCP_form
+
+
+
+function checkForm(thisForm){
+
+      outp.innerHTML += "data sent";
+
+      // -------------------
+      // Save form data AFTER the GET request
+      // -------------------
+
+      // Read from the submitted form
+      // Display the key/value pairs on the form before and AFTER the GET/POST
+      var formObject = document.getElementById("id_of_form");
+      var form_elements = formObject.elements;
+
+      for (var i=0; i<form_elements.length; i++){
+        var key_value_pair = form_elements[i]; 
+
+        localStorage.setItem(key_value_pair.name, key_value_pair.value)
+      }
+}
 
 
 // -------------------------------------------------
@@ -129,8 +153,10 @@ async function sendreceive_files_GCP_fetch() {
 	let headers = {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"};
 
 
-	// referrerPolicy: "origin"
-	let options = {method : 'GET', headers: headers, mode: 'cors', cache: "no-cache", redirect: "follow", referrerPolicy: "unsafe-url"};
+	// referrerPolicy: "origin"    // failed to do Cross-Origin Request
+	// referrerPolicy: "unsafe-url"  //Ignoring the less restricted referrer policy “unsafe-url” for the cross-site request (failed to do Cross-Origin Request)
+	// 
+	let options = {method : 'GET', headers: headers, mode: 'cors', cache: "no-cache", redirect: "follow", referrerPolicy: "origin-when-cross-origin"};
 
 	try {
 		await fetch(url, options).then(res => res.json()).then(imageout => {
