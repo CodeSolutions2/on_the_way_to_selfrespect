@@ -128,7 +128,7 @@ async function sendreceive_files_GCP_fetch() {
 	
 	let headers = {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"};
 	
-	let options = {method : 'post', headers: headers, mode: 'cors', cache: "no-cache", redirect: "follow", referrerPolicy: "origin"};
+	let options = {method : 'GET', headers: headers, mode: 'cors', cache: "no-cache", redirect: "follow", referrerPolicy: "origin"};
 
 	try {
 		await fetch(url, options).then(res => res.json()).then(imageout => {
