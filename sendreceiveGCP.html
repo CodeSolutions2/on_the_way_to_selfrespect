@@ -83,9 +83,8 @@ async function sendreceive_files_GCP_image() {
 // Way 1: Use a form to perform GET to obtain an image from GCP
 
 async function sendreceive_files_GCP_form() {
-
 	
-	await create_form().then(async onsubmit_get_result(){ console.log('onsubmit_get_result finished!'); });
+	let out = await create_form().then(async onsubmit_get_result(res){ console.log('res: ', res); console.log('onsubmit_get_result finished!'); return 'all done'; });
 	
 }
 	  
