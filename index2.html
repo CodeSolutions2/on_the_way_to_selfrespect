@@ -101,25 +101,13 @@ document.body.appendChild(canvasElement6); // Add the canvas to the document bod
 	  
 // -------------------------------------------------
 
-
-
 	  
 async function run_it() {
 
-
-	
 	// -------------------------------------------------
 
-	// Get the ordering of which squares to flash
-	// Randomize this
-	let order = [5, 2, 1]; 
-
-
-// -------------------------------------------------
-
-// Show all the grey squares
-
-
+	// Show all the grey squares
+	await show_grey_square();
 
 	// -------------------------------------------------
 
@@ -129,8 +117,10 @@ async function run_it() {
 	
 }  // end of run_it
 
+	  
 // -------------------------------------------------
-	
+
+	  
 async function show_image_square() {
 
 ImageArray.forEach(async function(val, index) {
@@ -164,48 +154,58 @@ ImageArray.forEach(async function(val, index) {
 
 
 
-async function print_covered_squares() {
+async function show_grey_square() {
 	
-ImageArray.forEach(async function(url, index) {
+squarelocation.forEach(async function(locnum, index) {
         
 	    const image = new Image();
 
 	    // Add 'crossorigin' attribute to bypass insecure error
-	    image.crossOrigin = ""
+	    // image.crossOrigin = ""
 	    // image.crossOrigin = "anonymous";
 	    // image.crossOrigin = "use-credentials"; // https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/crossorigin
 
 	    // PRINT
 	    // outp.innerHTML += 'image.complete: ' + image.complete + "<br/>";
 
-	    image.setAttribute('crossOrigin', "");
-	    image.setAttribute('headers', {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"});
+	    // image.setAttribute('crossOrigin', "");
+	    // image.setAttribute('headers', {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"});
 
 	    image.onload = async () => {
 		    // Draw image on canvas
-		    if (index == 0) {
-			ctx0.drawImage(image, 0,0);
+		    if (locnum == 0) {
+			// ctx0.drawImage(image, 0,0);
 			ctx0.fillStyle = '#999c98';  // Background square over image = blue
 			ctx0.fillRect(0, 0, canvasElement_width, canvasElement_height);
-		    } else if (index == 1) {
-			ctx1.drawImage(image, 0,0);
+		    } else if (locnum == 1) {
+			// ctx1.drawImage(image, 0,0);
 			ctx1.fillStyle = '#999c98';  // Background square over image = blue
 			ctx1.fillRect(0, 0, canvasElement_width, canvasElement_height);
-		    } else if (index == 2) {
-			ctx2.drawImage(image, 0,0);
+		    } else if (locnum == 2) {
+			// ctx2.drawImage(image, 0,0);
 			ctx2.fillStyle = '#999c98';  // Background square over image = blue
 			ctx2.fillRect(0, 0, canvasElement_width, canvasElement_height);
-		    } else if (index == 3) {
-			ctx0.drawImage(image, 0,0);
-		    } else if (index == 4) {
-			ctx0.drawImage(image, 0,0);
-
-		    } else if (index == 5) {
-		    
+		    } else if (locnum == 3) {
+			// ctx3.drawImage(image, 0,0);
+			ctx3.fillStyle = '#999c98';  // Background square over image = blue
+			ctx3.fillRect(0, 0, canvasElement_width, canvasElement_height);
+		    } else if (locnum == 4) {
+			// ctx4.drawImage(image, 0,0);
+			ctx4.fillStyle = '#999c98';  // Background square over image = blue
+			ctx4.fillRect(0, 0, canvasElement_width, canvasElement_height);
+		    } else if (locnum == 5) {
+			// ctx5.drawImage(image, 0,0);
+			ctx5.fillStyle = '#999c98';  // Background square over image = blue
+			ctx5.fillRect(0, 0, canvasElement_width, canvasElement_height);
+		    } else {
+			// ctx6.drawImage(image, 0,0);
+			ctx6.fillStyle = '#999c98';  // Background square over image = blue
+			ctx6.fillRect(0, 0, canvasElement_width, canvasElement_height);
+		    }
         
 	    };  // end of image.onload
 
-	    image.src = url;
+	    // image.src = url;
 
   	});  // end of image.forEach
   
