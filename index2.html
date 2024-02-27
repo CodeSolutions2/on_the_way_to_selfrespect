@@ -12,7 +12,7 @@
 
 <button id="run_it_button" onclick="run_it()" style="display:block">run_it</button>
 	
-
+<button id="flash_sequence_button" onclick="flash_sequence()" style="display:block">flash_sequence</button>
 
 	
 <style>
@@ -61,6 +61,12 @@ var ctx5 = canvasElement5.getContext("2d");  // Get the 2D rendering context of 
 
 var canvasElement6 = document.createElement('canvas');
 var ctx6 = canvasElement6.getContext("2d");  // Get the 2D rendering context of the canvas
+
+// -------------------------------------------------
+
+
+
+	var val = 0;
 
 // -------------------------------------------------
 
@@ -152,14 +158,9 @@ async function run_it() {
 		// await show_one_grey_square(val);
 
 		// OR
-	let val = order[0];
+	 val = order[0];
 	console.log('val: ', val);
-	
-		await show_one_image_square(val).then(async (val) => {
-			await new Promise(r => setTimeout(r, 2000)); return val;
-		}).then(async function(val) {
-			await show_one_grey_square(val);
-		});
+	 
 	
 	//});
 		      
@@ -187,10 +188,15 @@ async function rand_perm(x) {
 	  
 // -------------------------------------------------
 
+async function flash_sequence(){
 
-// async function flash_sequence(){
-
+	  await show_one_image_square(val).then(async (val) => {
+			await new Promise(r => setTimeout(r, 2000)); return val;
+		}).then(async function(val) {
+			await show_one_grey_square(val);
+		});
 	
+} 
 
 	  
 // -------------------------------------------------
