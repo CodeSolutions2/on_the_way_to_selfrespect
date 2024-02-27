@@ -45,65 +45,76 @@ var canvasElement_height = canvasElement_width;
 // Create all the elements
 // ----------------------------
 var canvasElement0 = document.createElement('canvas');
-canvasElement0.width = canvasElement_width;
-canvasElement0.height = canvasElement_height;
 var ctx0 = canvasElement0.getContext("2d");  // Get the 2D rendering context of the canvas
-canvasElement0.style.left = 40+'px';
-document.body.appendChild(canvasElement0); // Add the canvas to the document body or any other desired element
-// ----------------------------
+
 var canvasElement1 = document.createElement('canvas');
-canvasElement1.width = canvasElement_width;
-canvasElement1.height = canvasElement_height;
-var ctx1 = canvasElement1.getContext("2d");  // Get the 2D rendering context of the canvas
-let tot = 1*canvasElement_width + 40;
-canvasElement1.style.left = tot+'px';
-document.body.appendChild(canvasElement1); // Add the canvas to the document body or any other desired element
-// ----------------------------
+var ctx1 = canvasElement1.getContext("2d");
+
 var canvasElement2 = document.createElement('canvas');
-canvasElement2.width = canvasElement_width;
-canvasElement2.height = canvasElement_height;
 var ctx2 = canvasElement2.getContext("2d");  // Get the 2D rendering context of the canvas
-let tot = 2*canvasElement_width + 40;
-canvasElement2.style.left = tot+'px';
-document.body.appendChild(canvasElement2); // Add the canvas to the document body or any other desired element
-// ----------------------------
+
 var canvasElement3 = document.createElement('canvas');
-canvasElement3.width = canvasElement_width;
-canvasElement3.height = canvasElement_height;
-var ctx1 = canvasElement3.getContext("2d");  // Get the 2D rendering context of the canvas
-let tot = 3*canvasElement_width + 40;
-canvasElement3.style.left = tot+'px';
-document.body.appendChild(canvasElement3); // Add the canvas to the document body or any other desired element
-// ----------------------------
+var ctx3 = canvasElement3.getContext("2d");  // Get the 2D rendering context of the canvas
+
 var canvasElement4 = document.createElement('canvas');
-canvasElement4.width = canvasElement_width;
-canvasElement4.height = canvasElement_height;
-var ctx1 = canvasElement4.getContext("2d");  // Get the 2D rendering context of the canvas
-let tot = 4*canvasElement_width + 40;
-canvasElement4.style.left = tot+'px';
-document.body.appendChild(canvasElement4); // Add the canvas to the document body or any other desired element
-// ----------------------------
+var ctx4 = canvasElement4.getContext("2d");  // Get the 2D rendering context of the canvas
+
 var canvasElement5 = document.createElement('canvas');
-canvasElement5.width = canvasElement_width;
-canvasElement5.height = canvasElement_height;
 var ctx5 = canvasElement5.getContext("2d");  // Get the 2D rendering context of the canvas
-let tot = 5*canvasElement_width + 40;
-canvasElement5.style.left = tot+'px';
-document.body.appendChild(canvasElement5); // Add the canvas to the document body or any other desired element
-// ----------------------------
+
 var canvasElement6 = document.createElement('canvas');
-canvasElement6.width = canvasElement_width;
-canvasElement6.height = canvasElement_height;
 var ctx6 = canvasElement6.getContext("2d");  // Get the 2D rendering context of the canvas
-let tot = 6*canvasElement_width + 40;
-canvasElement6.style.left = tot+'px';
-document.body.appendChild(canvasElement6); // Add the canvas to the document body or any other desired element
-	  
+
 // -------------------------------------------------
 
+async function specify_location_of_canvas() {
+
+	canvasElement0.width = canvasElement_width;
+	canvasElement0.height = canvasElement_height;
+	canvasElement1.width = canvasElement_width;
+	canvasElement1.height = canvasElement_height;
+	canvasElement2.width = canvasElement_width;
+	canvasElement2.height = canvasElement_height;
+	canvasElement3.width = canvasElement_width;
+	canvasElement3.height = canvasElement_height;
+	canvasElement4.width = canvasElement_width;
+	canvasElement4.height = canvasElement_height;
+	canvasElement5.width = canvasElement_width;
+	canvasElement5.height = canvasElement_height;
+	canvasElement6.width = canvasElement_width;
+	canvasElement6.height = canvasElement_height;
+
+	// Location style: row
+	canvasElement0.style.left = Number(0*canvasElement_width + 40)+'px';
+	canvasElement1.style.left = Number(1*canvasElement_width + 40)+'px';
+	canvasElement2.style.left = Number(2*canvasElement_width + 40)+'px';
+	canvasElement3.style.left = Number(3*canvasElement_width + 40)+'px';
+	canvasElement4.style.left = Number(4*canvasElement_width + 40)+'px';
+	canvasElement5.style.left = Number(5*canvasElement_width + 40)+'px';
+	canvasElement6.style.left = Number(6*canvasElement_width + 40)+'px';
+
+	// Location sytle: triangle
+	// Location sytle: square
+	// Location sytle: 5 sides
+	// Location sytle: hexagon
+	// Location style: 7 sides
+
+	// Add the canvas to the document body or any other desired element
+	document.body.appendChild(canvasElement0);
+	document.body.appendChild(canvasElement1);
+	document.body.appendChild(canvasElement2);
+	document.body.appendChild(canvasElement3);
+	document.body.appendChild(canvasElement4);
+	document.body.appendChild(canvasElement5);
+	document.body.appendChild(canvasElement6); 
+}
+
+
+	  
 	  
 async function run_it() {
 
+	await specify_location_of_canvas();
 	// -------------------------------------------------
 
 	// Show all the grey squares
