@@ -123,6 +123,7 @@ async function run_it() {
 	// Uncover the grey squares in the order
 	order = squarelocation.sort((a, b) => a - Math.random());
 	console.log('Math.random():', Math.random());
+	console.log('order:', order);
 
 
 	
@@ -175,8 +176,8 @@ ImageArray.forEach(async function(val, index) {
 
 async function show_grey_square() {
 	
-squarelocation.forEach(async function(locnum, index) {
-        
+	squarelocation.forEach(async function(locnum, index) {
+	        
 	    // Draw image on canvas
 	    if (locnum == 0) {
 		ctx0.fillStyle = '#999c98';  // Background square over image = blue
@@ -200,8 +201,9 @@ squarelocation.forEach(async function(locnum, index) {
 		ctx6.fillStyle = '#999c98';  // Background square over image = blue
 		ctx6.fillRect(0, 0, canvasElement_width, canvasElement_height);
 	    }
-        
-}  // end of main
+	});
+	
+}  // end of show_grey_square
 	  
 // -------------------------------------------------
 
