@@ -143,7 +143,7 @@ async function run_it() {
 	// -------------------------------------------------
 
 	// Flash 
-	order.forEach(async function(val, index) {
+	//order.forEach(async function(val, index) {
 	
 		// await show_one_image_square(val);
 	
@@ -152,13 +152,16 @@ async function run_it() {
 		// await show_one_grey_square(val);
 
 		// OR
+	let val = order[0];
+	console.log('val: ', val);
+	
 		await show_one_image_square(val).then(async (val) => {
 			await new Promise(r => setTimeout(r, 2000)); return val;
 		}).then(async function(val) {
 			await show_one_grey_square(val);
 		});
 	
-	});
+	//});
 		      
 	// -------------------------------------------------
 
