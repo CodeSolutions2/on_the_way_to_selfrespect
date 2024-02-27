@@ -115,6 +115,7 @@ async function specify_location_of_canvas() {
 async function run_it() {
 
 	await specify_location_of_canvas();
+	
 	// -------------------------------------------------
 
 	// Show all the grey squares
@@ -141,16 +142,24 @@ ImageArray.forEach(async function(val, index) {
 	    image.setAttribute('crossOrigin', "");
 	    image.setAttribute('headers', {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"});
 
+	    let locnum = squarelocation[index];
+	
 	    image.onload = async () => {
-		    // Draw image on canvas
-		    if (index == 0) {
+		    if (locnum == 0) {
 			ctx0.drawImage(image, 0,0);
-		    } else if (index == 1) {
-			ctx0.drawImage(image, 0,0);
-		} else if (index == 0) {
-			ctx0.drawImage(image, 0,0);
-
-			    } else if () {
+		    } else if (locnum == 1) {
+			ctx1.drawImage(image, 0,0);
+		    } else if (locnum == 2) {
+			ctx2.drawImage(image, 0,0);
+		    } else if (locnum == 3) {
+			ctx3.drawImage(image, 0,0);
+		    } else if (locnum == 4) {
+			ctx4.drawImage(image, 0,0);
+		    } else if (locnum == 5) {
+			ctx5.drawImage(image, 0,0);
+		    } else {
+			ctx6.drawImage(image, 0,0);
+		    }
 		    
         
 	    };  // end of image.onload
