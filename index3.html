@@ -3,17 +3,17 @@
 <head></head>
 <body>
 
+<!-- https://CodeSolutions2.github.io/on_the_way_to_selfrespect/index2.html -->
 <h1 style='text-align: center; margin-bottom: -35px;'>On the way to self-respect webapp</h1>
 <br><br>
-
-	
-<!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/div -->
-<!-- https://CodeSolutions2.github.io/on_the_way_to_selfrespect/index2.html -->
 
 <button id="run_it_button" onclick="run_it()" style="display:block">run_it</button>
 
 <!-- Output text -->
 <div id="output" style="font-family:courier;font-size:24px;height:300px"></div>
+
+<br><br>
+
 <button id="user_click_done" onclick="user_click_done()" style="display:none">DONE</button>
 	
 <style>
@@ -149,7 +149,7 @@ async function run_it() {
 
 	var order = await initialization_of_canvasElements()
 		.then(async function() { var order = await flash_sequence_difficulty3(); return order;})
-		.then(async function(order) { await listen_for_user_clicks(); return order;})
+		.then(async function(order) { await listen_for_user_clicks(); localStorage.setItem("order", order); return order;})
 		;
 
 	// now, need a way to determine when the user is done click 
@@ -234,19 +234,16 @@ async function stop_listening_for_user_clicks() {
 
 
 async function verify_user_clicks(){
-	// user_click.push(1);
-
-	// OR
-
-	// user_click.push(val);
-
+	
 	// Remove DONE button
 	document.getElementById("user_click_done").style = 'none';
 
 	// make order a string
+	console.log('order: ', order);
 	const order_string = order.toString();
 	
 	// make user_click a string
+	console.log('user_click: ', user_click);
 	const user_click_string = user_click.toString();
 
 	if (order_string == user_click_string) {
@@ -256,7 +253,6 @@ async function verify_user_clicks(){
 		outp.innerHTML = "Incorrect: the pattern was " + order_string + ", you performed " + user_click_string;
 	}
 
-	
 }
 
 
@@ -316,6 +312,18 @@ async function flash_sequence_difficulty3(){
 
 	  
 // -------------------------------------------------
+
+
+async function flash_sequence_when_clicked_on(val){
+
+	await show_one_image_square(val)
+		.then(async (val) => { await new Promise(r => setTimeout(r, 1000)); return val;})
+		.then(async function(val) { await show_one_grey_square(val); })
+		;
+
+} 
+	  
+// -------------------------------------------------
 	  
 async function show_one_image_square(val) {
 	
@@ -350,7 +358,6 @@ async function show_one_image_square(val) {
 }  // end of show_one_image_square
 
 // -------------------------------------------------
-
 
 
 async function show_one_grey_square(val) {
@@ -388,19 +395,19 @@ async function start_one_eventlister(val) {
 
     // Start an eventlister per canvas to evaluate user response
     if (val == 0) {
-	canvasElement0.addEventListener("click", (event) => { user_click.push(val); });
+	canvasElement0.addEventListener("click", (event) => { await flash_sequence_when_clicked_on(val); user_click.push(val); });
     } else if (val == 1) {
-	canvasElement1.addEventListener("click", (event) => { user_click.push(val); });
+	canvasElement1.addEventListener("click", (event) => { await flash_sequence_when_clicked_on(val); user_click.push(val); });
     } else if (val == 2) {
-	canvasElement2.addEventListener("click", (event) => { user_click.push(val); });
+	canvasElement2.addEventListener("click", (event) => { await flash_sequence_when_clicked_on(val); user_click.push(val); });
     } else if (val == 3) {
-	canvasElement3.addEventListener("click", (event) => { user_click.push(val); });
+	canvasElement3.addEventListener("click", (event) => { await flash_sequence_when_clicked_on(val); user_click.push(val); });
     } else if (val == 4) {
-	canvasElement4.addEventListener("click", (event) => { user_click.push(val); });
+	canvasElement4.addEventListener("click", (event) => { await flash_sequence_when_clicked_on(val); user_click.push(val); });
     } else if (val == 5) {
-	canvasElement5.addEventListener("click", (event) => { user_click.push(val); });
+	canvasElement5.addEventListener("click", (event) => { await flash_sequence_when_clicked_on(val); user_click.push(val); });
     } else {
-	canvasElement6.addEventListener("click", (event) => { user_click.push(val); });
+	canvasElement6.addEventListener("click", (event) => { await flash_sequence_when_clicked_on(val); user_click.push(val); });
     }
 	
 }  // end of start_one_eventlister
