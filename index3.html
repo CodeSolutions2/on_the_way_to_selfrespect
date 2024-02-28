@@ -164,7 +164,7 @@ async function rand_perm(x, vec_len) {
 
 	out = [];
 	while (out.length != vec_len) {
-	   let y = Math.round(x.length*Math.random());
+	   let y = Math.round(x.length*Math.random())-1;
 		if (out.includes(x[y]) == false){
 			out.push(x[y]);
 		}
