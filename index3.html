@@ -172,6 +172,8 @@ async function flash_sequence(order){
 			await show_one_grey_square(val);
 		});
 
+	  await new Promise(r => setTimeout(r, 3000));
+
 	});  // end of order.forEach
 } 
 
