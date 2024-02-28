@@ -184,7 +184,7 @@ async function rand_perm(x, vec_len) {
 			if (out.includes(x_of_y) == false) { 
 				out.push(x_of_y);
 			}
-			return out;
+			return [... new Set(out)];
 		});
 	}
 	
