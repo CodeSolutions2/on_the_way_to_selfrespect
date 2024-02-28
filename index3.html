@@ -160,17 +160,28 @@ async function run_it() {
 // -------------------------------------------------
 
 
+async function get_number(x) {
+	return x[Math.round(x.length*Math.random())-1];
+}
+	  
+// -------------------------------------------------
+	  
 async function rand_perm(x, vec_len) {
 
-	out = [];
+	var out = [];
 	while (out.length != vec_len) {
 	   let y = Math.round(x.length*Math.random())-1;
 		
-		if (out.includes(x[y]) == false || x[y] != undefined) {
+		if (out.includes(x[y]) == false) {
 			out.push(x[y]);
 		}
 	}
 
+
+	//  await get_number(x).then(async function(x_of_y) {
+	//if (out.includes(x_of_y) == false) {
+	//		out.push(x_of_y);
+		//}
 
 	
 	return out;
