@@ -145,7 +145,7 @@ async function run_it() {
 		then(async () => {let order = await rand_perm(squarelocation, 2); console.log('order: ', order); return order;}).
 		then(async function(order) { 
 		  order.forEach(async function(val, index) { console.log('val: ', val);
-		  await show_one_image_square(val).then(async (val) => { await new Promise(r => setTimeout(r, 2000)); return val;
+		  await show_one_image_square(val).then(async (val) => { await new Promise(r => setTimeout(r, 1000)); return val;
 			}).then(async function(val) { await show_one_grey_square(val);
 			}).then(async () => { await new Promise(r => setTimeout(r, 3000)); });
 	
