@@ -396,7 +396,7 @@ async function start_one_eventlister(val) {
 
     // Start an eventlister per canvas to evaluate user response
     if (val == 0) {
-	canvasElement0.addEventListener("click", (event) => { var out = async () => { await flash_sequence_when_clicked_on(val); return 0;}; user_click.push(val); });
+	canvasElement0.addEventListener("click", (event) => { async () => { await flash_sequence_when_clicked_on(val); }; user_click.push(val); });
     } else if (val == 1) {
 	canvasElement1.addEventListener("click", (event) => { var out = async () => { await flash_sequence_when_clicked_on(val); return 0;}; user_click.push(val); });
     } else if (val == 2) {
