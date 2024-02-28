@@ -166,13 +166,21 @@ async function run_it() {
 // -------------------------------------------------
 
 
-document.getElementById("user_click_done").addEventListener("click", (event) => {
+// document.getElementById("user_click_done").addEventListener("click", (event) => {
+// 	  var user_click = async () => { await stop_listening_for_user_clicks()
+// 		.then(async function() { await verify_user_clicks(); })
+// 		.then(async function() { await run_it(); }); var user_click = []; return user_click; }
+// });
 
-	var user_click = async () => { await stop_listening_for_user_clicks()
+// OR
+
+// Exploit the onclick with the button
+async function user_click_done() {
+	var user_click = await stop_listening_for_user_clicks()
 		.then(async function() { await verify_user_clicks(); })
-		.then(async function() { await run_it(); }); var user_click = []; return user_click; }
+		.then(async function() { await run_it(); var user_click = []; return user_click; });
 	
-});
+}
 	  
 // -------------------------------------------------
 
