@@ -34,6 +34,7 @@ var canvasElement_height = canvasElement_width;
 const outp = document.getElementById('output');
 
 var user_click = [];
+var order = [];
 	  
 // ----------------------------
 // Create all the elements
@@ -155,10 +156,10 @@ async function run_it() {
 	// now, need a way to determine when the user is done click 
 	// monitor the length of the array that holds the user clicks: the user knows that they need to click on 3 even 
 	// OR let user click a button to say they are done
-
-	
 	
 	// -------------------------------------------------
+	
+	return order;
 	
 }  // end of run_it
 
@@ -176,10 +177,14 @@ async function run_it() {
 
 // Exploit the onclick with the button
 async function user_click_done() {
+
+	localStorage.setItem("user_click", user_click);
+	
 	var user_click = await stop_listening_for_user_clicks()
 		.then(async function() { await verify_user_clicks(); })
 		.then(async function() { await run_it(); var user_click = []; return user_click; });
-	
+
+	return user_click;
 }
 	  
 // -------------------------------------------------
@@ -198,7 +203,7 @@ async function listen_for_user_clicks() {
 	
 	// Launch eventListeners on all of the canvasElements
 	await start_one_eventlister(0)
-		.then(async function() {outp.innerHTML = "Click on the same pattern that was presented, then click the 'DONE' button."; await start_one_eventlister(1); })
+		.then(async function() {outp.innerHTML += "Click on the same pattern that was presented, then click the 'DONE' button."; await start_one_eventlister(1); })
 		.then(async function() { await start_one_eventlister(2); })
 		.then(async function() { await start_one_eventlister(3); })
 		.then(async function() { await start_one_eventlister(4); })
@@ -244,14 +249,15 @@ async function verify_user_clicks(){
 	const order_string = order.toString();
 	
 	// make user_click a string
+	var user_click = localStorage.getItem("user_click")
 	console.log('user_click: ', user_click);
 	const user_click_string = user_click.toString();
 
 	if (order_string == user_click_string) {
 		// Correct 
-		outp.innerHTML = "Correct: the pattern was " + order_string + ", you performed " + user_click_string;
+		outp.innerHTML += "Correct: the pattern was " + order_string + ", you performed " + user_click_string;
 	} else {
-		outp.innerHTML = "Incorrect: the pattern was " + order_string + ", you performed " + user_click_string;
+		outp.innerHTML += "Incorrect: the pattern was " + order_string + ", you performed " + user_click_string;
 	}
 
 }
@@ -396,19 +402,19 @@ async function start_one_eventlister(val) {
 
     // Start an eventlister per canvas to evaluate user response
     if (val == 0) {
-	canvasElement0.addEventListener("click", (event) => { async () => { await flash_sequence_when_clicked_on(val); }; user_click.push(val); });
+	canvasElement0.addEventListener("click", (event) => { async (val) => { await flash_sequence_when_clicked_on(val); }; user_click.push(val); });
     } else if (val == 1) {
-	canvasElement1.addEventListener("click", (event) => { var out = async () => { await flash_sequence_when_clicked_on(val); return 0;}; user_click.push(val); });
+	canvasElement1.addEventListener("click", (event) => { var out = async (val) => { await flash_sequence_when_clicked_on(val); return 0;}; user_click.push(val); });
     } else if (val == 2) {
-	canvasElement2.addEventListener("click", (event) => { var out = async () => { await flash_sequence_when_clicked_on(val); return 0;}; user_click.push(val); });
+	canvasElement2.addEventListener("click", (event) => { var out = async (val) => { await flash_sequence_when_clicked_on(val); return 0;}; user_click.push(val); });
     } else if (val == 3) {
-	canvasElement3.addEventListener("click", (event) => { var out = async () => { await flash_sequence_when_clicked_on(val); return 0;}; user_click.push(val); });
+	canvasElement3.addEventListener("click", (event) => { var out = async (val) => { await flash_sequence_when_clicked_on(val); return 0;}; user_click.push(val); });
     } else if (val == 4) {
-	canvasElement4.addEventListener("click", (event) => { var out = async () => { await flash_sequence_when_clicked_on(val); return 0;}; user_click.push(val); });
+	canvasElement4.addEventListener("click", (event) => { var out = async (val) => { await flash_sequence_when_clicked_on(val); return 0;}; user_click.push(val); });
     } else if (val == 5) {
-	canvasElement5.addEventListener("click", (event) => { var out = async () => { await flash_sequence_when_clicked_on(val); return 0;}; user_click.push(val); });
+	canvasElement5.addEventListener("click", (event) => { var out = async (val) => { await flash_sequence_when_clicked_on(val); return 0;}; user_click.push(val); });
     } else {
-	canvasElement6.addEventListener("click", (event) => { var out = async () => { await flash_sequence_when_clicked_on(val); return 0;}; user_click.push(val); });
+	canvasElement6.addEventListener("click", (event) => { var out = async (val) => { await flash_sequence_when_clicked_on(val); return 0;}; user_click.push(val); });
     }
 	
 }  // end of start_one_eventlister
