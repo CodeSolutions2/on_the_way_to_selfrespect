@@ -199,7 +199,7 @@ async function listen_for_user_clicks() {
 	;
 
 	// Make the DONE button visible
-	document.getElementById("user_click_done").style = block;
+	document.getElementById("user_click_done").style = 'block';
 
 }
 
@@ -232,8 +232,8 @@ async function verify_user_clicks(){
 
 	// user_click.push(val);
 
-	// Make the DONE button visible
-	document.getElementById("user_click_done").style = none;
+	// Remove DONE button
+	document.getElementById("user_click_done").style = 'none';
 
 	// make order a string
 	const order_string = order.toString();
