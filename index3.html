@@ -132,27 +132,26 @@ async function run_it() {
 
 	// OR
 
-	// await initialization_of_canvasElements().then(async () => {
-	// 		let order = await rand_perm(squarelocation, 2); console.log('order: ', order); return order;
-	// 	}).then(async function(order) { await flash_sequence(order);
-		// });
+	/await initialization_of_canvasElements().then(async () => {
+	 		let order = await rand_perm(squarelocation, 1); console.log('order: ', order); return order;
+		}).then(async function(order) { await flash_sequence(order);
+		 });
 
 	// -------------------------------------------------
 
 	// OR
 
-	await initialization_of_canvasElements().
-		then(async () => {let order = await rand_perm(squarelocation, 1); console.log('order: ', order); return order;}).
-		then(async function(order) { 
-		  order.forEach(async function(val, index) { console.log('val: ', val);
-		  await show_one_image_square(val).then(async (val) => { await new Promise(r => setTimeout(r, 1000)); return val;
-			}).then(async function(val) { await show_one_grey_square(val);
-			});
+	// await initialization_of_canvasElements().
+	// 	then(async () => {let order = await rand_perm(squarelocation, 1); console.log('order: ', order); return order;}).
+	// 	then(async function(order) { 
+		//   order.forEach(async function(val, index) { console.log('val: ', val);
+		//   await show_one_image_square(val).then(async (val) => { await new Promise(r => setTimeout(r, 1000)); return val;
+		// 	}).then(async function(val) { await show_one_grey_square(val);
+		// 	});
 			  //.then(async () => { await new Promise(r => setTimeout(r, 3000)); });
-	
-		});  // end of order.forEach
+		// });  // end of order.forEach
 			
-		});
+		// });
 	
 	// -------------------------------------------------
 	
@@ -183,8 +182,8 @@ async function flash_sequence(order){
 	  console.log('val: ', val);
 		
 	  await show_one_image_square(val).then(async (val) => { await new Promise(r => setTimeout(r, 2000)); return val;
-		}).then(async function(val) { await show_one_grey_square(val);
-		}).then(async () => { await new Promise(r => setTimeout(r, 3000)); });
+		}).then(async function(val) { await show_one_grey_square(val); });
+		  //.then(async () => { await new Promise(r => setTimeout(r, 3000)); });
 
 	});  // end of order.forEach
 } 
