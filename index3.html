@@ -23,14 +23,6 @@
   <script>
 
 // -------------------------------------------------
-const ImageArray = ["https://storage.googleapis.com/on-the-way2selfrespect/red.png",
-		    "https://storage.googleapis.com/on-the-way2selfrespect/green.png",
-		    "https://storage.googleapis.com/on-the-way2selfrespect/blue.png", 
-		     "https://storage.googleapis.com/on-the-way2selfrespect/cyan.png",
-		    "https://storage.googleapis.com/on-the-way2selfrespect/yellow.png", 
-		    "https://storage.googleapis.com/on-the-way2selfrespect/magenta.png",
-		    "https://storage.googleapis.com/on-the-way2selfrespect/orange.png"];
-
 
 var squarelocation = [0, 1, 2, 3, 4, 5, 6];
 	  
@@ -133,50 +125,38 @@ async function initialization_of_canvasElements() {
 	  
 async function run_it() {
 
-	await initialization_of_canvasElements();
-
 	// -------------------------------------------------
+	
+	// await initialization_of_canvasElements();
 
+	// Select difficulty: difficulity can be from 0 to 6, here it is 3 so only 3 squares flash 
 	// Randomly permute squarelocation
-	let order = rand_perm(squarelocation);
-	console.log('order: ', order);
+	// let order = await rand_perm(squarelocation, 3);
+	// console.log('order: ', order);
 
-	// Select difficulty
-	//let flash_num = 3;
-	//order = order.slice(0,flash_num);
-	console.log('order w/ difficulty: ', order);
-
-	// -------------------------------------------------
-
-	// Flash 
-	//order.forEach(async function(val, index) {
-	
-		// await show_one_image_square(val);
-	
-		// await new Promise(r => setTimeout(r, 2000));
-	
-		// await show_one_grey_square(val);
-
-		// OR
-	 val = order[0];
-	console.log('val: ', val);
-	 
-	
-	//});
+	// await flash_sequence(order);
 		      
 	// -------------------------------------------------
 
+	// OR
 
+	await initialization_of_canvasElements().then(async () => {
+			let order = await rand_perm(squarelocation, 3); console.log('order: ', order); return order;
+		}).then(async function(order) {
+			await flash_sequence(order);
+		});
+	
+	// -------------------------------------------------
 	
 }  // end of run_it
 
 // -------------------------------------------------
 
 
-async function rand_perm(x) {
+async function rand_perm(x, vec_len) {
 
 	out = [];
-	while (out.length != x.length) {
+	while (out.length != vec_len) {
 	   let y = Math.round(x.length*Math.random());
 		if (out.includes(y) == false){
 			out.push(y);
@@ -188,22 +168,25 @@ async function rand_perm(x) {
 	  
 // -------------------------------------------------
 
-async function flash_sequence(){
+async function flash_sequence(order){
 
+	order.forEach(async function(val, index) {
+
+	  console.log('val: ', val);
+		
 	  await show_one_image_square(val).then(async (val) => {
 			await new Promise(r => setTimeout(r, 2000)); return val;
 		}).then(async function(val) {
 			await show_one_grey_square(val);
 		});
-	
+
+	});  // end of order.forEach
 } 
 
 	  
 // -------------------------------------------------
 	  
 async function show_one_image_square(order) {
-
-	// https://codesolutions2.github.io/on_the_way_to_selfrespect/undefined
 	
 	    const image = new Image();
 	
@@ -212,25 +195,31 @@ async function show_one_image_square(order) {
 	
 	    image.onload = async () => {
 		    if (order == 0) {
+			let url = "https://storage.googleapis.com/on-the-way2selfrespect/red.png";
 			ctx0.drawImage(image, 0,0);
 		    } else if (order == 1) {
+			let url = "https://storage.googleapis.com/on-the-way2selfrespect/green.png";
 			ctx1.drawImage(image, 0,0);
 		    } else if (order == 2) {
+			let url = "https://storage.googleapis.com/on-the-way2selfrespect/blue.png";
 			ctx2.drawImage(image, 0,0);
 		    } else if (order == 3) {
+			let url = "https://storage.googleapis.com/on-the-way2selfrespect/cyan.png";
 			ctx3.drawImage(image, 0,0);
 		    } else if (order == 4) {
+			let url = "https://storage.googleapis.com/on-the-way2selfrespect/yellow.png";
 			ctx4.drawImage(image, 0,0);
 		    } else if (order == 5) {
+			let url = "https://storage.googleapis.com/on-the-way2selfrespect/magenta.png";
 			ctx5.drawImage(image, 0,0);
 		    } else {
+			let url = "https://storage.googleapis.com/on-the-way2selfrespect/orange.png";
 			ctx6.drawImage(image, 0,0);
 		    }
 		    
 	    };  // end of image.onload
 
-	    // image.src = ImageArray[order];
-	image.src = "https://storage.googleapis.com/on-the-way2selfrespect/red.png";
+	image.src = url;
   
 }  // end of main
 
