@@ -133,7 +133,7 @@ async function run_it() {
 	// OR
 
 	await initialization_of_canvasElements().then(async () => {
-	 		let order = await rand_perm(squarelocation, 1); console.log('order: ', order); return order;
+	 		let order = await rand_perm(squarelocation, squarelocation.length); console.log('order: ', order); return order;
 		}).then(async function(order) { await flash_sequence(order);
 		 });
 
@@ -165,8 +165,8 @@ async function rand_perm(x, vec_len) {
 	out = [];
 	while (out.length != vec_len) {
 	   let y = Math.round(x.length*Math.random());
-		if (out.includes(y) == false){
-			out.push(y);
+		if (out.includes(x[y]) == false){
+			out.push(x[y]);
 		}
 	}
 	return out;
@@ -210,7 +210,6 @@ async function show_one_image_square(val) {
 		image.onload = async () => { ctx2.drawImage(image, 0,0); };  // end of image.onload
 		    image.src = "https://storage.googleapis.com/on-the-way2selfrespect/blue.png";
 	    } else if (val == 4) {
-		
 		image.onload = async () => { ctx3.drawImage(image, 0,0); };  // end of image.onload
 		    image.src = "https://storage.googleapis.com/on-the-way2selfrespect/cyan.png";
 	    } else if (val == 5) {
