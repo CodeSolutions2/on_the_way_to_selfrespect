@@ -199,25 +199,25 @@ async function show_one_image_square(val) {
 	    image.setAttribute('crossOrigin', "");
 	    image.setAttribute('headers', {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"});
 	    
-	    if (val == 0) {
+	    if (val == 1) {
 		image.onload = async () => { ctx0.drawImage(image, 0,0); };  // end of image.onload
 		image.src = "https://storage.googleapis.com/on-the-way2selfrespect/red.png";
-	    } else if (val == 1) {
+	    } else if (val == 2) {
 		image.onload = async () => { ctx1.drawImage(image, 0,0); };  // end of image.onload
 		image.src = "https://storage.googleapis.com/on-the-way2selfrespect/green.png";
-	    } else if (val == 2) {
+	    } else if (val == 3) {
 		
 		image.onload = async () => { ctx2.drawImage(image, 0,0); };  // end of image.onload
 		    image.src = "https://storage.googleapis.com/on-the-way2selfrespect/blue.png";
-	    } else if (val == 3) {
+	    } else if (val == 4) {
 		
 		image.onload = async () => { ctx3.drawImage(image, 0,0); };  // end of image.onload
 		    image.src = "https://storage.googleapis.com/on-the-way2selfrespect/cyan.png";
-	    } else if (val == 4) {
+	    } else if (val == 5) {
 		
 		image.onload = async () => { ctx4.drawImage(image, 0,0); };  // end of image.onload
 		    image.src = "https://storage.googleapis.com/on-the-way2selfrespect/yellow.png";
-	    } else if (val == 5) {
+	    } else if (val == 6) {
 		image.onload = async () => { ctx5.drawImage(image, 0,0); };  // end of image.onload
 		image.src = "https://storage.googleapis.com/on-the-way2selfrespect/magenta.png";
 	    } else {
@@ -238,22 +238,22 @@ async function show_one_image_square(val) {
 async function show_one_grey_square(val) {
 	
     // Draw image on canvas
-    if (val == 0) {
+    if (val == 1) {
 	ctx0.fillStyle = '#999c98';  // Background square over image = blue
 	ctx0.fillRect(0, 0, canvasElement_width, canvasElement_height);
-    } else if (val == 1) {
+    } else if (val == 2) {
 	ctx1.fillStyle = '#999c98';  // Background square over image = blue
 	ctx1.fillRect(0, 0, canvasElement_width, canvasElement_height);
-    } else if (val == 2) {
+    } else if (val == 3) {
 	ctx2.fillStyle = '#999c98';  // Background square over image = blue
 	ctx2.fillRect(0, 0, canvasElement_width, canvasElement_height);
-    } else if (val == 3) {
+    } else if (val == 4) {
 	ctx3.fillStyle = '#999c98';  // Background square over image = blue
 	ctx3.fillRect(0, 0, canvasElement_width, canvasElement_height);
-    } else if (val == 4) {
+    } else if (val == 5) {
 	ctx4.fillStyle = '#999c98';  // Background square over image = blue
 	ctx4.fillRect(0, 0, canvasElement_width, canvasElement_height);
-    } else if (val == 5) {
+    } else if (val == 6) {
 	ctx5.fillStyle = '#999c98';  // Background square over image = blue
 	ctx5.fillRect(0, 0, canvasElement_width, canvasElement_height);
     } else {
