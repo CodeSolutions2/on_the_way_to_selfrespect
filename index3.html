@@ -184,32 +184,34 @@ async function show_one_image_square(val) {
 	
 	    image.setAttribute('crossOrigin', "");
 	    image.setAttribute('headers', {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"});
-	
-	    image.onload = async () => {
-		    if (val == 0) {
-			image.src = "https://storage.googleapis.com/on-the-way2selfrespect/red.png";
-			ctx0.drawImage(image, 0,0);
-		    } else if (val == 1) {
-			image.src = "https://storage.googleapis.com/on-the-way2selfrespect/green.png";
-			ctx1.drawImage(image, 0,0);
-		    } else if (val == 2) {
-			image.src = "https://storage.googleapis.com/on-the-way2selfrespect/blue.png";
-			ctx2.drawImage(image, 0,0);
-		    } else if (val == 3) {
-			image.src = "https://storage.googleapis.com/on-the-way2selfrespect/cyan.png";
-			ctx3.drawImage(image, 0,0);
-		    } else if (val == 4) {
-			image.src = "https://storage.googleapis.com/on-the-way2selfrespect/yellow.png";
-			ctx4.drawImage(image, 0,0);
-		    } else if (val == 5) {
-			image.src = "https://storage.googleapis.com/on-the-way2selfrespect/magenta.png";
-			ctx5.drawImage(image, 0,0);
-		    } else {
-			image.src = "https://storage.googleapis.com/on-the-way2selfrespect/orange.png";
-			ctx6.drawImage(image, 0,0);
-		    }
+	    
+	    if (val == 0) {
+		image.onload = async () => { ctx0.drawImage(image, 0,0); };  // end of image.onload
+		image.src = "https://storage.googleapis.com/on-the-way2selfrespect/red.png";
+	    } else if (val == 1) {
+		image.onload = async () => { ctx1.drawImage(image, 0,0); };  // end of image.onload
+		image.src = "https://storage.googleapis.com/on-the-way2selfrespect/green.png";
+	    } else if (val == 2) {
+		
+		image.onload = async () => { ctx2.drawImage(image, 0,0); };  // end of image.onload
+		    image.src = "https://storage.googleapis.com/on-the-way2selfrespect/blue.png";
+	    } else if (val == 3) {
+		
+		image.onload = async () => { ctx3.drawImage(image, 0,0); };  // end of image.onload
+		    image.src = "https://storage.googleapis.com/on-the-way2selfrespect/cyan.png";
+	    } else if (val == 4) {
+		
+		image.onload = async () => { ctx4.drawImage(image, 0,0); };  // end of image.onload
+		    image.src = "https://storage.googleapis.com/on-the-way2selfrespect/yellow.png";
+	    } else if (val == 5) {
+		image.onload = async () => { ctx5.drawImage(image, 0,0); };  // end of image.onload
+		image.src = "https://storage.googleapis.com/on-the-way2selfrespect/magenta.png";
+	    } else {
+		image.onload = async () => { ctx6.drawImage(image, 0,0); };  // end of image.onload
+		image.src = "https://storage.googleapis.com/on-the-way2selfrespect/orange.png";
+	    }
 		    
-	    };  // end of image.onload
+	    
 
 	// image.src = url;
   
