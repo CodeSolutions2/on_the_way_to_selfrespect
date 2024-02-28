@@ -181,8 +181,9 @@ async function flash_sequence(order){
 
 	  console.log('val: ', val);
 		
-	  await show_one_image_square(val).then(async (val) => { await new Promise(r => setTimeout(r, 2000)); return val;
-		}).then(async function(val) { await show_one_grey_square(val); });
+	  await show_one_image_square(val).then(async (val) => { await new Promise(r => setTimeout(r, 2000)); await show_one_grey_square(val); return val;})
+		  .then(async function(val) { await show_one_grey_square(val); })
+		  ;
 		  //.then(async () => { await new Promise(r => setTimeout(r, 3000)); });
 
 	});  // end of order.forEach
