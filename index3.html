@@ -134,7 +134,7 @@ async function run_it() {
 
 	await initialization_of_canvasElements()
 		.then(async () => {var order = await rand_perm(squarelocation, 3); console.log('order: ', order); return order;})
-		.then(async function(order) { await flash_sequence(order); });
+		.then(async function(order) { await flash_sequence3(order); });
 
 	// -------------------------------------------------
 
