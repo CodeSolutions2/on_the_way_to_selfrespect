@@ -132,25 +132,7 @@ async function run_it() {
 
 	// OR
 
-	await initialization_of_canvasElements()
-		.then(async () => {var order = await rand_perm(squarelocation, 3); console.log('order: ', order); return order;})
-		.then(async function(order) { await flash_sequence3(order); });
-
-	// -------------------------------------------------
-
-	// OR
-
-	// await initialization_of_canvasElements().
-	// 	then(async () => {let order = await rand_perm(squarelocation, 1); console.log('order: ', order); return order;}).
-	// 	then(async function(order) { 
-		//   order.forEach(async function(val, index) { console.log('val: ', val);
-		//   await show_one_image_square(val).then(async (val) => { await new Promise(r => setTimeout(r, 1000)); return val;
-		// 	}).then(async function(val) { await show_one_grey_square(val);
-		// 	});
-			  //.then(async () => { await new Promise(r => setTimeout(r, 3000)); });
-		// });  // end of order.forEach
-			
-		// });
+	await initialization_of_canvasElements().then(async function() { await flash_sequence3(); });
 	
 	// -------------------------------------------------
 	
@@ -193,7 +175,7 @@ async function rand_perm(x, vec_len) {
 	  
 // -------------------------------------------------
 
-async function flash_sequence3(order){
+async function flash_sequence3(){
 
 
 	// Ok, so it executes console.log('val to show_one_image_square: ', val); before it executes await show_one_image_square(val)
@@ -219,12 +201,15 @@ async function flash_sequence3(order){
 
 	// Base function: show image, pause, show grey square, pause
 	
-	await show_one_image_square(order)
-		.then(async (order) => {console.log('val to show_one_image_square: ', order.at(0));  await new Promise(r => setTimeout(r, 2000)); return order;})
+	await rand_perm(squarelocation, 3)
+		.then(async function(order) {console.log('order.at(0) to show_one_image_square: ', order.at(0)); await show_one_image_square(order.at(0)); return order; })
+		.then(async (order) => { console.log('Pause: ', order.at(0)); await new Promise(r => setTimeout(r, 2000)); return order;})
 		.then(async function(order) { console.log('order.at(0) to show_one_grey_square: ', order.at(0)); await show_one_grey_square(order.at(0)); return order;})
-		.then(async (order) => {console.log('order.at(1) to show_one_image_square: ', order.at(1));  await new Promise(r => setTimeout(r, 2000)); return order;})
-		.then(async function(order) { console.log('order.at(1) to show_one_grey_square: ', val); await show_one_grey_square(order.at(1)); return order;})
-		.then(async (order) => {console.log('order.at(2) to show_one_image_square: ', order.at(2));  await new Promise(r => setTimeout(r, 2000)); return order;})
+		.then(async function(order) {console.log('order.at(1) to show_one_image_square: ', order.at(1)); await show_one_image_square(order.at(1)); return order; })
+		.then(async (order) => {console.log('Pause: ', order.at(1));  await new Promise(r => setTimeout(r, 2000)); return order;})
+		.then(async function(order) { console.log('order.at(1) to show_one_grey_square: ', order.at(1)); await show_one_grey_square(order.at(1)); return order;})
+		.then(async function(order) {console.log('order.at(2) to show_one_image_square: ', order.at(2)); await show_one_image_square(order.at(2)); return order; })
+		.then(async (order) => {console.log('Pause: ', order.at(2));  await new Promise(r => setTimeout(r, 2000)); return order;})
 		.then(async function(order) { console.log('order.at(2) to show_one_grey_square: ', order.at(2)); await show_one_grey_square(order.at(2)); })
 		;
 	
