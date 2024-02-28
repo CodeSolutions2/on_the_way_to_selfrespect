@@ -16,7 +16,7 @@
 <div id="output" style="font-family:courier;font-size:24px;height:300px"></div>
 
 <br><br>
-<button id="done_button" onclick="user_click_done()" style="display:none">DONE</button>
+<button id="user_click_done" onclick="user_click_done()" style="display:none">DONE</button>
 	
 <style>
       canvas {border: 1px solid black;}
@@ -151,7 +151,7 @@ async function run_it() {
 
 	var order = await initialization_of_canvasElements()
 		.then(async function() { var order = await flash_sequence_difficulty3(); return order;})
-		.then(async function(order) { await listen_for_user_clicks_difficulty3(); return order;})
+		.then(async function(order) { await listen_for_user_clicks(); return order;})
 		;
 
 	// now, need a way to determine when the user is done click 
@@ -170,14 +170,16 @@ async function run_it() {
 
 document.getElementById("user_click_done").addEventListener("click", (event) => {
 
-	var user_click = async () => { await verify_user_clicks().then(async function() { await run_it(); }); var user_click = []; return user_click; }
+	var user_click = async () => { await stop_listening_for_user_clicks()
+		.then(async function() { await verify_user_clicks(); })
+		.then(async function() { await run_it(); }); var user_click = []; return user_click; }
 	
 });
 	  
 // -------------------------------------------------
 
 
-async function listen_for_user_clicks_difficulty3() {
+async function listen_for_user_clicks() {
 
 	// Launch eventListeners on only the canvasElements that were flashed
 	// await start_one_eventlister(order.at(0))
@@ -199,7 +201,25 @@ async function listen_for_user_clicks_difficulty3() {
 	;
 
 	// Make the DONE button visible
-	document.getElementById("done_button").style = block;
+	document.getElementById("user_click_done").style = block;
+
+}
+
+// -------------------------------------------------
+
+
+
+async function stop_listening_for_user_clicks() {
+	
+	// Launch eventListeners on all of the canvasElements
+	await stop_one_eventlister(0)
+		.then(async function() { await stop_one_eventlister(1); })
+		.then(async function() { await stop_one_eventlister(2); })
+		.then(async function() { await stop_one_eventlister(3); })
+		.then(async function() { await stop_one_eventlister(4); })
+		.then(async function() { await stop_one_eventlister(5); })
+		.then(async function() { await stop_one_eventlister(6); })
+	;
 
 }
 
