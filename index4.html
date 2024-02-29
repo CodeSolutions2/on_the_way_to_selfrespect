@@ -182,7 +182,7 @@ async function user_click_done() {
 
 async function listen_for_user_clicks() {
 
-	// Launch eventListeners on all of the canvasElements
+	// Launch eventListeners on all of the canvasElements, then Make the DONE button visible
 	await start_one_eventlister(0)
 		.then(async function() {outp.innerHTML = "Click on the same pattern that was presented, then click the 'DONE' button."; await start_one_eventlister(1); })
 		.then(async function() { await start_one_eventlister(2); })
@@ -190,10 +190,9 @@ async function listen_for_user_clicks() {
 		.then(async function() { await start_one_eventlister(4); })
 		.then(async function() { await start_one_eventlister(5); })
 		.then(async function() { await start_one_eventlister(6); })
+		.then(function() { document.getElementById("user_click_done").style = 'block'; })
 	;
-
-	// Make the DONE button visible
-	document.getElementById("user_click_done").style = 'block';
+	
 }
 
 // -------------------------------------------------
@@ -201,7 +200,7 @@ async function listen_for_user_clicks() {
 
 async function stop_listening_for_user_clicks() {
 	
-	// Launch eventListeners on all of the canvasElements
+	// Launch eventListeners on all of the canvasElements, then Remove DONE button
 	await stop_one_eventlister(0)
 		.then(async function() { await stop_one_eventlister(1); })
 		.then(async function() { await stop_one_eventlister(2); })
@@ -209,10 +208,9 @@ async function stop_listening_for_user_clicks() {
 		.then(async function() { await stop_one_eventlister(4); })
 		.then(async function() { await stop_one_eventlister(5); })
 		.then(async function() { await stop_one_eventlister(6); })
+		.then(function() { document.getElementById("user_click_done").style = 'none'; })
 	;
-
-	// Remove DONE button
-	document.getElementById("user_click_done").style = 'none';
+	
 }
 
 	  
