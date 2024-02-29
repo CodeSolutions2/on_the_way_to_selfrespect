@@ -14,8 +14,6 @@
 <!-- Output text -->
 <div id="output" style="font-family:courier;font-size:24px;height:300px"></div>
 
-
-
 	
 <style>
 canvas {border: 1px solid black; position: absolute; display: inline-block; z-index: 1; top: 200px;},
@@ -317,7 +315,7 @@ async function verify_user_clicks(){
 	} else {
 		outp.innerHTML = "Incorrect: the pattern was " + order_string + ", you performed " + user_click_string + "</br>";
 	}
-	outp.innerHTML += data + "</br>";
+	// outp.innerHTML += data + "</br>";
 
 	// ------------------------
 
@@ -693,7 +691,7 @@ async function download_data() {
     // document.body.appendChild(link);
 
     // Automatic download of csv
-    // link.click();
+    link.click();
     // document.body.removeChild(link);
 	  
 }
