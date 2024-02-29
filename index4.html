@@ -36,8 +36,8 @@ const outp = document.getElementById('output');
 var user_click = [];
 var order = [];
 
-	  
-var data = [];
+
+var data = [['', '', '', ''],['accuracy', 'response_time', 'presentation_time_interval', 'flash_number']]; 
 var presentation_time_interval = 2000;
 var flash_number = 3; // scalar from 3 to 7
 var response_time = 0;
@@ -305,7 +305,7 @@ async function verify_user_clicks(){
 	
 	// ------------------------
 
-	data.push( [accuracy0+accuracy1, response_time, presentation_time_interval, flash_number] ); 
+	data.push([accuracy0+accuracy1, response_time, presentation_time_interval, flash_number]); 
 
 	// ------------------------
 
