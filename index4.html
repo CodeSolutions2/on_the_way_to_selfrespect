@@ -283,17 +283,14 @@ async function calculate_color_selection_correct(){
 
 // -------------------------------------------------
 
-
-
 async function calculate_sequence_selection_correct(){
 
 	// Points for the correct order
-	const out = 0;
 	if (order.toString() == user_click.toString()) {
-		out = flash_number/2; // Max is half of flash_number
+		accuracy0 = flash_number/2; // Max is half of flash_number
 	}
 	
-	return out;
+	return accuracy0;
 }
 
 // -------------------------------------------------
