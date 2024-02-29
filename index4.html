@@ -306,13 +306,13 @@ async function flash_sequence_difficulty3(){
 	order = await rand_perm(squarelocation, 3)
 		.then(async function(order) { await show_one_image_square(order.at(0)); return order; })
 		.then(async (order) => { await new Promise(r => setTimeout(r, 2000)); return order;})
-		.then(async function(order) { await show_one_grey_square(order.at(0)); return order;})
+		.then(async function(order) { await show_one_grey_square(order.at(0), 1); return order;})
 		.then(async function(order) { await show_one_image_square(order.at(1)); return order; })
 		.then(async (order) => { await new Promise(r => setTimeout(r, 2000)); return order;})
-		.then(async function(order) { await show_one_grey_square(order.at(1)); return order;})
+		.then(async function(order) { await show_one_grey_square(order.at(1), 1); return order;})
 		.then(async function(order) { await show_one_image_square(order.at(2)); return order; })
 		.then(async (order) => { await new Promise(r => setTimeout(r, 2000)); return order;})
-		.then(async function(order) { await show_one_grey_square(order.at(2)); return order; })
+		.then(async function(order) { await show_one_grey_square(order.at(2), 1); return order; })
 		;
 
 	return order;
@@ -323,26 +323,10 @@ async function flash_sequence_difficulty3(){
 
 
 async function flash_sequence_when_clicked_on(val){
-
-	// Make all the canvas context objects a certain initial color
-	ctx0.fillStyle = '#999c98';  // Background color
-	ctx0.fillRect(0, 0, canvasElement_width, canvasElement_height/2);
-	ctx1.fillStyle = '#999c98';  // Background color
-	ctx1.fillRect(0, 0, canvasElement_width, canvasElement_height/2);
-	ctx2.fillStyle = '#999c98';  // Background color
-	ctx2.fillRect(0, 0, canvasElement_width, canvasElement_height/2);
-	ctx3.fillStyle = '#999c98';  // Background color
-	ctx3.fillRect(0, 0, canvasElement_width, canvasElement_height/2);
-	ctx4.fillStyle = '#999c98';  // Background color
-	ctx4.fillRect(0, 0, canvasElement_width, canvasElement_height/2);
-	ctx5.fillStyle = '#999c98';  // Background color
-	ctx5.fillRect(0, 0, canvasElement_width, canvasElement_height/2);
-	ctx6.fillStyle = '#999c98';  // Background color
-	ctx6.fillRect(0, 0, canvasElement_width, canvasElement_height/2);
 	
 	await show_one_image_square(val)
 		.then(async (val) => { await new Promise(r => setTimeout(r, 1000)); return val;})
-		.then(async function(val) { await show_one_grey_square(val); })
+		.then(async function(val) { await show_one_grey_square(val, 1); })
 		;
 
 } 
@@ -384,30 +368,30 @@ async function show_one_image_square(val) {
 // -------------------------------------------------
 
 
-async function show_one_grey_square(val) {
+async function show_one_grey_square(val, scaleheight) {
 	
     // Draw image on canvas
     if (val == 0) {
 	ctx0.fillStyle = '#999c98';  // Background square over image = blue
-	ctx0.fillRect(0, 0, canvasElement_width, canvasElement_height);
+	ctx0.fillRect(0, 0, canvasElement_width, canvasElement_height*scaleheight);
     } else if (val == 1) {
 	ctx1.fillStyle = '#999c98';  // Background square over image = blue
-	ctx1.fillRect(0, 0, canvasElement_width, canvasElement_height);
+	ctx1.fillRect(0, 0, canvasElement_width, canvasElement_height*scaleheight);
     } else if (val == 2) {
 	ctx2.fillStyle = '#999c98';  // Background square over image = blue
-	ctx2.fillRect(0, 0, canvasElement_width, canvasElement_height);
+	ctx2.fillRect(0, 0, canvasElement_width, canvasElement_height*scaleheight);
     } else if (val == 3) {
 	ctx3.fillStyle = '#999c98';  // Background square over image = blue
-	ctx3.fillRect(0, 0, canvasElement_width, canvasElement_height);
+	ctx3.fillRect(0, 0, canvasElement_width, canvasElement_height*scaleheight);
     } else if (val == 4) {
 	ctx4.fillStyle = '#999c98';  // Background square over image = blue
-	ctx4.fillRect(0, 0, canvasElement_width, canvasElement_height);
+	ctx4.fillRect(0, 0, canvasElement_width, canvasElement_height*scaleheight);
     } else if (val == 5) {
 	ctx5.fillStyle = '#999c98';  // Background square over image = blue
-	ctx5.fillRect(0, 0, canvasElement_width, canvasElement_height);
+	ctx5.fillRect(0, 0, canvasElement_width, canvasElement_height*scaleheight);
     } else {
 	ctx6.fillStyle = '#999c98';  // Background square over image = blue
-	ctx6.fillRect(0, 0, canvasElement_width, canvasElement_height);
+	ctx6.fillRect(0, 0, canvasElement_width, canvasElement_height*scaleheight);
     }
 	
 }  // end of show_grey_square
@@ -417,14 +401,21 @@ async function show_one_grey_square(val) {
 
 // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
 async function processEvent(event) {
-  user_click.push(this.getAttribute("data-id"));
-  await flash_sequence_when_clicked_on(this.getAttribute("data-id"));
+	
+    // When the user clicks the square, save value
+    user_click.push(this.getAttribute("data-id"));
+
+    // Also, flash the square and make the square full color
+    await flash_sequence_when_clicked_on(this.getAttribute("data-id"));
 }
 
 	  
 async function start_one_eventlister(val) {
 
     // console.log("user_click in start_one_eventlister: ", user_click);  // user_click = []
+
+    // When the eventlister is turned on for each square, show half of the square 
+    await show_one_grey_square(val, 0.5);
 	
     // Start an eventlister per canvas to evaluate user response
     if (val == 0) {
