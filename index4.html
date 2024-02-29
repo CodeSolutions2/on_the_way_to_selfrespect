@@ -183,6 +183,7 @@ async function listen_for_user_clicks() {
 
 	// Launch eventListeners on all of the canvasElements
 	await start_one_eventlister(0)
+		.then(async function() { await show_one_grey_square(0, 0.5); })
 		.then(async function() {outp.innerHTML = "Click on the same pattern that was presented, then click the 'DONE' button."; await start_one_eventlister(1); })
 		.then(async function() { await start_one_eventlister(2); })
 		.then(async function() { await start_one_eventlister(3); })
@@ -384,7 +385,7 @@ async function start_one_eventlister(val) {
     // console.log("user_click in start_one_eventlister: ", user_click);  // user_click = []
 
     // When the eventlister is turned on for each square, show half of the square 
-    await show_one_grey_square(val, 0.5);
+    //await show_one_grey_square(val, 0.5);  // nothing happens
 	
     // Start an eventlister per canvas to evaluate user response
     if (val == 0) {
