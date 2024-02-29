@@ -266,25 +266,24 @@ async function sendreceive_files_GCP_fetch_forIMAGES() {
 
 
 	try {
-		await fetch(url, options).then(res => res.json()).then(imageout => {
-			console.log('imageout:', imageout);
-		  }).catch(error => { outp.innerHTML += error; });
+		// await fetch(url, options).then(res => res.json()).then(imageout => {
+		// 	console.log('imageout:', imageout);
+		// 	img = await imageout.text();
+		// 	outp.innerHTML += img;
+		 //  }).catch(error => { outp.innerHTML += error; });
 
 		// OR
 
 		img_res = await fetch(url, options);
 		img = await img_res.text();
-		
-		// document.querySelector("#img" + i).src = img;
-		// OR
+		outp.innerHTML += img;
 		const img1 = new Image();
 		img1.src = img;
 		document.body.appendChild(img1);
 
 	} catch (error) {
-      document.getElementById("outData").innerHTML = error; 
-      // return error
-    }
+	      outp.innerHTML += error;
+	}
 	 
 
 }  // end of sendreceive_files_GCP_fetch_forIMAGES
