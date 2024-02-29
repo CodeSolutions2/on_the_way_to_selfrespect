@@ -8,7 +8,9 @@
 <br><br>
 
 <button id="run_it_button" onclick="run_it()" style="display:block">run_it</button>
-
+<br><br>
+<button id="download_data_button" onclick="download_data()" style="display:block">download_data</button>
+	
 <!-- Output text -->
 <div id="output" style="font-family:courier;font-size:24px;height:300px"></div>
 
@@ -17,7 +19,7 @@
 <button id="user_click_done_button" onclick="user_click_done()" style="display:none">DONE</button>
 	
 <style>
-      canvas {border: 1px solid black;}
+canvas {border: 1px solid black; position: absolute; display: inline-block; z-index: 1; top: 150px;},
 </style>
 	
   
@@ -219,6 +221,7 @@ async function user_click_done() {
 		.then(async function() { accuracy1 = await calculate_color_selection_correct(); console.log("IN user__click_done - accuracy1: ", accuracy1);  })
 		.then(async function() { response_time = await elapsedTime(startTime, endTime); console.log("IN user__click_done - response_time: ", response_time);  })
 		.then(async function() { await verify_user_clicks(); })
+	  	.then(async function() { await put_results_in_CSVfile(data); })
 		;
 }
 	  
@@ -268,9 +271,9 @@ async function stop_listening_for_user_clicks() {
 	  
 // -------------------------------------------------
 
-async function calculate_sequence_selection_correct(){
+async function calculate_color_selection_correct(){
 
-	console.log("IN calculate_accuracy - user_click: ", user_click);
+	// console.log("IN calculate_accuracy - user_click: ", user_click);
 	
 	// Points for the squares selected, order is not important
 	const combined  = [... new Set(order.concat(user_click))];
@@ -282,16 +285,15 @@ async function calculate_sequence_selection_correct(){
 
 
 
-async function calculate_color_selection_correct(){
+async function calculate_sequence_selection_correct(){
 
 	// Points for the correct order
-	const color_selection_correct = 0;
-	if (order == user_click) {
-		color_selection_correct = flash_number/2; // Max is half of flash_number
+	const out = 0;
+	if (order.toString() == user_click.toString()) {
+		out = flash_number/2; // Max is half of flash_number
 	}
-	console.log("color_selection_correct: ", color_selection_correct);
 	
-	return color_selection_correct;
+	return out;
 }
 
 // -------------------------------------------------
@@ -308,12 +310,8 @@ async function verify_user_clicks(){
 	const user_click_string = user_click.toString();
 	
 	// ------------------------
-	
-	// accuracy = await calculate_accuracy();
 
-	// response_time = await elapsedTime(startTime, endTime);
-
-	data.push( [accuracy0, accuracy1, response_time, presentation_time_interval, flash_number] ); 
+	data.push( [accuracy0+accuracy1, response_time, presentation_time_interval, flash_number] ); 
 
 	// ------------------------
 
@@ -676,6 +674,33 @@ async function stop_one_eventlister(val) {
 
 	  
 // -------------------------------------------------
+
+async function download_data() {
+    
+    // ---------------------
+    // Puts array into csv format
+    const blob = new Blob([data], { type: 'text/csv;charset=utf-8;' });
+
+    // Create a url for the data object
+    const url = URL.createObjectURL(blob);
+    // ---------------------
+
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+
+    const filename = 'data.csv';
+    link.setAttribute("download", filename);
+	  
+    link.style.display = 'block';
+
+    outp.innerHTML += 'Download CSV here: ' + url + "<br/>";
+    // document.body.appendChild(link);
+
+    // Automatic download of csv
+    // link.click();
+    // document.body.removeChild(link);
+	  
+}
 	
 
 	
