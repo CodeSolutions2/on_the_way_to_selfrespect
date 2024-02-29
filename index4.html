@@ -221,7 +221,6 @@ async function user_click_done() {
 		.then(async function() { accuracy1 = await calculate_color_selection_correct(); console.log("IN user__click_done - accuracy1: ", accuracy1);  })
 		.then(async function() { response_time = await elapsedTime(startTime, endTime); console.log("IN user__click_done - response_time: ", response_time);  })
 		.then(async function() { await verify_user_clicks(); })
-	  	.then(async function() { await put_results_in_CSVfile(data); })
 		;
 }
 	  
