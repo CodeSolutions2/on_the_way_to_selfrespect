@@ -180,6 +180,7 @@ async function run_it() {
 
 	order = await initialization_of_canvasElements()
 		.then(async function(flash_number) { 
+			console.log("flash_number: ", flash_number);
 			if (flash_number == 3) {
 				order = await flash_sequence_difficulty3();
 			} else if (flash_number == 4) {
@@ -268,13 +269,13 @@ async function stop_listening_for_user_clicks() {
 async function calculate_accuracy(){
 
 	// sequence_selection_correct
-	const combined  = [... new Set(order.concat(user_click))];
+	const combined  = [... new Set(order.concat(Number(user_click)))];
 	console.log("combined: ", combined);
 
 	const sequence_selection_correct = (flash_number - combined.length-user_click.length)/2; // Max is half of flash_number
 	console.log("sequence_selection_correct: ", sequence_selection_correct);
 	
-	if (order.toString() == user_click.toString()) {
+	if (order.toString() === Number(user_click).toString()) {
 		const color_selection_correct = flash_number/2; // Max is half of flash_number
 	} else {
 		const color_selection_correct = 0;
