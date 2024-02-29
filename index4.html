@@ -375,25 +375,25 @@ async function show_onehalf_grey_square(val) {
     // Draw image on canvas
     if (val == 0) {
 	ctx0.fillStyle = '#999c98';  // Background square over image = blue
-	ctx0.fillRect(0, 0, canvasElement_width, canvasElement_height/2);
+	ctx0.fillRect(0, 0, canvasElement_width, 50);
     } else if (val == 1) {
 	ctx1.fillStyle = '#999c98';  // Background square over image = blue
-	ctx1.fillRect(0, 0, canvasElement_width, canvasElement_height/2);
+	ctx1.fillRect(0, 0, canvasElement_width, 50);
     } else if (val == 2) {
 	ctx2.fillStyle = '#999c98';  // Background square over image = blue
-	ctx2.fillRect(0, 0, canvasElement_width, canvasElement_height/2);
+	ctx2.fillRect(0, 0, canvasElement_width, 50);
     } else if (val == 3) {
 	ctx3.fillStyle = '#999c98';  // Background square over image = blue
-	ctx3.fillRect(0, 0, canvasElement_width, canvasElement_height/2);
+	ctx3.fillRect(0, 0, canvasElement_width, 50);
     } else if (val == 4) {
 	ctx4.fillStyle = '#999c98';  // Background square over image = blue
-	ctx4.fillRect(0, 0, canvasElement_width, canvasElement_height/2);
+	ctx4.fillRect(0, 0, canvasElement_width, 50);
     } else if (val == 5) {
 	ctx5.fillStyle = '#999c98';  // Background square over image = blue
-	ctx5.fillRect(0, 0, canvasElement_width, canvasElement_height/2);
+	ctx5.fillRect(0, 0, canvasElement_width, 50);
     } else {
 	ctx6.fillStyle = '#999c98';  // Background square over image = blue
-	ctx6.fillRect(0, 0, canvasElement_width, canvasElement_height/2);
+	ctx6.fillRect(0, 0, canvasElement_width, 50);
     }
 
 	return val;
@@ -408,7 +408,7 @@ async function processEvent(event) {
     // When the user clicks the square, save value
     user_click.push(this.getAttribute("data-id"));
 
-    // Also, flash the square and make the square full color
+    // When the user clicks the square, flash the square and make the square full color
     await flash_sequence_when_clicked_on(this.getAttribute("data-id"));
 }
 
@@ -417,7 +417,7 @@ async function start_one_eventlister(val) {
 
     // console.log("user_click in start_one_eventlister: ", user_click);  // user_click = []
 
-    // When the eventlister is turned on for each square, show image first then half of the square to hide image
+    // When the eventlister is turned on for each square, show image first then half of the square to hide image [seeing half or no image could be another spatial difficulty parameter]
     await show_one_image_square(val)
     .then(async function(val) { val = await show_onehalf_grey_square(val); return val; })
     .then(function(val) {
