@@ -242,18 +242,27 @@ async function verify_user_clicks(){
 	// Remove DONE button
 	document.getElementById("user_click_done").style = 'none';
 
+	// ------------------------
+	console.log('order global variable: ', order);
+	
 	// make order a string
 	var order = localStorage.getItem("order");
-	console.log('order: ', order);
-	const order_string = order.toString();
+	console.log('order localStorage: ', order);
 	
-	console.log('user_click in verify_user_clicks: ', user_click);
-	localStorage.setItem("user_click", user_click); // value is correct here
+	const order_string = order.toString();
+	// ------------------------
 
+	// ------------------------
+	console.log('user_click in verify_user_clicks: ', user_click);
+	// localStorage.setItem("user_click", user_click);
+	// OR
+	const user_click_string = user_click.toString();
+	
 	// Reset user_click
 	user_click = [];
 
-	const user_click_string = localStorage.getItem("user_click").toString();
+	// const user_click_string = localStorage.getItem("user_click").toString();
+	// ------------------------
 
 	if (order_string == user_click_string) {
 		// Correct 
@@ -271,8 +280,7 @@ async function verify_user_clicks(){
 async function get_number(x) {
 	return x[Math.round(x.length*Math.random())-1];
 }
-	  
-// -------------------------------------------------
+
 	  
 async function rand_perm(x, vec_len) {
 
