@@ -95,7 +95,7 @@ async function elapsedTime(startTime, endTime) {
 
 async function initialization_of_canvasElements() {
 
-	flash_number = await rand_perm([3, 4, 5, 6, 7], 1);
+	flash_number = await rand_perm([3, 4, 5, 6, 7], 1)[0];
 	
 	canvasElement0.width = canvasElement_width;
 	canvasElement0.height = canvasElement_height;
@@ -269,13 +269,14 @@ async function stop_listening_for_user_clicks() {
 async function calculate_accuracy(){
 
 	// sequence_selection_correct
-	const combined  = [... new Set(order.concat(Number(user_click)))];
+	const user_clickNumberArray = Number(user_click);
+	const combined  = [... new Set(order.concat(user_clickNumberArray))];
 	console.log("combined: ", combined);
 
 	const sequence_selection_correct = (flash_number - combined.length-user_click.length)/2; // Max is half of flash_number
 	console.log("sequence_selection_correct: ", sequence_selection_correct);
 	
-	if (order.toString() === Number(user_click).toString()) {
+	if (order.toString() === user_clickNumberArray.toString()) {
 		const color_selection_correct = flash_number/2; // Max is half of flash_number
 	} else {
 		const color_selection_correct = 0;
