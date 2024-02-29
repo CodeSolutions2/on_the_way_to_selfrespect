@@ -23,7 +23,7 @@
 	
 <button id="send_files_GCP_fetch_for_file_woTOKEN_woGCPlibrary" onclick="send_files_GCP_fetch_for_file_woTOKEN_woGCPlibrary()" style="display:block">send_files_GCP_fetch_for_file_woTOKEN_woGCPlibrary</button>
 
-
+<button id="send_files_GCP_fetch_for_file_woTOKEN_wGCPlibrary" onclick="send_files_GCP_fetch_for_file_woTOKEN_wGCPlibrary()" style="display:block">send_files_GCP_fetch_for_file_woTOKEN_wGCPlibrary</button>
 
 	
 	
@@ -396,9 +396,14 @@ async function send_files_GCP_fetch_for_file_woTOKEN_woGCPlibrary(){
 
 	
 
+async function send_files_GCP_fetch_for_file_woTOKEN_wGCPlibrary() {
+	
+	// Creates a client
+	const storage = new Storage();
+		  
+	await generateV4UploadSignedUrl().catch(console.error);
 
-// Creates a client
-const storage = new Storage();
+}  // end of send_files_GCP_fetch_for_file_woTOKEN_wGCPlibrary
 
 	  
 async function generateV4UploadSignedUrl() {
@@ -427,7 +432,6 @@ async function generateV4UploadSignedUrl() {
 	  );
 	}
 
-generateV4UploadSignedUrl().catch(console.error);
 
 // -------------------------------------------------
 
