@@ -14,7 +14,7 @@
 
 <br><br>
 
-<button id="user_click_done" onclick="user_click_done()" style="display:none">DONE</button>
+<button id="user_click_done_button" onclick="user_click_done()" style="display:none">DONE</button>
 	
 <style>
       canvas {border: 1px solid black;}
@@ -213,6 +213,8 @@ async function user_click_done() {
 
 	// The first stop_one_eventlister has the correct user_click
 	return await stop_listening_for_user_clicks()
+		.then(async function() { accuracy = await calculate_accuracy(); console.log("IN user__click_done - accuracy: ", accuracy);  })
+		.then(async function() { response_time = await elapsedTime(startTime, endTime); console.log("IN user__click_done - response_time: ", response_time);  })
 		.then(async function() { await verify_user_clicks(); })
 		;
 }
@@ -224,6 +226,7 @@ async function listen_for_user_clicks() {
 
 	// Launch eventListeners on all of the canvasElements, then Make the DONE button visible
 	startTime = await currentTime();
+	console.log("startTime: ", startTime);
 	
 	await start_one_eventlister(0)
 		.then(async function() {outp.innerHTML = "Click on the same pattern that was presented, then click the 'DONE' button."; await start_one_eventlister(1); })
@@ -232,7 +235,7 @@ async function listen_for_user_clicks() {
 		.then(async function() { await start_one_eventlister(4); })
 		.then(async function() { await start_one_eventlister(5); })
 		.then(async function() { await start_one_eventlister(6); })
-		.then(function() { document.getElementById("user_click_done").style = 'block'; })
+		.then(function() { document.getElementById("user_click_done_button").style = 'block'; })
 	;
 	
 }
@@ -251,27 +254,33 @@ async function stop_listening_for_user_clicks() {
 		.then(async function() { await stop_one_eventlister(5); })
 		.then(async function() { await stop_one_eventlister(6); })
 		.then(async () => { await new Promise(r => setTimeout(r, 200)); })
-		.then(async function() { document.getElementById("user_click_done").style = 'none'; })
+		.then(function() { document.getElementById("user_click_done_button").style = 'none'; })
 	;
 
 	endTime = await currentTime();
+	console.log("endTime: ", endTime);
 	
 }
 
 	  
 // -------------------------------------------------
 
-async function calculate_accuracy(order_string, user_click_string){
+async function calculate_accuracy(){
 
 	// sequence_selection_correct
-	const combined  = await [... new Set(order.concat(user_click))];
+	const combined  = [... new Set(order.concat(user_click))];
+	console.log("combined: ", combined);
 
 	const sequence_selection_correct = (flash_number - combined.length-user_click.length)/2; // Max is half of flash_number
-	if (order_string == user_click_string) {
+	console.log("sequence_selection_correct: ", sequence_selection_correct);
+	
+	if (order.toString() == user_click.toString()) {
 		const color_selection_correct = flash_number/2; // Max is half of flash_number
 	} else {
 		const color_selection_correct = 0;
 	}
+	console.log("color_selection_correct: ", color_selection_correct);
+	
 	return Number(color_selection_correct + sequence_selection_correct);
 }
 
@@ -291,14 +300,13 @@ async function verify_user_clicks(){
 	
 	// ------------------------
 	
-	accuracy = await calculate_accuracy(order_string, user_click_string);
+	// accuracy = await calculate_accuracy();
 
-	response_time = await elapsedTime(startTime, endTime);
+	// response_time = await elapsedTime(startTime, endTime);
+
+	data.push( [accuracy, response_time, presentation_time_interval, flash_number] ); 
 
 	// ------------------------
-	
-	// Update data
-	data.push( [accuracy, response_time, presentation_time_interval, flash_number] ); 
 
 	if (order_string == user_click_string) {
 		// Correct 
