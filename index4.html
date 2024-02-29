@@ -210,6 +210,8 @@ async function stop_listening_for_user_clicks() {
 		.then(async function() { await stop_one_eventlister(6); })
 	;
 
+	// Remove DONE button
+	document.getElementById("user_click_done").style = 'none';
 }
 
 	  
@@ -217,9 +219,6 @@ async function stop_listening_for_user_clicks() {
 
 
 async function verify_user_clicks(){
-	
-	// Remove DONE button
-	document.getElementById("user_click_done").style = 'none';
 
 	// ------------------------
 	console.log('order global variable: ', order); // Array(3) [ 1, 5, 3 ]
@@ -275,13 +274,13 @@ async function flash_sequence_difficulty3(){
 	order = await rand_perm(squarelocation, 3)
 		.then(async function(order) { const val = await show_one_image_square(order.at(0)); return order; })
 		.then(async (order) => { await new Promise(r => setTimeout(r, 2000)); return order;})
-		.then(async function(order) { const val = await show_one_grey_square(order.at(0), 1); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(0)); return order;})
 		.then(async function(order) { const val = await show_one_image_square(order.at(1)); return order; })
 		.then(async (order) => { await new Promise(r => setTimeout(r, 2000)); return order;})
-		.then(async function(order) { const val = await show_one_grey_square(order.at(1), 1); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(1)); return order;})
 		.then(async function(order) { const val = await show_one_image_square(order.at(2)); return order; })
 		.then(async (order) => { await new Promise(r => setTimeout(r, 2000)); return order;})
-		.then(async function(order) { const val = await show_one_grey_square(order.at(2), 1); return order; })
+		.then(async function(order) { const val = await show_one_grey_square(order.at(2)); return order; })
 		;
 
 	return order;
@@ -294,8 +293,8 @@ async function flash_sequence_difficulty3(){
 async function flash_sequence_when_clicked_on(val){
 	
 	await show_one_image_square(val)
-		.then(async (val) => { await new Promise(r => setTimeout(r, 1000)); return val;})
-		.then(async function(val) { val = await show_one_grey_square(val, 1); })
+		.then(async (val) => { await new Promise(r => setTimeout(r, 500)); return val;})
+		.then(async function(val) { val = await show_one_grey_square(val); })
 		;
 
 } 
@@ -339,34 +338,66 @@ async function show_one_image_square(val) {
 // -------------------------------------------------
 
 
-async function show_one_grey_square(val, scaleheight) {
+async function show_one_grey_square(val) {
 	
     // Draw image on canvas
     if (val == 0) {
 	ctx0.fillStyle = '#999c98';  // Background square over image = blue
-	ctx0.fillRect(0, 0, canvasElement_width, canvasElement_height*scaleheight);
+	ctx0.fillRect(0, 0, canvasElement_width, canvasElement_height);
     } else if (val == 1) {
 	ctx1.fillStyle = '#999c98';  // Background square over image = blue
-	ctx1.fillRect(0, 0, canvasElement_width, canvasElement_height*scaleheight);
+	ctx1.fillRect(0, 0, canvasElement_width, canvasElement_height);
     } else if (val == 2) {
 	ctx2.fillStyle = '#999c98';  // Background square over image = blue
-	ctx2.fillRect(0, 0, canvasElement_width, canvasElement_height*scaleheight);
+	ctx2.fillRect(0, 0, canvasElement_width, canvasElement_height);
     } else if (val == 3) {
 	ctx3.fillStyle = '#999c98';  // Background square over image = blue
-	ctx3.fillRect(0, 0, canvasElement_width, canvasElement_height*scaleheight);
+	ctx3.fillRect(0, 0, canvasElement_width, canvasElement_height);
     } else if (val == 4) {
 	ctx4.fillStyle = '#999c98';  // Background square over image = blue
-	ctx4.fillRect(0, 0, canvasElement_width, canvasElement_height*scaleheight);
+	ctx4.fillRect(0, 0, canvasElement_width, canvasElement_height);
     } else if (val == 5) {
 	ctx5.fillStyle = '#999c98';  // Background square over image = blue
-	ctx5.fillRect(0, 0, canvasElement_width, canvasElement_height*scaleheight);
+	ctx5.fillRect(0, 0, canvasElement_width, canvasElement_height);
     } else {
 	ctx6.fillStyle = '#999c98';  // Background square over image = blue
-	ctx6.fillRect(0, 0, canvasElement_width, canvasElement_height*scaleheight);
+	ctx6.fillRect(0, 0, canvasElement_width, canvasElement_height);
     }
 
 	return val;
-}  // end of show_grey_square
+}  // end of show_one_grey_square
+
+// -------------------------------------------------
+
+
+async function show_onehalf_grey_square(val) {
+	
+    // Draw image on canvas
+    if (val == 0) {
+	ctx0.fillStyle = '#999c98';  // Background square over image = blue
+	ctx0.fillRect(0, 0, canvasElement_width, canvasElement_height/2);
+    } else if (val == 1) {
+	ctx1.fillStyle = '#999c98';  // Background square over image = blue
+	ctx1.fillRect(0, 0, canvasElement_width, canvasElement_height/2);
+    } else if (val == 2) {
+	ctx2.fillStyle = '#999c98';  // Background square over image = blue
+	ctx2.fillRect(0, 0, canvasElement_width, canvasElement_height/2);
+    } else if (val == 3) {
+	ctx3.fillStyle = '#999c98';  // Background square over image = blue
+	ctx3.fillRect(0, 0, canvasElement_width, canvasElement_height/2);
+    } else if (val == 4) {
+	ctx4.fillStyle = '#999c98';  // Background square over image = blue
+	ctx4.fillRect(0, 0, canvasElement_width, canvasElement_height/2);
+    } else if (val == 5) {
+	ctx5.fillStyle = '#999c98';  // Background square over image = blue
+	ctx5.fillRect(0, 0, canvasElement_width, canvasElement_height/2);
+    } else {
+	ctx6.fillStyle = '#999c98';  // Background square over image = blue
+	ctx6.fillRect(0, 0, canvasElement_width, canvasElement_height/2);
+    }
+
+	return val;
+}  // end of show_onehalf_grey_square
 
 	  
 // -------------------------------------------------
@@ -388,7 +419,7 @@ async function start_one_eventlister(val) {
 
     // When the eventlister is turned on for each square, show image first then half of the square to hide image
     await show_one_image_square(val)
-    .then(async function(val) { val = await show_one_grey_square(val, 0.5); return val; })
+    .then(async function(val) { val = await show_onehalf_grey_square(val); return val; })
     .then(function(val) {
 							       
      	// Start an eventlister per canvas to evaluate user response
