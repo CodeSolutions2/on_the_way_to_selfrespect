@@ -270,17 +270,16 @@ async function calculate_accuracy(){
 
 	console.log("IN calculate_accuracy - user_click: ", user_click);
 	
-	// sequence_selection_correct
+	// Points for the squares selected, order is not important
 	const combined  = [... new Set(order.concat(user_click))];
 	console.log("combined: ", combined);
-
-	const sequence_selection_correct = (flash_number - combined.length-user_click.length)/2; // Max is half of flash_number
+	const sequence_selection_correct = (flash_number - (combined.length-user_click.length))/2; // Max is half of flash_number
 	console.log("sequence_selection_correct: ", sequence_selection_correct);
-	
-	if (order.toString() === user_click.toString()) {
-		const color_selection_correct = flash_number/2; // Max is half of flash_number
-	} else {
-		const color_selection_correct = 0;
+
+	// Points for the correct order
+	const color_selection_correct = 0;
+	if (order == user_click) {
+		color_selection_correct = flash_number/2; // Max is half of flash_number
 	}
 	console.log("color_selection_correct: ", color_selection_correct);
 	
