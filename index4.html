@@ -295,7 +295,7 @@ async function flash_sequence_when_clicked_on(val){
 	
 	await show_one_image_square(val)
 		.then(async (val) => { await new Promise(r => setTimeout(r, 1000)); return val;})
-		.then(async function(val) { const val = await show_one_grey_square(val, 1); })
+		.then(async function(val) { val = await show_one_grey_square(val, 1); })
 		;
 
 } 
