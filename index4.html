@@ -41,7 +41,8 @@ var data = [];
 var presentation_time_interval = 2000;
 var flash_number = 3; // scalar from 3 to 7
 var response_time = 0;
-var accuracy = 0;
+var accuracy0 = 0;
+var accuracy1 = 0;
 
 var startTime = []; 
 var endTime = [];
@@ -214,7 +215,8 @@ async function user_click_done() {
 
 	// The first stop_one_eventlister has the correct user_click
 	return await stop_listening_for_user_clicks()
-		.then(async function() { accuracy = await calculate_accuracy(); console.log("IN user__click_done - accuracy: ", accuracy);  })
+		.then(async function() { accuracy0 = await calculate_sequence_selection_correct(); console.log("IN user__click_done - accuracy0: ", accuracy0);  })
+		.then(async function() { accuracy1 = await calculate_color_selection_correct(); console.log("IN user__click_done - accuracy1: ", accuracy1);  })
 		.then(async function() { response_time = await elapsedTime(startTime, endTime); console.log("IN user__click_done - response_time: ", response_time);  })
 		.then(async function() { await verify_user_clicks(); })
 		;
@@ -266,37 +268,31 @@ async function stop_listening_for_user_clicks() {
 	  
 // -------------------------------------------------
 
-async function calculate_accuracy(){
+async function calculate_sequence_selection_correct(){
 
 	console.log("IN calculate_accuracy - user_click: ", user_click);
 	
 	// Points for the squares selected, order is not important
 	const combined  = [... new Set(order.concat(user_click))];
-	console.log("combined: ", combined);
-	const sequence_selection_correct = (flash_number - (combined.length-user_click.length))/2; // Max is half of flash_number
-	console.log("sequence_selection_correct: ", sequence_selection_correct);
-
-	const subtract2arrays = order - user_click;
-	console.log("color_selection_correct: ", color_selection_correct);
-	const sumArray = subtract2arrays.reduce((accumulator, currentValue) => accumulator + currentValue, 0); // sum array from left to right
-	console.log("sumArray: ", sumArray);
-
 	
-	// const object1 = { true : flash_number/2};
-	 // console.log("color_selection_correct: ", color_selection_correct);
-	//const color_selection_correct = object1[] ?? 0;
-
-	  
-	// Points for the correct order
-	//const color_selection_correct = 0;
-	// if (order == user_click) {
-	// 	color_selection_correct = flash_number/2; // Max is half of flash_number
-	// }
-	console.log("color_selection_correct: ", color_selection_correct);
-	
-	return Number(color_selection_correct + sequence_selection_correct);
+	return (flash_number - (combined.length-user_click.length))/2; // Max is half of flash_number
 }
 
+// -------------------------------------------------
+
+
+
+async function calculate_color_selection_correct(){
+
+	// Points for the correct order
+	const color_selection_correct = 0;
+	if (order == user_click) {
+		color_selection_correct = flash_number/2; // Max is half of flash_number
+	}
+	console.log("color_selection_correct: ", color_selection_correct);
+	
+	return color_selection_correct;
+}
 
 // -------------------------------------------------
 
@@ -317,7 +313,7 @@ async function verify_user_clicks(){
 
 	// response_time = await elapsedTime(startTime, endTime);
 
-	data.push( [accuracy, response_time, presentation_time_interval, flash_number] ); 
+	data.push( [accuracy0, accuracy1, response_time, presentation_time_interval, flash_number] ); 
 
 	// ------------------------
 
