@@ -36,7 +36,7 @@
 	
 
 
-<script src="https://cdn.jsdelivr.net/npm/@google-cloud/storage/build/cjs/src/index.min.js"></script>
+<<!-- script src="https://cdn.jsdelivr.net/npm/@google-cloud/storage/build/cjs/src/index.min.js"></script> -->
 	
   <script>
 	  
@@ -396,42 +396,41 @@ async function send_files_GCP_fetch_for_file_woTOKEN_woGCPlibrary(){
 
 	
 
-async function send_files_GCP_fetch_for_file_woTOKEN_wGCPlibrary() {
+// async function send_files_GCP_fetch_for_file_woTOKEN_wGCPlibrary() {
 	
 	// Creates a client
-	const storage = new Storage();
+// 	const storage = new Storage();
 		  
-	await generateV4UploadSignedUrl().catch(console.error);
+// 	await generateV4UploadSignedUrl().catch(console.error);
 
-}  // end of send_files_GCP_fetch_for_file_woTOKEN_wGCPlibrary
+// }  // end of send_files_GCP_fetch_for_file_woTOKEN_wGCPlibrary
 
 	  
-async function generateV4UploadSignedUrl() {
+// async function generateV4UploadSignedUrl() {
 	// https://www.jsdelivr.com/package/npm/@google-cloud/storage
 	
 	  // These options will allow temporary uploading of the file with outgoing
 	  // Content-Type: application/octet-stream header.
-	  const options = {
-	    version: 'v4',
-	    action: 'write',
-	    expires: Date.now() + 15 * 60 * 1000, // 15 minutes
-	    contentType: 'application/octet-stream',
-	  };
+// 	  const options = {
+	//     version: 'v4',
+	//     action: 'write',
+	//     expires: Date.now() + 15 * 60 * 1000, // 15 minutes
+	//     contentType: 'application/octet-stream',
+	//   };
 	
 	  // Get a v4 signed URL for uploading file
-	  const [url] = await storage
-	    .bucket(on-the-way2selfrespect)
-	    .file(file_test.csv)
-	    .getSignedUrl(options);
+	//   const [url] = await storage
+	//     .bucket(on-the-way2selfrespect)
+	//     .file(file_test.csv)
+	//     .getSignedUrl(options);
 	
-	  console.log('Generated PUT signed URL:');
-	  console.log(url);
-	  console.log('You can use this URL with any user agent, for example:');
-	  console.log(
-	    "curl -X PUT -H 'Content-Type: application/octet-stream' " +
-	      `--upload-file my-file '${url}'`
-	  );
-	}
+// 	  console.log('Generated PUT signed URL:');
+	//   console.log(url);
+	//   console.log('You can use this URL with any user agent, for example:');
+	//   console.log(
+	    "curl -X PUT -H 'Content-Type: application/octet-stream' " +  `--upload-file my-file '${url}'`
+	//   );
+// 	}
 
 
 // -------------------------------------------------
