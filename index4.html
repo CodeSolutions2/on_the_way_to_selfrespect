@@ -268,15 +268,16 @@ async function stop_listening_for_user_clicks() {
 
 async function calculate_accuracy(){
 
+	console.log("IN calculate_accuracy - user_click: ", user_click);
+	
 	// sequence_selection_correct
-	const user_clickNumberArray = Number(user_click);
-	const combined  = [... new Set(order.concat(user_clickNumberArray))];
+	const combined  = [... new Set(order.concat(user_click))];
 	console.log("combined: ", combined);
 
 	const sequence_selection_correct = (flash_number - combined.length-user_click.length)/2; // Max is half of flash_number
 	console.log("sequence_selection_correct: ", sequence_selection_correct);
 	
-	if (order.toString() === user_clickNumberArray.toString()) {
+	if (order.toString() === user_click.toString()) {
 		const color_selection_correct = flash_number/2; // Max is half of flash_number
 	} else {
 		const color_selection_correct = 0;
@@ -596,7 +597,7 @@ async function show_onehalf_grey_square(val) {
 async function processEvent(event) {
 	
     // When the user clicks the square, save value
-    user_click.push(this.getAttribute("data-id"));
+    user_click.push( Number(this.getAttribute("data-id");); );
 
     // When the user clicks the square, flash the square and make the square full color
     await flash_sequence_when_clicked_on(this.getAttribute("data-id"));
