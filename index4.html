@@ -35,6 +35,17 @@ const outp = document.getElementById('output');
 
 var user_click = [];
 var order = [];
+
+	  
+var data = [];
+var presentation_time_interval = 2000;
+var flash_number = 3; // scalar from 3 to 7
+var response_time = 0;
+var accuracy = 0;
+
+var startTime = []; 
+var endTime = [];
+	
 	  
 // ----------------------------
 // Create all the elements
@@ -63,13 +74,29 @@ var ctx6 = canvasElement6.getContext("2d");  // Get the 2D rendering context of 
 
 // -------------------------------------------------
 
+async function currentTime() { 
+	let date = new Date(); 
+	let hh = date.getHours(); 
+	let mm = date.getMinutes(); 
+	let ss = date.getSeconds();
+	return [hh, mm, ss];
+}
+			
 
+
+async function elapsedTime(startTime, endTime) {
+	return = (endTime[0]*60*60 + endTime[1]*60 + endTime[2]) - (startTime[0]*60*60 + startTime[1]*60 + startTime[2]);
+	
+}
+			
 
 // -------------------------------------------------
 
 
 async function initialization_of_canvasElements() {
 
+	flash_number = await rand_perm([3, 4, 5, 6, 7], 1);
+	
 	canvasElement0.width = canvasElement_width;
 	canvasElement0.height = canvasElement_height;
 	canvasElement1.width = canvasElement_width;
@@ -133,6 +160,8 @@ async function initialization_of_canvasElements() {
 	ctx5.fillRect(0, 0, canvasElement_width, canvasElement_height);
 	ctx6.fillStyle = '#999c98';  // Background square over image = blue
 	ctx6.fillRect(0, 0, canvasElement_width, canvasElement_height);
+
+	return flash_number;
 }
 
 
@@ -150,7 +179,19 @@ async function run_it() {
 	outp.innerHTML = "";
 
 	order = await initialization_of_canvasElements()
-		.then(async function() { order = await flash_sequence_difficulty3(); return order;})
+		.then(async function(flash_number) { 
+			if (flash_number == 3) {
+				order = await flash_sequence_difficulty3();
+			} else if (flash_number == 4) {
+				order = await flash_sequence_difficulty4();
+			} else if (flash_number == 5) {
+				order = await flash_sequence_difficulty5();
+			} else if (flash_number == 6) {
+				order = await flash_sequence_difficulty6();
+			} else {
+				order = await flash_sequence_difficulty7();
+			}
+		return order; })
 		.then(async function(order) { await listen_for_user_clicks(); return order;})
 		;
 
@@ -173,7 +214,6 @@ async function user_click_done() {
 	// The first stop_one_eventlister has the correct user_click
 	return await stop_listening_for_user_clicks()
 		.then(async function() { await verify_user_clicks(); })
-		//.then(async function() { user_click = []; return user_click; })
 		;
 }
 	  
@@ -183,6 +223,8 @@ async function user_click_done() {
 async function listen_for_user_clicks() {
 
 	// Launch eventListeners on all of the canvasElements, then Make the DONE button visible
+	startTime = await currentTime();
+	
 	await start_one_eventlister(0)
 		.then(async function() {outp.innerHTML = "Click on the same pattern that was presented, then click the 'DONE' button."; await start_one_eventlister(1); })
 		.then(async function() { await start_one_eventlister(2); })
@@ -199,7 +241,7 @@ async function listen_for_user_clicks() {
 
 
 async function stop_listening_for_user_clicks() {
-	
+	 
 	// Launch eventListeners on all of the canvasElements, then Remove DONE button
 	await stop_one_eventlister(0)
 		.then(async function() { await stop_one_eventlister(1); })
@@ -208,14 +250,33 @@ async function stop_listening_for_user_clicks() {
 		.then(async function() { await stop_one_eventlister(4); })
 		.then(async function() { await stop_one_eventlister(5); })
 		.then(async function() { await stop_one_eventlister(6); })
-		.then(function() { document.getElementById("user_click_done").style = 'none'; })
+		.then(async () => { await new Promise(r => setTimeout(r, 200)); })
+		.then(async function() { document.getElementById("user_click_done").style = 'none'; })
 	;
+
+	endTime = await currentTime();
 	
 }
 
 	  
 // -------------------------------------------------
 
+async function calculate_accuracy(order_string, user_click_string){
+
+	// sequence_selection_correct
+	const combined  = await [... new Set(order.concat(user_click))];
+
+	const sequence_selection_correct = (flash_number - combined.length-user_click.length)/2; // Max is half of flash_number
+	if (order_string == user_click_string) {
+		const color_selection_correct = flash_number/2; // Max is half of flash_number
+	} else {
+		const color_selection_correct = 0;
+	}
+	return Number(color_selection_correct + sequence_selection_correct);
+}
+
+
+// -------------------------------------------------
 
 async function verify_user_clicks(){
 
@@ -228,9 +289,16 @@ async function verify_user_clicks(){
 	console.log('user_click in verify_user_clicks: ', user_click);
 	const user_click_string = user_click.toString();
 	
-	// Reset user_click
-	user_click = [];
 	// ------------------------
+	
+	accuracy = await calculate_accuracy(order_string, user_click_string);
+
+	response_time = await elapsedTime(startTime, endTime);
+
+	// ------------------------
+	
+	// Update data
+	data.push( [accuracy, response_time, presentation_time_interval, flash_number] ); 
 
 	if (order_string == user_click_string) {
 		// Correct 
@@ -238,6 +306,14 @@ async function verify_user_clicks(){
 	} else {
 		outp.innerHTML = "Incorrect: the pattern was " + order_string + ", you performed " + user_click_string;
 	}
+	outp.innerHTML += data;
+
+	// ------------------------
+
+	// Reset user_click
+	user_click = [];
+
+	// ------------------------
 
 }
 
@@ -272,13 +348,13 @@ async function flash_sequence_difficulty3(){
 
 	order = await rand_perm(squarelocation, 3)
 		.then(async function(order) { const val = await show_one_image_square(order.at(0)); return order; })
-		.then(async (order) => { await new Promise(r => setTimeout(r, 2000)); return order;})
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
 		.then(async function(order) { const val = await show_one_grey_square(order.at(0)); return order;})
 		.then(async function(order) { const val = await show_one_image_square(order.at(1)); return order; })
-		.then(async (order) => { await new Promise(r => setTimeout(r, 2000)); return order;})
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
 		.then(async function(order) { const val = await show_one_grey_square(order.at(1)); return order;})
 		.then(async function(order) { const val = await show_one_image_square(order.at(2)); return order; })
-		.then(async (order) => { await new Promise(r => setTimeout(r, 2000)); return order;})
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
 		.then(async function(order) { const val = await show_one_grey_square(order.at(2)); return order; })
 		;
 
