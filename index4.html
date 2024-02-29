@@ -597,7 +597,9 @@ async function show_onehalf_grey_square(val) {
 async function processEvent(event) {
 	
     // When the user clicks the square, save value
-    user_click.push( Number(this.getAttribute("data-id");); );
+	const out = this.getAttribute("data-id");
+	const out1 = Number(out);
+    user_click.push( out1 );
 
     // When the user clicks the square, flash the square and make the square full color
     await flash_sequence_when_clicked_on(this.getAttribute("data-id"));
