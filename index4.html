@@ -143,19 +143,22 @@ async function initialization_of_canvasElements() {
 async function run_it() {
 
 	// -------------------------------------------------
-	
-	var user_click = [];
+
+	// Reset user_click
+	// user_click = [];
 	console.log("user_click in run_it: ", user_click);
 
 	// Reset screen text
 	outp.innerHTML = "";
 
-	var order = await initialization_of_canvasElements()
-		.then(async function() { var order = await flash_sequence_difficulty3(); return order;})
+	order = await initialization_of_canvasElements()
+		.then(async function() { order = await flash_sequence_difficulty3(); return order;})
 		.then(async function(order) { await allow_some_color_to_be_seen(); return order;})
 		.then(async function(order) { await listen_for_user_clicks(); localStorage.setItem("order", order); return order;})
 		;
 
+	console.log("order in run_it: ", order);
+	
 	// now, need a way to determine when the user is done click 
 	// monitor the length of the array that holds the user clicks: the user knows that they need to click on 3 even 
 	// OR let user click a button to say they are done
@@ -210,14 +213,13 @@ async function user_click_done() {
 async function listen_for_user_clicks() {
 
 	// Launch eventListeners on all of the canvasElements
-	localStorage.setItem("val", 0);
 	await start_one_eventlister(0)
-		.then(async function() {outp.innerHTML = "Click on the same pattern that was presented, then click the 'DONE' button."; localStorage.setItem("val", 1); await start_one_eventlister(1); })
-		.then(async function() { localStorage.setItem("val", 2); await start_one_eventlister(2); })
-		.then(async function() { localStorage.setItem("val", 3); await start_one_eventlister(3); })
-		.then(async function() { localStorage.setItem("val", 4); await start_one_eventlister(4); })
-		.then(async function() { localStorage.setItem("val", 5); await start_one_eventlister(5); })
-		.then(async function() { localStorage.setItem("val", 6); await start_one_eventlister(6); })
+		.then(async function() {outp.innerHTML = "Click on the same pattern that was presented, then click the 'DONE' button."; await start_one_eventlister(1); })
+		.then(async function() { await start_one_eventlister(2); })
+		.then(async function() { await start_one_eventlister(3); })
+		.then(async function() { await start_one_eventlister(4); })
+		.then(async function() { await start_one_eventlister(5); })
+		.then(async function() { await start_one_eventlister(6); })
 	;
 
 	// Make the DONE button visible
@@ -255,24 +257,18 @@ async function verify_user_clicks(){
 	// ------------------------
 	// console.log('order global variable: ', order); // undefined, so localStorage is required because the global variable does not get updated in time
 	
-	// make order a string
-	var order = localStorage.getItem("order");
+	order = localStorage.getItem("order");
 	console.log('order localStorage: ', order);
 	
 	const order_string = order.toString();
 	// ------------------------
 
 	// ------------------------
-	user_click = [... new Set(user_click)]; // remove repeating values due to addeventlisterner handle
 	console.log('user_click in verify_user_clicks: ', user_click);
-	// localStorage.setItem("user_click", user_click);
-	// OR
 	const user_click_string = user_click.toString();
 	
 	// Reset user_click
 	user_click = [];
-
-	// const user_click_string = localStorage.getItem("user_click").toString();
 	// ------------------------
 
 	if (order_string == user_click_string) {
@@ -313,7 +309,7 @@ async function rand_perm(x, vec_len) {
 
 async function flash_sequence_difficulty3(){
 
-	var order = await rand_perm(squarelocation, 3)
+	order = await rand_perm(squarelocation, 3)
 		.then(async function(order) { await show_one_image_square(order.at(0)); return order; })
 		.then(async (order) => { await new Promise(r => setTimeout(r, 2000)); return order;})
 		.then(async function(order) { await show_one_grey_square(order.at(0)); return order;})
@@ -425,28 +421,16 @@ async function start_one_eventlister(val) {
 	// OR
 	canvasElement0.addEventListener("click", processEvent, false);
     } else if (val == 1) {
-	// canvasElement1.addEventListener("click", (event) => { user_click.push(val); }, false);
-	// OR
 	canvasElement1.addEventListener("click", processEvent, false);
     } else if (val == 2) {
-	// canvasElement2.addEventListener("click", (event) => { user_click.push(val); }, false);
-	// OR
 	canvasElement2.addEventListener("click", processEvent, false);
     } else if (val == 3) {
-	// canvasElement3.addEventListener("click", (event) => { user_click.push(val); }, false);
-	// OR
 	canvasElement3.addEventListener("click", processEvent, false);
     } else if (val == 4) {
-	// canvasElement4.addEventListener("click", (event) => { user_click.push(val); }, false);
-	// OR
 	canvasElement4.addEventListener("click", processEvent, false);
     } else if (val == 5) {
-	// canvasElement5.addEventListener("click", (event) => { user_click.push(val); }, false);
-	// OR
 	canvasElement5.addEventListener("click", processEvent, false);
     } else {
-	// canvasElement6.addEventListener("click", (event) => { user_click.push(val); }, false);
-	// OR
 	canvasElement6.addEventListener("click", processEvent, false);
     }
 	
@@ -462,32 +446,18 @@ async function stop_one_eventlister(val) {
 	
     // Start an eventlister per canvas to evaluate user response
     if (val == 0) {
-	// canvasElement0.removeEventListener("click", (event) => { });
-	// OR
 	canvasElement0.removeEventListener("click", processEvent);
     } else if (val == 1) {
-	// canvasElement1.removeEventListener("click", (event) => { });
-	// OR
 	canvasElement1.removeEventListener("click", processEvent);
     } else if (val == 2) {
-	// canvasElement2.removeEventListener("click", (event) => { });
-	// OR
 	canvasElement2.removeEventListener("click", processEvent);
     } else if (val == 3) {
-	// canvasElement3.removeEventListener("click", (event) => { });
-	// OR
 	canvasElement3.removeEventListener("click", processEvent);
     } else if (val == 4) {
-	// canvasElement4.removeEventListener("click", (event) => { });
-	// OR
 	canvasElement4.removeEventListener("click", processEvent);
     } else if (val == 5) {
-	// canvasElement5.removeEventListener("click", (event) => { });
-	// OR
 	canvasElement5.removeEventListener("click", processEvent);
     } else {
-	// canvasElement6.removeEventListener("click", (event) => { });
-	// OR
 	canvasElement6.removeEventListener("click", processEvent);
     }
 	
