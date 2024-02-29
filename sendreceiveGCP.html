@@ -240,6 +240,11 @@ async function sendreceive_files_GCP_fetch_forIMAGES() {
 	let url = 'https://storage.googleapis.com/on-the-way2selfrespect/blue.png';
 
 	// The server should set this , "Access-Control-Allow-Credentials": true
+
+	// For text data: "Content-Type": "application/x-www-form-urlencoded"
+	// For binary data: "Content-Type": "multipart/form-data"
+	// For image data: "Content-Type": "image/png", "image/jpg"
+	
 	let headers = {"Content-Type": "image/png", 
 		       "Access-Control-Allow-Origin": "*", 
 		       "Access-Control-Allow-Credentials": true,
@@ -255,10 +260,19 @@ async function sendreceive_files_GCP_fetch_forIMAGES() {
 	// https://fetch.spec.whatwg.org/#http-cors-protocol
 	// https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image
 	// https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/crossorigin
+
+	
+	// https://web.dev/articles/introduction-to-fetch
+	// Types of mode: 
+   	// "same-origin" = only succeeds for requests for assets on the same origin, all other requests will reject.
+	// "cors" = will allow requests for assets on the same-origin and other origins which return the appropriate CORs headers.
+	// "cors-with-forced-preflight" = will always perform a preflight check before making the actual request.
+	// "no-cors" = is intended to make requests to other origins that do not have CORS headers and result in an opaque response, but as stated, this isn't possible in the window global scope at the moment.
+
 	
 	let options = {method : 'GET', 
 		       headers: headers, 
-		       mode: 'cors', 
+		       mode: 'cors-with-forced-preflight', 
 		       cache: "no-cache", 
 		       credentials: "include", 
 		       redirect: "follow", 
@@ -266,20 +280,35 @@ async function sendreceive_files_GCP_fetch_forIMAGES() {
 
 
 	try {
-		// await fetch(url, options).then(res => res.json()).then(imageout => {
-		// 	console.log('imageout:', imageout);
-		// 	img = await imageout.text();
-		// 	outp.innerHTML += img;
-		 //  }).catch(error => { outp.innerHTML += error; });
+		//  await fetch(url, options).then(res => res.json()).then(imageout => {
+		//  	console.log('imageout:', imageout);
+		//  	img = await imageout.text();
+		//  	outp.innerHTML += img;
+		//   }).catch(error => { outp.innerHTML += error; });
 
 		// OR
 
-		img_res = await fetch(url, options);
-		img = await img_res.text();
-		outp.innerHTML += img;
-		const img1 = new Image();
-		img1.src = img;
-		document.body.appendChild(img1);
+		 //img_res = await fetch(url, options);
+		 //img = await img_res.text();
+		 //outp.innerHTML += img;
+		 //const img1 = new Image();
+		 //img1.src = img;
+		 //document.body.appendChild(img1);
+		//  (Reason: CORS request did not succeed). Status code: (null)
+
+		// OR
+
+		await fetch(url, {mode: 'cors-with-forced-preflight'})
+			    .then(function(response) {
+			    return response.text();
+			    })
+			    .then(function(text) {
+			    console.log('Request successful', text);
+			    })
+			    .catch(function(error) {
+			    log('Request failed', error)
+			    });
+
 
 	} catch (error) {
 	      outp.innerHTML += error;
