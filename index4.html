@@ -275,13 +275,13 @@ async function flash_sequence_difficulty3(){
 	order = await rand_perm(squarelocation, 3)
 		.then(async function(order) { await show_one_image_square(order.at(0)); return order; })
 		.then(async (order) => { await new Promise(r => setTimeout(r, 2000)); return order;})
-		.then(async function(order) { await show_one_grey_square(order.at(0), 1); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(0), 1); return order;})
 		.then(async function(order) { await show_one_image_square(order.at(1)); return order; })
 		.then(async (order) => { await new Promise(r => setTimeout(r, 2000)); return order;})
-		.then(async function(order) { await show_one_grey_square(order.at(1), 1); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(1), 1); return order;})
 		.then(async function(order) { await show_one_image_square(order.at(2)); return order; })
 		.then(async (order) => { await new Promise(r => setTimeout(r, 2000)); return order;})
-		.then(async function(order) { await show_one_grey_square(order.at(2), 1); return order; })
+		.then(async function(order) { const val = await show_one_grey_square(order.at(2), 1); return order; })
 		;
 
 	return order;
@@ -295,7 +295,7 @@ async function flash_sequence_when_clicked_on(val){
 	
 	await show_one_image_square(val)
 		.then(async (val) => { await new Promise(r => setTimeout(r, 1000)); return val;})
-		.then(async function(val) { await show_one_grey_square(val, 1); })
+		.then(async function(val) { const val = await show_one_grey_square(val, 1); })
 		;
 
 } 
@@ -362,7 +362,8 @@ async function show_one_grey_square(val, scaleheight) {
 	ctx6.fillStyle = '#999c98';  // Background square over image = blue
 	ctx6.fillRect(0, 0, canvasElement_width, canvasElement_height*scaleheight);
     }
-	
+
+	return val;
 }  // end of show_grey_square
 
 	  
