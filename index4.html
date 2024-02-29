@@ -279,10 +279,12 @@ async function calculate_accuracy(){
 	const subtract2arrays = order - user_click;
 	console.log("color_selection_correct: ", color_selection_correct);
 	const sumArray = subtract2arrays.reduce((accumulator, currentValue) => accumulator + currentValue, 0); // sum array from left to right
-	console.log("color_selection_correct: ", color_selection_correct);
-	const object1 = { `${sumArray}`: flash_number/2};
-	  console.log("color_selection_correct: ", color_selection_correct);
-	const color_selection_correct = object1["0"] ?? 0;
+	console.log("sumArray: ", sumArray);
+
+	
+	// const object1 = { true : flash_number/2};
+	 // console.log("color_selection_correct: ", color_selection_correct);
+	//const color_selection_correct = object1[] ?? 0;
 
 	  
 	// Points for the correct order
