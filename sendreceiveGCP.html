@@ -15,7 +15,18 @@
 <button id="sendreceive_files_GCP_form" onclick="sendreceive_files_GCP_form()" style="display:block">sendreceive_files_GCP_form</button>
 <button id="onsubmit_get_result" onclick="onsubmit_get_result()" style="display:block">onsubmit_get_result</button>
 
-<button id="sendreceive_files_GCP_fetch_forIMAGES" onclick="sendreceive_files_GCP_fetch_forIMAGES()" style="display:block">sendreceive_files_GCP_fetch_forIMAGES</button>
+<button id="receive_files_GCP_fetch_forIMAGES" onclick="receive_files_GCP_fetch_forIMAGES()" style="display:block">receive_files_GCP_fetch_forIMAGES</button>
+
+<button id="send_files_GCP_fetch_forIMAGES" onclick="send_files_GCP_fetch_forIMAGES()" style="display:block">send_files_GCP_fetch_forIMAGES</button>
+
+<button id="send_files_GCP_fetch_for_file_wTOKEN_wOAuthtoken" onclick="send_files_GCP_fetch_for_file_wTOKEN_wOAuthtoken()" style="display:block">send_files_GCP_fetch_for_file_wTOKEN_wOAuthtoken</button>
+	
+<button id="send_files_GCP_fetch_for_file_woTOKEN_woGCPlibrary" onclick="send_files_GCP_fetch_for_file_woTOKEN_woGCPlibrary()" style="display:block">send_files_GCP_fetch_for_file_woTOKEN_woGCPlibrary</button>
+
+
+
+	
+	
 <!-- View results -->
 <div id="output" style="font-family:courier;font-size:24px;height:300px"></div>
 	
@@ -23,7 +34,10 @@
       canvas {border: 1px solid black;}
 </style>
 	
-  
+
+
+<script src="https://cdn.jsdelivr.net/npm/@google-cloud/storage@7.7.0/build/cjs/src/index.min.js"></script>
+	
   <script>
 	  
 // -------------------------------------------------
@@ -235,7 +249,7 @@ function onsubmit_get_result() {
 // -------------------------------------------------
 
 // Way 2: Use a fetch to perform GET to obtain an image from GCP
-async function sendreceive_files_GCP_fetch_forIMAGES() {
+async function receive_files_GCP_fetch_forIMAGES() {
 
 	let url = 'https://storage.googleapis.com/on-the-way2selfrespect/blue.png';
 
@@ -244,6 +258,7 @@ async function sendreceive_files_GCP_fetch_forIMAGES() {
 	// For text data: "Content-Type": "application/x-www-form-urlencoded"
 	// For binary data: "Content-Type": "multipart/form-data"
 	// For image data: "Content-Type": "image/png", "image/jpg"
+	// For PUTTING a file to storage: "Content-Type": "application/octet-stream"
 	
 	let headers = {"Content-Type": "image/png", 
 		       "Access-Control-Allow-Origin": "*", 
@@ -306,7 +321,7 @@ async function sendreceive_files_GCP_fetch_forIMAGES() {
 			    console.log('Request successful', text);
 			    })
 			    .catch(function(error) {
-			    log('Request failed', error)
+			    console.log('Request failed', error)
 			    });
 
 
@@ -315,11 +330,109 @@ async function sendreceive_files_GCP_fetch_forIMAGES() {
 	}
 	 
 
-}  // end of sendreceive_files_GCP_fetch_forIMAGES
+}  // end of receive_files_GCP_fetch_forIMAGES
 
 
 // -------------------------------------------------
 
+
+async function send_files_GCP_fetch_for_file_wTOKEN_wOAuthtoken(){
+	
+	// Make an Oauth2 token, paste it into Authorization
+	
+	  let response = await fetch(
+          `https://storage.googleapis.com/upload/storage/v1/b/on-the-way2selfrespect/o?uploadType=media&name=file_test.csv`,
+
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": 'multipart/form-data',
+              "Authorization": `Bearer ${token}`,
+            },
+            body: file_test.csv,
+          }
+
+		  
+}  // end of send_files_GCP_fetch_for_file_wTOKEN_wOAuthtoken
+
+
+
+// -------------------------------------------------
+
+
+async function send_files_GCP_fetch_for_file_woTOKEN_woGCPlibrary(){
+
+	
+	let url = 'https://storage.googleapis.com/on-the-way2selfrespect';
+	
+	let headers = {"Content-Type": "application/octet-stream", 
+		       "Access-Control-Allow-Origin": "*", 
+		       "Access-Control-Allow-Credentials": true,
+		       "Connection": "keep-alive"};
+
+	
+	let options = {method : 'PUT', 
+		       headers: headers, 
+		       mode: 'cors', 
+		       cache: "no-cache", 
+		       credentials: "include", 
+		       redirect: "follow", 
+		       referrerPolicy: "origin",
+		      body: "https://api.github.com/repos/CodeSolutions2/on_the_way_to_selfrespect/file_test.csv"};
+
+	try {
+		 await fetch(url, options).then(res => res.json()).then(res => {
+			console.log('res:', res);
+		  }).catch(error => { outp.innerHTML += error; });
+
+
+	} catch (error) {
+	      outp.innerHTML += error;
+	}
+	
+}  // end of send_files_GCP_fetch_for_file_woTOKEN_woGCPlibrary
+
+// -------------------------------------------------
+
+	
+
+
+// Creates a client
+const storage = new Storage();
+
+	  
+async function generateV4UploadSignedUrl() {
+	// https://www.jsdelivr.com/package/npm/@google-cloud/storage
+	  // These options will allow temporary uploading of the file with outgoing
+	  // Content-Type: application/octet-stream header.
+	  const options = {
+	    version: 'v4',
+	    action: 'write',
+	    expires: Date.now() + 15 * 60 * 1000, // 15 minutes
+	    contentType: 'application/octet-stream',
+	  };
+	
+	  // Get a v4 signed URL for uploading file
+	  const [url] = await storage
+	    .bucket(on-the-way2selfrespect)
+	    .file(file_test.csv)
+	    .getSignedUrl(options);
+	
+	  console.log('Generated PUT signed URL:');
+	  console.log(url);
+	  console.log('You can use this URL with any user agent, for example:');
+	  console.log(
+	    "curl -X PUT -H 'Content-Type: application/octet-stream' " +
+	      `--upload-file my-file '${url}'`
+	  );
+	}
+
+generateV4UploadSignedUrl().catch(console.error);
+
+// -------------------------------------------------
+
+
+	  
 	
 </script>
 </body>
