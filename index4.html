@@ -253,6 +253,7 @@ async function verify_user_clicks(){
 	// ------------------------
 
 	// ------------------------
+	user_click = [... new Set(user_click)]; // remove repeating values due to addeventlisterner handle
 	console.log('user_click in verify_user_clicks: ', user_click);
 	// localStorage.setItem("user_click", user_click);
 	// OR
@@ -410,7 +411,7 @@ async function start_one_eventlister(val) {
     if (val == 0) {
 	canvasElement0.addEventListener("click", (event) => { user_click.push(val); }, false); // it duplicates each val by the number of time "run it" is pushed, meaning that the handle is not deleted everytime eventlistener is removed??
 	// OR
-	//canvasElement0.addEventListener("click", newHandle, false);
+	// canvasElement0.addEventListener("click", newHandle, false);
     } else if (val == 1) {
 	canvasElement1.addEventListener("click", (event) => { user_click.push(val); }, false);
 	// OR
