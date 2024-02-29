@@ -276,11 +276,20 @@ async function calculate_accuracy(){
 	const sequence_selection_correct = (flash_number - (combined.length-user_click.length))/2; // Max is half of flash_number
 	console.log("sequence_selection_correct: ", sequence_selection_correct);
 
+	const subtract2arrays = order - user_click;
+	console.log("color_selection_correct: ", color_selection_correct);
+	const sumArray = subtract2arrays.reduce((accumulator, currentValue) => accumulator + currentValue, 0); // sum array from left to right
+	console.log("color_selection_correct: ", color_selection_correct);
+	const object1 = { `${sumArray}`: flash_number/2};
+	  console.log("color_selection_correct: ", color_selection_correct);
+	const color_selection_correct = object1["0"] ?? 0;
+
+	  
 	// Points for the correct order
-	const color_selection_correct = 0;
-	if (order == user_click) {
-		color_selection_correct = flash_number/2; // Max is half of flash_number
-	}
+	//const color_selection_correct = 0;
+	// if (order == user_click) {
+	// 	color_selection_correct = flash_number/2; // Max is half of flash_number
+	// }
 	console.log("color_selection_correct: ", color_selection_correct);
 	
 	return Number(color_selection_correct + sequence_selection_correct);
@@ -312,11 +321,11 @@ async function verify_user_clicks(){
 
 	if (order_string == user_click_string) {
 		// Correct 
-		outp.innerHTML = "Correct: the pattern was " + order_string + ", you performed " + user_click_string;
+		outp.innerHTML = "Correct: the pattern was " + order_string + ", you performed " + user_click_string + "</br>";
 	} else {
-		outp.innerHTML = "Incorrect: the pattern was " + order_string + ", you performed " + user_click_string;
+		outp.innerHTML = "Incorrect: the pattern was " + order_string + ", you performed " + user_click_string + "</br>";
 	}
-	outp.innerHTML += data;
+	outp.innerHTML += data + "</br>";
 
 	// ------------------------
 
