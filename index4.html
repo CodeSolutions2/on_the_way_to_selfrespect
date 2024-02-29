@@ -135,19 +135,10 @@ async function run_it() {
 
 	// -------------------------------------------------
 	
-	// await initialization_of_canvasElements();
-
-	// Select difficulty: difficulity can be from 0 to 6, here it is 3 so only 3 squares flash 
-	// Randomly permute squarelocation
-	// let order = await rand_perm(squarelocation, 3);
-	// console.log('order: ', order);
-
-	// await flash_sequence(order);
-		      
-	// -------------------------------------------------
-
-	// OR
 	var user_click = [];
+	console.log("user_click in run_it: ", user_click);
+
+	// Reset screen text
 	outp.innerHTML = "";
 
 	var order = await initialization_of_canvasElements()
@@ -192,17 +183,11 @@ async function allow_some_color_to_be_seen() {
 } 
 
 // -------------------------------------------------
-	  
-// document.getElementById("user_click_done").addEventListener("click", (event) => {
-// 	  var user_click = async () => { await stop_listening_for_user_clicks()
-// 		.then(async function() { await verify_user_clicks(); })
-// 		.then(async function() { await run_it(); }); var user_click = []; return user_click; }
-// });
-
-// OR
 
 // Exploit the onclick with the button
 async function user_click_done() {
+
+	console.log("user_click in user_click_done: ", user_click);
 
 	var user_click = await stop_listening_for_user_clicks()
 		.then(async function() { localStorage.setItem("user_click", user_click); await verify_user_clicks(); })
@@ -276,9 +261,11 @@ async function verify_user_clicks(){
 	const order_string = order.toString();
 	
 	// make user_click a string
-	var user_click0 = localStorage.getItem("user_click")
+	var user_click0 = localStorage.getItem("user_click")  // This is NOT correct
 	console.log('user_click0: ', user_click0);
-	
+
+
+	// This is correct
 	console.log('user_click: ', user_click);
 	const user_click_string = user_click.toString();
 
@@ -302,16 +289,6 @@ async function get_number(x) {
 // -------------------------------------------------
 	  
 async function rand_perm(x, vec_len) {
-
-	// var out = [];
-	// while (out.length != vec_len) {
-	//    let y = Math.round(x.length*Math.random())-1;
-	//     if (out.includes(x[y]) == false) {
-	// 		out.push(x[y]);
-	// 	}
-	// }
-
-	// OR
 
 	var out = [];
 	while (out.length != vec_len) {
