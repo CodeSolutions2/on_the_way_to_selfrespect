@@ -187,7 +187,7 @@ async function allow_some_color_to_be_seen() {
 // Exploit the onclick with the button
 async function user_click_done() {
 
-	console.log("user_click in user_click_done: ", user_click); // user_click = undefined
+	// console.log("user_click in user_click_done: ", user_click); // user_click = undefined
 
 	// The first stop_one_eventlister has the correct user_click
 	return await stop_listening_for_user_clicks()
@@ -243,7 +243,7 @@ async function verify_user_clicks(){
 	document.getElementById("user_click_done").style = 'none';
 
 	// ------------------------
-	console.log('order global variable: ', order);
+	// console.log('order global variable: ', order); // undefined, so localStorage is required because the global variable does not get updated in time
 	
 	// make order a string
 	var order = localStorage.getItem("order");
@@ -401,8 +401,11 @@ async function show_one_grey_square(val) {
 
 
 function save_value() { 
-	user_click.push( localStorage.getItem("val"); ); 
-}
+	var out = localStorage.getItem("val");
+	user_click.push( out ); 
+}  // end of save_value
+
+	  
 	  
 async function start_one_eventlister(val) {
 
