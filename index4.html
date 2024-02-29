@@ -294,7 +294,7 @@ async function flash_sequence_difficulty3(){
 async function flash_sequence_when_clicked_on(val){
 	
 	await show_one_image_square(val)
-		.then(async (val) => { await new Promise(r => setTimeout(r, 500)); return val;})
+		.then(async (val) => { await new Promise(r => setTimeout(r, 200)); return val;})
 		.then(async function(val) { val = await show_one_grey_square(val); })
 		;
 
@@ -310,22 +310,22 @@ async function show_one_image_square(val) {
 	    image.setAttribute('headers', {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"});
 	    
 	    if (val == 0) {
-		image.onload = async () => { ctx0.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };  // end of image.onload
+		image.onload = async () => { ctx0.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
 		image.src = "https://storage.googleapis.com/on-the-way2selfrespect/red.png";
 	    } else if (val == 1) {
-		image.onload = async () => { ctx1.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };  // end of image.onload
+		image.onload = async () => { ctx1.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
 		image.src = "https://storage.googleapis.com/on-the-way2selfrespect/green.png";
 	    } else if (val == 2) {
-		image.onload = async () => { ctx2.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };  // end of image.onload
+		image.onload = async () => { ctx2.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
 		image.src = "https://storage.googleapis.com/on-the-way2selfrespect/blue.png";
 	    } else if (val == 3) {
-		image.onload = async () => { ctx3.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };  // end of image.onload
+		image.onload = async () => { ctx3.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
 		image.src = "https://storage.googleapis.com/on-the-way2selfrespect/cyan.png";
 	    } else if (val == 4) {
-		image.onload = async () => { ctx4.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };  // end of image.onload
+		image.onload = async () => { ctx4.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
 		image.src = "https://storage.googleapis.com/on-the-way2selfrespect/yellow.png";
 	    } else if (val == 5) {
-		image.onload = async () => { ctx5.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };  // end of image.onload
+		image.onload = async () => { ctx5.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
 		image.src = "https://storage.googleapis.com/on-the-way2selfrespect/magenta.png";
 	    } else {
 		image.onload = async () => { ctx6.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
@@ -420,6 +420,7 @@ async function start_one_eventlister(val) {
 
     // When the eventlister is turned on for each square, show image first then half of the square to hide image [seeing half or no image could be another spatial difficulty parameter]
     await show_one_image_square(val)
+    .then(async (val) => { await new Promise(r => setTimeout(r, 200)); return val;})
     .then(async function(val) { val = await show_onehalf_grey_square(val); return val; })
     .then(function(val) {
 							       
