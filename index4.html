@@ -95,7 +95,7 @@ async function elapsedTime(startTime, endTime) {
 
 async function initialization_of_canvasElements() {
 
-	flash_number = await rand_perm([3, 4, 5, 6, 7], 1)[0];
+	flash_number = await rand_perm([3, 4, 5, 6, 7], 1).then(async function (flash_number_array) {  const flash_number_scalar = flash_number_array.at(0); return flash_number_scalar});
 	
 	canvasElement0.width = canvasElement_width;
 	canvasElement0.height = canvasElement_height;
@@ -597,8 +597,8 @@ async function show_onehalf_grey_square(val) {
 async function processEvent(event) {
 	
     // When the user clicks the square, save value
-	const out = this.getAttribute("data-id");
-	const out1 = Number(out);
+    const out = this.getAttribute("data-id");
+    const out1 = Number(out);
     user_click.push( out1 );
 
     // When the user clicks the square, flash the square and make the square full color
