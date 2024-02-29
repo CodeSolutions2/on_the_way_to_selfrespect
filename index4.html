@@ -187,13 +187,15 @@ async function allow_some_color_to_be_seen() {
 // Exploit the onclick with the button
 async function user_click_done() {
 
-	console.log("user_click in user_click_done: ", user_click);
+	console.log("user_click in user_click_done: ", user_click); // user_click = undefined
+
+	// The first stop_one_eventlister has the correct user_click
 
 	var user_click = await stop_listening_for_user_clicks()
-		.then(async function() { localStorage.setItem("user_click", user_click); await verify_user_clicks(); })
-		// .then(async function() { await run_it(); var user_click = []; return user_click; })
+		.then(async function() { await verify_user_clicks(); })
+		// .then(async function() { await run_it(); user_click = []; return user_click; })
 		// OR
-		.then(async function() { var user_click = []; return user_click; })
+		.then(async function() { user_click = []; return user_click; })
 		;
 
 	return user_click;
@@ -251,14 +253,13 @@ async function verify_user_clicks(){
 	console.log('order: ', order);
 	const order_string = order.toString();
 	
-	// make user_click a string
-	var user_click0 = localStorage.getItem("user_click")  // This is NOT correct
-	console.log('user_click0: ', user_click0);
-
-
-	// This is correct
 	console.log('user_click in verify_user_clicks: ', user_click);
-	const user_click_string = user_click.toString();
+	localStorage.setItem("user_click", user_click); // value is correct here
+
+	// Reset user_click
+	user_click = [];
+
+	const user_click_string = localStorage.getItem("user_click").toString();
 
 	if (order_string == user_click_string) {
 		// Correct 
