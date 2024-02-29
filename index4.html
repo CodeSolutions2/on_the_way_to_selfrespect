@@ -173,7 +173,8 @@ async function user_click_done() {
 	// The first stop_one_eventlister has the correct user_click
 	return await stop_listening_for_user_clicks()
 		.then(async function() { await verify_user_clicks(); })
-		.then(async function() { user_click = []; return user_click; });
+		//.then(async function() { user_click = []; return user_click; })
+		;
 }
 	  
 // -------------------------------------------------
