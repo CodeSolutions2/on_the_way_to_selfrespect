@@ -649,7 +649,10 @@ async function processEvent(event) {
     const out1 = Number(out);
     user_click.push( out1 );
 
-    if (user_click.length > order.length){
+    console.log('user_click.length: ', user_click.length);
+    console.log('order.length: ', order.length);
+	
+    if (user_click.length == order.length){
 	    // Click on thhe invisible button
 	    await user_click_done();
     }
