@@ -37,7 +37,7 @@ var user_click = [];
 var order = [];
 
 
-var data = [['accuracy', 'response_time', 'presentation_time_interval', 'flash_number\n']]; 
+var data = [['accuracy', 'response_time', 'presentation_time_interval', 'flash_number', '\n']]; 
 var presentation_time_interval = 2000;
 var flash_number = 3; // scalar from 3 to 7
 var response_time = 0;
@@ -290,7 +290,8 @@ async function listen_for_user_clicks() {
 		.then(async function() { await start_one_eventlister(4); })
 		.then(async function() { await start_one_eventlister(5); })
 		.then(async function() { await start_one_eventlister(6); })
-		.then(function() { document.getElementById("user_click_done_button").style = 'block'; })
+		//.then(function() { document.getElementById("user_click_done_button").style = 'block'; })
+		user_click.addEventListener("click", processEvent_array, false);
 	;
 	
 }
@@ -308,8 +309,8 @@ async function stop_listening_for_user_clicks() {
 		.then(async function() { await stop_one_eventlister(4); })
 		.then(async function() { await stop_one_eventlister(5); })
 		.then(async function() { await stop_one_eventlister(6); })
-		.then(async () => { await new Promise(r => setTimeout(r, 200)); })
-		.then(function() { document.getElementById("user_click_done_button").style = 'none'; })
+		//.then(async () => { await new Promise(r => setTimeout(r, 200)); })
+		//.then(function() { document.getElementById("user_click_done_button").style = 'none'; })
 	;
 
 	endTime = await currentTime();
@@ -357,7 +358,7 @@ async function verify_user_clicks(){
 	
 	// ------------------------
 
-	data.push([accuracy0+accuracy1, response_time, presentation_time_interval, flash_number+"\n"]); 
+	data.push([accuracy0+accuracy1, response_time, presentation_time_interval, flash_number, '\n']); 
 
 	// ------------------------
 
@@ -641,6 +642,21 @@ async function show_onehalf_grey_square(val) {
 }  // end of show_onehalf_grey_square
 
 	  
+// -------------------------------------------------
+
+// https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
+async function processEvent_array(event) {
+	
+    // When the user clicks the square, save value
+    const arrlength = this.getAttribute("length");
+    if (Number(arrlength) > order.length){
+	this.removeEventListener("click", processEvent_array);
+
+	// Click on thhe invisible button
+	await user_click_done();
+    }
+}
+
 // -------------------------------------------------
 
 // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
