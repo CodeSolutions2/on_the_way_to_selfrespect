@@ -339,13 +339,15 @@ async function save_csvDataset() {
 	
 	// Download CSV here: blob: https://codesolutions2.github.io/2e7701d0-559c-4be8-87de-61c72fce9a96
 	// Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at ‘https://api.github.com/repos/CodeSolutions2/on_the_way_to_selfrespect’. (Reason: Credential is not supported if the CORS header ‘Access-Control-Allow-Origin’ is ‘*’)
+
+	// If you are trying to transfer files to and from the same domain URL, do not use "Access-Control-Allow-Credentials": true, using settings [mode: 'cors', "Access-Control-Allow-Origin": "*"]
+	// The Same Origin Policy disallows reading the remote resource at https://api.github.com/repos/CodeSolutions2/on_the_way_to_selfrespect. (Reason: header ‘access-control-allow-credentials’ is not allowed according to header ‘Access-Control-Allow-Headers’ from CORS preflight response).
 	let headers = {"Content-Type": "application/octet-stream", 
 		       "Access-Control-Allow-Origin": "*", 
-		       "Access-Control-Allow-Credentials": true,
 		       "Connection": "keep-alive",
 		      "processData": false};
 
-	//  credentials: "include" can not be included for "Access-Control-Allow-Origin": "*" cors because * means it is open to the public, so credentials are not necessary
+	//  If you are trying to transfer files to and from the same domain URL or a different domain URL, one can use [mode: 'cors']. credentials: "include" can not be included for "Access-Control-Allow-Origin": "*" cors because * means it is open to the public, so credentials are not necessary
 	
 	let options = {method : 'PUT', 
 		       headers: headers, 
