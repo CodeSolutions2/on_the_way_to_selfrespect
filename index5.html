@@ -40,7 +40,8 @@ const outp = document.getElementById('output');
 var user_click = [];
 var order = [];
 
-var data = ['round_accuracy', 'total_accuracy', 'response_time', 'presentation_time_interval', 'flash_number', '\n']; 
+// var data = ['round_accuracy', 'total_accuracy', 'response_time', 'presentation_time_interval', 'flash_number', '\n'];  // not correct
+var data = ['round_accuracy', 'total_accuracy', 'response_time', 'presentation_time_interval', 'flash_number\n']; 
 var presentation_time_interval = 2000;
 var flash_number = 3; // scalar from 3 to 7
 var response_time = 0;
@@ -523,7 +524,9 @@ async function verify_user_clicks(){
 	// ------------------------
 	
 	// Save to dataset
-	data.push([round_accuracy, total_accuracy, response_time, presentation_time_interval, flash_number, '\n']); 
+	// var data = ['round_accuracy', 'total_accuracy', 'response_time', 'presentation_time_interval', 'flash_number', '\n']; 
+	// var data = ['round_accuracy', 'total_accuracy', 'response_time', 'presentation_time_interval', 'flash_number\n']; 
+	data.push([round_accuracy, total_accuracy, response_time, presentation_time_interval, flash_number]); 
 
 	// ------------------------
 
