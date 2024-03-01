@@ -7,7 +7,7 @@
 <h1 style='text-align: center; margin-bottom: -35px;'>On the way to self-respect webapp</h1>
 <br><br>
 
-<button id="run_it_button" onclick="run_it()" style="display:block">run_it</button>
+<button id="run_it_button" onclick="run_it()" style="display:block">Run a memory game round</button>
 <button id="download_data_button" onclick="download_data()" style="display:block">download_data</button>
 <button id="user_click_done_button" onclick="user_click_done()" style="display:none">DONE</button>
 	
@@ -37,7 +37,7 @@ var user_click = [];
 var order = [];
 
 
-var data = [['accuracy', 'response_time', 'presentation_time_interval', 'flash_number', '\n']]; 
+var data = ['accuracy', 'response_time', 'presentation_time_interval', 'flash_number', '\n']; 
 var presentation_time_interval = 2000;
 var flash_number = 3; // scalar from 3 to 7
 var response_time = 0;
@@ -46,6 +46,8 @@ var accuracy1 = 0;
 
 var startTime = []; 
 var endTime = [];
+
+var run_it_count = 0;
 	
 	  
 // ----------------------------
@@ -222,7 +224,7 @@ async function run_it() {
 
 	// -------------------------------------------------
 
-	console.log("user_click in run_it: ", user_click);  // user_click = [];
+	// console.log("user_click in run_it: ", user_click);  // user_click = [];
 
 	// Reset screen text after a previous run
 	outp.innerHTML = "";
@@ -245,9 +247,16 @@ async function run_it() {
 		.then(async function(order) { await listen_for_user_clicks(); return order;})
 		;
 
-	console.log("order in run_it: ", order);  // Array(3) [ 2, 1, 3 ]
+	// console.log("order in run_it: ", order);  // Array(3) [ 2, 1, 3 ]
 	
 	// -------------------------------------------------
+
+	// Count the number of times it is run
+	run_it_count += 1;
+	outp.innerHTML = 'run_it_count: ' + run_it_count + "<br/>";
+	
+	// -------------------------------------------------
+
 	
 	return order;
 	
@@ -259,13 +268,11 @@ async function run_it() {
 // Exploit the onclick with the button
 async function user_click_done() {
 
-	// console.log("user_click in user_click_done: ", user_click); // user_click = undefined
-
 	// The first stop_one_eventlister has the correct user_click
 	return await stop_listening_for_user_clicks()
-		.then(async function() { accuracy0 = await calculate_sequence_selection_correct(); console.log("IN user__click_done - accuracy0: ", accuracy0);  })
-		.then(async function() { accuracy1 = await calculate_color_selection_correct(); console.log("IN user__click_done - accuracy1: ", accuracy1);  })
-		.then(async function() { response_time = await elapsedTime(startTime, endTime); console.log("IN user__click_done - response_time: ", response_time);  })
+		.then(async function() { accuracy0 = await calculate_sequence_selection_correct(); })
+		.then(async function() { accuracy1 = await calculate_color_selection_correct(); })
+		.then(async function() { response_time = await elapsedTime(startTime, endTime); })
 		.then(async function() { await verify_user_clicks(); })
 		;
 }
@@ -277,7 +284,6 @@ async function listen_for_user_clicks() {
 
 	// Launch eventListeners on all of the canvasElements, then Make the DONE button visible
 	startTime = await currentTime();
-	console.log("startTime: ", startTime);
 	
 	await start_one_eventlister(0)
 		.then(async function() {outp.innerHTML = "Click on the same pattern that was presented, then click the 'DONE' button."; await start_one_eventlister(1); })
@@ -285,10 +291,7 @@ async function listen_for_user_clicks() {
 		.then(async function() { await start_one_eventlister(3); })
 		.then(async function() { await start_one_eventlister(4); })
 		.then(async function() { await start_one_eventlister(5); })
-		.then(async function() { await start_one_eventlister(6); })
-		//.then(function() { document.getElementById("user_click_done_button").style = 'block'; })
-	;
-
+		.then(async function() { await start_one_eventlister(6); });
 }
 	  
 
@@ -304,14 +307,9 @@ async function stop_listening_for_user_clicks() {
 		.then(async function() { await stop_one_eventlister(3); })
 		.then(async function() { await stop_one_eventlister(4); })
 		.then(async function() { await stop_one_eventlister(5); })
-		.then(async function() { await stop_one_eventlister(6); })
-		//.then(async () => { await new Promise(r => setTimeout(r, 200)); })
-		//.then(function() { document.getElementById("user_click_done_button").style = 'none'; })
-	;
+		.then(async function() { await stop_one_eventlister(6); });
 
 	endTime = await currentTime();
-	console.log("endTime: ", endTime);
-	
 }
 
 	  
@@ -319,8 +317,6 @@ async function stop_listening_for_user_clicks() {
 
 async function calculate_color_selection_correct(){
 
-	// console.log("IN calculate_accuracy - user_click: ", user_click);
-	
 	// Points for the squares selected, order is not important
 	const combined  = [... new Set(order.concat(user_click))];
 	
@@ -344,12 +340,12 @@ async function calculate_sequence_selection_correct(){
 async function verify_user_clicks(){
 
 	// ------------------------
-	console.log('order global variable: ', order); // Array(3) [ 1, 5, 3 ]
+	console.log('IN verify_user_clicks: order - ', order); // Array(3) [ 1, 5, 3 ]
 	const order_string = order.toString();
 	// ------------------------
 
 	// ------------------------
-	console.log('user_click in verify_user_clicks: ', user_click);
+	console.log('IN verify_user_clicks: user_click - ', user_click);
 	const user_click_string = user_click.toString();
 	
 	// ------------------------
@@ -649,8 +645,8 @@ async function processEvent(event) {
     const out1 = Number(out);
     user_click.push( out1 );
 
-    console.log('user_click.length: ', user_click.length);
-    console.log('order.length: ', order.length);
+    // console.log('user_click.length: ', user_click.length);
+    // console.log('order.length: ', order.length);
 	
     if (user_click.length == order.length){
 	    // Click on thhe invisible button
@@ -703,7 +699,7 @@ async function start_one_eventlister(val) {
 	  
 async function stop_one_eventlister(val) {
 
-    console.log("user_click in stop_one_eventlister: ", user_click);
+    // console.log("user_click in stop_one_eventlister: ", user_click);
 	
     // Start an eventlister per canvas to evaluate user response
     if (val == 0) {
@@ -745,7 +741,9 @@ async function download_data() {
 	  
     link.style.display = 'block';
 
-    outp.innerHTML += 'Download CSV here: ' + url + "<br/>";
+    // Download CSV here: blob:https://codesolutions2.github.io/2e7701d0-559c-4be8-87de-61c72fce9a96
+    // outp.innerHTML += 'Download CSV here: ' + url + "<br/>";
+	
     // document.body.appendChild(link);
 
     // Automatic download of csv
