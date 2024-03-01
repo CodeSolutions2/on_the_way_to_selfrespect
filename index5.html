@@ -9,7 +9,9 @@
 
 <button id="run_it_button" onclick="run_it()" style="display:block">Run a memory game round</button>
 <button id="download_data_button" onclick="download_data()" style="display:block">download_data</button>
+<button id="save_csvDataset_button" onclick="save_csvDataset()" style="display:block">save_csvDataset</button>
 <button id="user_click_done_button" onclick="user_click_done()" style="display:none">DONE</button>
+
 	
 <!-- Output text -->
 <div id="output" style="font-family:courier;font-size:24px;height:300px"></div>
@@ -19,9 +21,11 @@
 canvas {border: 1px solid black; position: absolute; display: inline-block; z-index: 1; top: 200px;},
 div {position: relative; z-index: 2;},
 </style>
+
+
 	
-  
-  <script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+<script>
 
 // -------------------------------------------------
 
@@ -49,8 +53,8 @@ var startTime = [];
 var endTime = [];
 
 var run_it_count = 0;
-	
-	  
+
+
 // ----------------------------
 // Create all the elements
 // ----------------------------
@@ -77,6 +81,29 @@ var ctx6 = canvasElement6.getContext("2d");  // Get the 2D rendering context of 
 
 
 // -------------------------------------------------
+	  
+// Load flash_number model Object when page loads
+const inputs_m0 = tf.input({shape: [4]}); // there are 4 columns in xs
+const denseLayer1_m0 = tf.layers.dense({units: 64, activation: 'relu'});
+const denseLayer2_m0 = tf.layers.dense({units: 64, activation: 'relu'});
+const denseLayer3_m0 = tf.layers.dense({units: 64, activation: 'relu'});
+const denseLayer4_m0 = tf.layers.dense({units: 5, activation: 'softmax'});  // there are 5 possible outputs for game parameter flash_number= [3, 4, 5, 6, 7] that one can predict
+const outputs_m0 = denseLayer4_m0.apply(denseLayer3_m0.apply(denseLayer2_m0.apply(denseLayer1_m0.apply(inputs_m0))));
+const flash_number_model = tf.LayersModel({inputs: inputs_m0, outputs: outputs_m0});
+
+	  
+// -------------------------------------------------
+	  
+// Load presentation_time_interval model Object when page loads
+const inputs_m1 = tf.input({shape: [4]}); // there are 4 columns in xs
+const denseLayer1_m1 = tf.layers.dense({units: 64, activation: 'relu'});
+const denseLayer2_m1 = tf.layers.dense({units: 64, activation: 'relu'});
+const denseLayer3_m1 = tf.layers.dense({units: 64, activation: 'relu'});
+const denseLayer4_m1 = tf.layers.dense({units: 3, activation: 'softmax'});  // there are 3 possible outputs for game parameter presentation_time_interval= [2000, 1500, 1000] that one can predict
+const outputs_m1 = denseLayer4_m1.apply(denseLayer3_m1.apply(denseLayer2_m1.apply(denseLayer1_m1.apply(inputs_m1))));
+const presentation_time_interval_model = tf.LayersModel({inputs: inputs_m1, outputs: outputs_m1});
+	  
+// -------------------------------------------------
 
 async function currentTime() { 
 	let date = new Date(); 
@@ -99,10 +126,28 @@ async function elapsedTime(startTime, endTime) {
 
 async function initialization_of_canvasElements() {
 
+	// ------------------------------------------
+	// Predict flash_number based on past performance
+	// ------------------------------------------
+	// Random selection
 	flash_number = await rand_perm([3, 4, 5, 6, 7], 1).then(async function (flash_number_array) {  const flash_number_scalar = flash_number_array.at(0); return flash_number_scalar});
+	// OR
+	// Model predicted selection
+	// flash_number = await predict_w_pretrained_flash_number_model();
+	// ------------------------------------------
 
+
+	// ------------------------------------------
+	// Predict presentation_time_interval based on past performance
+	// ------------------------------------------
+	// Random selection
 	presentation_time_interval = await rand_perm([2000, 1500, 1000], 1).then(async function (presentation_time_interval_array) {  const presentation_time_interval_scalar = presentation_time_interval_array.at(0); return presentation_time_interval_scalar});
-	console.log("presentation_time_interval: ", presentation_time_interval);
+	// console.log("presentation_time_interval: ", presentation_time_interval);
+	// OR
+	// Model predicted selection
+	// presentation_time_interval = await predict_w_pretrained_presentation_time_interval_model();
+	// ------------------------------------------
+	
 	
 	canvasElement0.width = canvasElement_width;
 	canvasElement0.height = canvasElement_height;
@@ -266,6 +311,7 @@ async function run_it() {
 
 // -------------------------------------------------
 
+	  
 // Exploit the onclick with the button
 async function user_click_done() {
 
@@ -276,9 +322,127 @@ async function user_click_done() {
 		.then(async function() { response_time = await elapsedTime(startTime, endTime); })
 		.then(async function() { await verify_user_clicks(); });
 }
+
 	  
 // -------------------------------------------------
 
+async function save_csvDataset() {
+
+	const repoOwner = 'CodeSolutions2';
+	const repoName = 'on_the_way_to_selfrespect';
+	var url = `https://api.github.com/repos/${repoOwner}/${repoName}`;
+
+	var bloburl = await download_data();
+	
+	// Download CSV here: blob: https://codesolutions2.github.io/2e7701d0-559c-4be8-87de-61c72fce9a96
+	let headers = {"Content-Type": "application/octet-stream", 
+		       "Access-Control-Allow-Origin": "*", 
+		       "Access-Control-Allow-Credentials": true,
+		       "Connection": "keep-alive",
+		      "processData": false};
+
+	
+	let options = {method : 'PUT', 
+		       headers: headers, 
+		       mode: 'cors', 
+		       cache: "no-cache", 
+		       credentials: "include", 
+		       redirect: "follow", 
+		       referrerPolicy: "origin",
+		      body: bloburl};
+
+	try {
+		 await fetch(url, options).then(res => res.json()).then(res => {
+			console.log('Fetch response success: ', res);
+		  }).catch(error => { console.log('Fetch response error: ', error); });
+
+
+	} catch (error) {
+	      console.log('Try response error of Fetch: ', error);
+	}
+
+}
+
+	
+// -------------------------------------------------
+
+	  
+async function get_csvDataset(y_colname) {
+
+    const repoOwner = 'CodeSolutions2';
+    const repoName = 'on_the_way_to_selfrespect';
+    var url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents`;
+
+	var url_vec = [];
+	await fetch(url).then(res => res.json()).then(data => {
+		    data.forEach(file => {
+		      if (file.type === 'file' && file.name.match(/.(csv|txt)$/i)) {
+			url_vec.push(file.download_url);
+		      }
+		    });
+		  }).catch(error => { outp.innerHTML += error; });
+
+    // Make a Dataset  
+   // csvDataset = await tf.data.csv(url_vec[0], { columnConfigs: { flash_number: {isLabel: true} } });  // csvDataset: [object Object]
+
+	// OR
+
+	csvDataset = await tf.data.csv(url_vec[0], { columnConfigs: { `${y_colname}`: {isLabel: true} } }); 
+	
+    return csvDataset;
+}
+
+	  
+// -------------------------------------------------
+	  
+	  
+async function train_flash_number_model() {
+
+	// Read dataset from location to tensorflow csvDataset object
+	await get_csvDataset('flash_number')
+		.then(async function(csvDataset) { const flattenedDataset = await csvDataset.map(({xs, ys}) => { return {xs:Object.values(xs), ys:Object.values(ys)}; }); return flattenedDataset; })
+		.then(async function(flattenedDataset) { flash_number_model.compile({optimizer: 'adam', loss: 'sparse_categorical_crossentropy', metrics: ["accuracy"]});  return flattenedDataset; })
+		.then(async function(flattenedDataset) {  await flash_number_model.fitDataset(flattenedDataset, { epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { console.log(epoch + ':' + logs.loss); } } }); return flash_number_model; })
+		.then(async function(flash_number_model) { const saveResults = await flash_number_model.save('localstorage://flash_number_model');  })
+	;
+}
+
+	  
+async function predict_w_pretrained_flash_number_model() {
+
+   const flash_number_model = await tf.loadLayersModel('localstorage://flash_number_model');
+
+	// Give previous round data
+	return flash_number_model.predict( [round_accuracy, total_accuracy, response_time, presentation_time_interval] );
+}
+
+
+// -------------------------------------------------
+
+async function train_presentation_time_interval_model() {
+
+	// Read dataset from location to tensorflow csvDataset object
+	await get_csvDataset('presentation_time_interval')
+		.then(async function(csvDataset) { const flattenedDataset = await csvDataset.map(({xs, ys}) => { return {xs:Object.values(xs), ys:Object.values(ys)}; }); return flattenedDataset; })
+		.then(async function(flattenedDataset) { presentation_time_interval_model.compile({optimizer: 'adam', loss: 'sparse_categorical_crossentropy', metrics: ["accuracy"]});  return flattenedDataset; })
+		.then(async function(flattenedDataset) {  await presentation_time_interval_model.fitDataset(flattenedDataset, { epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { console.log(epoch + ':' + logs.loss); } } }); return presentation_time_interval_model; })
+		.then(async function(presentation_time_interval_model) { const saveResults = await presentation_time_interval_model.save('localstorage://presentation_time_interval_model');  })
+	;
+}
+
+
+async function predict_w_pretrained_presentation_time_interval_model() {
+
+   const presentation_time_interval_model = await tf.loadLayersModel('localstorage://presentation_time_interval_model');
+
+	// Give previous round data
+	return presentation_time_interval_model.predict( [round_accuracy, total_accuracy, response_time, flash_number] );
+}
+
+	  
+// -------------------------------------------------
+
+	  
 
 async function listen_for_user_clicks() {
 
@@ -660,6 +824,12 @@ async function processEvent(event) {
     if (user_click.length == order.length){
 	    // Click on thhe invisible button
 	    await user_click_done();
+
+	    // Train the model every round, or every XX rounds
+	  //   if (run_it_count % 2){
+		//     await train_flash_number_model();
+		//     await train_presentation_time_interval_model();
+	 //    }
     }
 
     // When the user clicks the square, flash the square and make the square full color
@@ -732,6 +902,7 @@ async function stop_one_eventlister(val) {
 	  
 // -------------------------------------------------
 
+	
 async function download_data() {
     
     // ---------------------
@@ -739,7 +910,7 @@ async function download_data() {
     const blob = new Blob([data], { type: 'text/csv;charset=utf-8;' });
 
     // Create a url for the data object
-    const url = URL.createObjectURL(blob);
+    const bloburl = URL.createObjectURL(blob);
     // ---------------------
 
     const link = document.createElement("a");
@@ -751,14 +922,15 @@ async function download_data() {
     link.style.display = 'block';
 
     // Download CSV here: blob:https://codesolutions2.github.io/2e7701d0-559c-4be8-87de-61c72fce9a96
-    // outp.innerHTML += 'Download CSV here: ' + url + "<br/>";
+    // outp.innerHTML += 'Download CSV here: ' + bloburl + "<br/>";
 	
     // document.body.appendChild(link);
 
     // Automatic download of csv
-    link.click();
+    link.click();  // to have the PC prompt where to save the file
     // document.body.removeChild(link);
-	  
+
+    return bloburl;
 }
 	
 
