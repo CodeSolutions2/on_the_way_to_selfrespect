@@ -288,26 +288,9 @@ async function listen_for_user_clicks() {
 		.then(async function() { await start_one_eventlister(6); })
 		//.then(function() { document.getElementById("user_click_done_button").style = 'block'; })
 	;
-	
+
 }
-
-// So when I push something into the array user_click, the callback function processEvent_array is called
-user_click[order.length].addEventListener("click", processEvent_array);
-
-// -------------------------------------------------
-
-// https://jsvault.com/array-listener/
-async function processEvent_array(event) {
-	
-    // When the user clicks the square, save value
-    //const arrlength = this.getAttribute("length");
-    //if (Number(arrlength) > order.length){
-	this.removeEventListener("click", processEvent_array);
-
-	// Click on thhe invisible button
-	await user_click_done();
-    //}
-}
+	  
 
 // -------------------------------------------------
 
@@ -665,6 +648,11 @@ async function processEvent(event) {
     const out = this.getAttribute("data-id");
     const out1 = Number(out);
     user_click.push( out1 );
+
+    if (user_click.length > order.length){
+	    // Click on thhe invisible button
+	    await user_click_done();
+    }
 
     // When the user clicks the square, flash the square and make the square full color
     await flash_sequence_when_clicked_on(this.getAttribute("data-id"));
