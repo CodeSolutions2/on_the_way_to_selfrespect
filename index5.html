@@ -341,9 +341,13 @@ async function save_csvDataset() {
 	// Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at ‘https://api.github.com/repos/CodeSolutions2/on_the_way_to_selfrespect’. (Reason: Credential is not supported if the CORS header ‘Access-Control-Allow-Origin’ is ‘*’)
 
 	// If you are trying to transfer files to and from the same domain URL, do not use "Access-Control-Allow-Credentials": true, using settings [mode: 'cors', "Access-Control-Allow-Origin": "*"]
+	
 	// The Same Origin Policy disallows reading the remote resource at https://api.github.com/repos/CodeSolutions2/on_the_way_to_selfrespect. (Reason: header ‘access-control-allow-credentials’ is not allowed according to header ‘Access-Control-Allow-Headers’ from CORS preflight response).
+
+
+	// Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at https://api.github.com/repos/CodeSolutions2/on_the_way_to_selfrespect. (Reason: header ‘access-control-allow-origin’ is not allowed according to header ‘Access-Control-Allow-Headers’ from CORS preflight response) - Removed ["Access-Control-Allow-Origin": "*", ]
+	
 	let headers = {"Content-Type": "application/octet-stream", 
-		       "Access-Control-Allow-Origin": "*", 
 		       "Connection": "keep-alive",
 		      "processData": false};
 
