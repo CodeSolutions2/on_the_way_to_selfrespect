@@ -10,6 +10,7 @@
 <button id="run_it_button" onclick="run_it()" style="display:block">Run a memory game round</button>
 <button id="download_data_button" onclick="download_data()" style="display:block">download_data</button>
 <button id="save_csvDataset_button" onclick="save_csvDataset()" style="display:block">save_csvDataset</button>
+<button id="resetresponse_button" onclick="resetresponse()" style="display:none">resetresponse</button>	
 <button id="user_click_done_button" onclick="user_click_done()" style="display:none">DONE</button>
 
 	
@@ -291,7 +292,7 @@ async function run_it() {
 				order = await flash_sequence_difficulty7();
 			}
 		return order; })
-		.then(async function(order) { await listen_for_user_clicks(); return order;})
+		.then(async function(order) { await listen_for_user_clicks(); return order; })
 		;
 
 	// console.log("order in run_it: ", order);  // Array(3) [ 2, 1, 3 ]
@@ -454,7 +455,10 @@ async function listen_for_user_clicks() {
 		.then(async function() { await start_one_eventlister(3); })
 		.then(async function() { await start_one_eventlister(4); })
 		.then(async function() { await start_one_eventlister(5); })
-		.then(async function() { await start_one_eventlister(6); });
+		.then(async function() { await start_one_eventlister(6); })
+		.then(function() { document.getElementById("resetresponse_button").style = 'block'; })
+	;
+	
 }
 	  
 
@@ -470,7 +474,10 @@ async function stop_listening_for_user_clicks() {
 		.then(async function() { await stop_one_eventlister(3); })
 		.then(async function() { await stop_one_eventlister(4); })
 		.then(async function() { await stop_one_eventlister(5); })
-		.then(async function() { await stop_one_eventlister(6); });
+		.then(async function() { await stop_one_eventlister(6); })
+		.then(async () => { await new Promise(r => setTimeout(r, 200)); })
+		.then(function() { document.getElementById("resetresponse_button").style = 'none'; })
+		;
 
 	endTime = await currentTime();
 }
@@ -811,6 +818,16 @@ async function show_onehalf_grey_square(val) {
 
 // -------------------------------------------------
 
+async function resetresponse() {
+
+	user_click = [];
+	await stop_listening_for_user_clicks().then(async function() {  await listen_for_user_clicks(); })
+}
+
+
+// -------------------------------------------------
+
+	
 // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
 async function processEvent(event) {
 	
