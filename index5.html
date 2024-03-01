@@ -355,12 +355,12 @@ async function save_csvDataset() {
 
 	// Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at https://api.github.com/repos/CodeSolutions2/on_the_way_to_selfrespect. (Reason: header ‘processdata’ is not allowed according to header ‘Access-Control-Allow-Headers’ from CORS preflight response). -  Changed [mode: 'cors' to mode: 'no-cors' ]
 	
-	let options = {method : 'PUT', 
+	let options = {method : 'POST', 
 		       headers: headers, 
 		       mode: 'no-cors', 
 		       cache: "no-cache", 
 		       redirect: "follow", 
-		    //   referrerPolicy: "origin",
+		       referrerPolicy: "origin",
 		      body: bloburl};
 
 	try {
