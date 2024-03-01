@@ -90,7 +90,7 @@ const denseLayer2_m0 = tf.layers.dense({units: 64, activation: 'relu'});
 const denseLayer3_m0 = tf.layers.dense({units: 64, activation: 'relu'});
 const denseLayer4_m0 = tf.layers.dense({units: 5, activation: 'softmax'});  // there are 5 possible outputs for game parameter flash_number= [3, 4, 5, 6, 7] that one can predict
 const outputs_m0 = denseLayer4_m0.apply(denseLayer3_m0.apply(denseLayer2_m0.apply(denseLayer1_m0.apply(inputs_m0))));
-const flash_number_model = tf.LayersModel({inputs: inputs_m0, outputs: outputs_m0});
+const flash_number_model = tf.model({inputs: inputs_m0, outputs: outputs_m0});
 
 	  
 // -------------------------------------------------
@@ -102,7 +102,7 @@ const denseLayer2_m1 = tf.layers.dense({units: 64, activation: 'relu'});
 const denseLayer3_m1 = tf.layers.dense({units: 64, activation: 'relu'});
 const denseLayer4_m1 = tf.layers.dense({units: 3, activation: 'softmax'});  // there are 3 possible outputs for game parameter presentation_time_interval= [2000, 1500, 1000] that one can predict
 const outputs_m1 = denseLayer4_m1.apply(denseLayer3_m1.apply(denseLayer2_m1.apply(denseLayer1_m1.apply(inputs_m1))));
-const presentation_time_interval_model = tf.LayersModel({inputs: inputs_m1, outputs: outputs_m1});
+const presentation_time_interval_model = tf.model({inputs: inputs_m1, outputs: outputs_m1});
 	  
 // -------------------------------------------------
 
