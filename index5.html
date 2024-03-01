@@ -345,12 +345,12 @@ async function save_csvDataset() {
 		       "Connection": "keep-alive",
 		      "processData": false};
 
+	//  credentials: "include" can not be included for "Access-Control-Allow-Origin": "*" cors because * means it is open to the public, so credentials are not necessary
 	
 	let options = {method : 'PUT', 
 		       headers: headers, 
 		       mode: 'cors', 
 		       cache: "no-cache", 
-		     #  credentials: "include", 
 		       redirect: "follow", 
 		       referrerPolicy: "origin",
 		      body: bloburl};
