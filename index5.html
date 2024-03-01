@@ -531,7 +531,14 @@ async function verify_user_clicks(){
 	// Save to dataset
 	// var data = ['round_accuracy', 'total_accuracy', 'response_time', 'presentation_time_interval', 'flash_number', '\n']; 
 	// var data = ['round_accuracy', 'total_accuracy', 'response_time', 'presentation_time_interval', 'flash_number\n']; 
-	data.push([round_accuracy, total_accuracy, response_time, presentation_time_interval, flash_number]); 
+
+	// Not correct, appends the data in one long row
+	// data.push([round_accuracy, total_accuracy, response_time, presentation_time_interval, flash_number]); 
+
+	// Not correct: It returns but it leaves the first column empty, so data is shifted by one column to the right
+	// data.push([round_accuracy, total_accuracy, response_time, presentation_time_interval, flash_number+'\n']);
+	
+	data.push([round_accuracy, total_accuracy, response_time, presentation_time_interval, flash_number]+'\n'); 
 
 	// ------------------------
 
