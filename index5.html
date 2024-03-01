@@ -287,7 +287,7 @@ async function listen_for_user_clicks() {
 		.then(async function() { await start_one_eventlister(5); })
 		.then(async function() { await start_one_eventlister(6); })
 		//.then(function() { document.getElementById("user_click_done_button").style = 'block'; })
-		.then(async function() { await suser_click.addEventListener("click", processEvent_array, false); })
+		.then(async function() { await user_click.addEventListener("click", processEvent_array, false); })
 	;
 	
 }
