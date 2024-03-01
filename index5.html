@@ -36,13 +36,14 @@ const outp = document.getElementById('output');
 var user_click = [];
 var order = [];
 
-
-var data = ['accuracy', 'response_time', 'presentation_time_interval', 'flash_number', '\n']; 
+var data = ['round_accuracy', 'total_accuracy', 'response_time', 'presentation_time_interval', 'flash_number', '\n']; 
 var presentation_time_interval = 2000;
 var flash_number = 3; // scalar from 3 to 7
 var response_time = 0;
 var accuracy0 = 0;
 var accuracy1 = 0;
+var round_accuracy = 0;
+var total_accuracy = 0;
 
 var startTime = []; 
 var endTime = [];
@@ -253,7 +254,7 @@ async function run_it() {
 
 	// Count the number of times it is run
 	run_it_count += 1;
-	outp.innerHTML = 'run_it_count: ' + run_it_count + "<br/>";
+	outp.innerHTML = 'run_it_count: ' + run_it_count;
 	
 	// -------------------------------------------------
 
@@ -273,8 +274,7 @@ async function user_click_done() {
 		.then(async function() { accuracy0 = await calculate_sequence_selection_correct(); })
 		.then(async function() { accuracy1 = await calculate_color_selection_correct(); })
 		.then(async function() { response_time = await elapsedTime(startTime, endTime); })
-		.then(async function() { await verify_user_clicks(); })
-		;
+		.then(async function() { await verify_user_clicks(); });
 }
 	  
 // -------------------------------------------------
@@ -350,7 +350,16 @@ async function verify_user_clicks(){
 	
 	// ------------------------
 
-	data.push([accuracy0+accuracy1, response_time, presentation_time_interval, flash_number, '\n']); 
+	round_accuracy = (accuracy0+accuracy1)/order.length;
+	total_accuracy = (total_accuracy + round_accuracy)/2;
+
+	// Print to screen: user accuracy
+	outp.innerHTML = ' Round accuracy: ' + round_accuracy + ', Total accuracy: ' + total_accuracy + '<br/>';
+
+	// ------------------------
+	
+	// Save to dataset
+	data.push([round_accuracy, total_accuracy, response_time, presentation_time_interval, flash_number, '\n']); 
 
 	// ------------------------
 
