@@ -287,9 +287,26 @@ async function listen_for_user_clicks() {
 		.then(async function() { await start_one_eventlister(5); })
 		.then(async function() { await start_one_eventlister(6); })
 		//.then(function() { document.getElementById("user_click_done_button").style = 'block'; })
-		.then(async function() { await user_click.addEventListener("click", processEvent_array, false); })
 	;
+
+	// So when I push something into the array user_click, the callback function processEvent_array is called
+	user_click.addListener("add", processEvent_array);
 	
+}
+
+// -------------------------------------------------
+
+// https://jsvault.com/array-listener/
+async function processEvent_array(event) {
+	
+    // When the user clicks the square, save value
+    const arrlength = this.getAttribute("length");
+    if (Number(arrlength) > order.length){
+	this.removeListener("add", processEvent_array);
+
+	// Click on thhe invisible button
+	await user_click_done();
+    }
 }
 
 // -------------------------------------------------
@@ -637,21 +654,7 @@ async function show_onehalf_grey_square(val) {
 	return val;
 }  // end of show_onehalf_grey_square
 
-	  
-// -------------------------------------------------
 
-// https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
-async function processEvent_array(event) {
-	
-    // When the user clicks the square, save value
-    const arrlength = this.getAttribute("length");
-    if (Number(arrlength) > order.length){
-	this.removeEventListener("click", processEvent_array);
-
-	// Click on thhe invisible button
-	await user_click_done();
-    }
-}
 
 // -------------------------------------------------
 
