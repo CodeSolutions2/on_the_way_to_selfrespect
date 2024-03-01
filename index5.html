@@ -288,11 +288,11 @@ async function listen_for_user_clicks() {
 		.then(async function() { await start_one_eventlister(6); })
 		//.then(function() { document.getElementById("user_click_done_button").style = 'block'; })
 	;
-
-	// So when I push something into the array user_click, the callback function processEvent_array is called
-	user_click.addListener("add", processEvent_array);
 	
 }
+
+// So when I push something into the array user_click, the callback function processEvent_array is called
+user_click[order.length].addEventListener("click", processEvent_array);
 
 // -------------------------------------------------
 
@@ -300,13 +300,13 @@ async function listen_for_user_clicks() {
 async function processEvent_array(event) {
 	
     // When the user clicks the square, save value
-    const arrlength = this.getAttribute("length");
-    if (Number(arrlength) > order.length){
-	this.removeListener("add", processEvent_array);
+    //const arrlength = this.getAttribute("length");
+    //if (Number(arrlength) > order.length){
+	this.removeEventListener("click", processEvent_array);
 
 	// Click on thhe invisible button
 	await user_click_done();
-    }
+    //}
 }
 
 // -------------------------------------------------
