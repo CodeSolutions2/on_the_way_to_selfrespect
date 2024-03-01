@@ -37,7 +37,7 @@ var user_click = [];
 var order = [];
 
 
-var data = [['', '', '', ''],['accuracy', 'response_time', 'presentation_time_interval', 'flash_number']]; 
+var data = [['accuracy', 'response_time', 'presentation_time_interval', 'flash_number\n']]; 
 var presentation_time_interval = 2000;
 var flash_number = 3; // scalar from 3 to 7
 var response_time = 0;
@@ -97,6 +97,10 @@ async function elapsedTime(startTime, endTime) {
 async function initialization_of_canvasElements() {
 
 	flash_number = await rand_perm([3, 4, 5, 6, 7], 1).then(async function (flash_number_array) {  const flash_number_scalar = flash_number_array.at(0); return flash_number_scalar});
+
+	presentation_time_interval = await rand_perm([2000, 1500, 1000], 1).then(async function (presentation_time_interval_array) {  const presentation_time_interval_scalar = presentation_time_interval_array.at(0); return presentation_time_interval_scalar});
+
+	
 	
 	canvasElement0.width = canvasElement_width;
 	canvasElement0.height = canvasElement_height;
@@ -113,20 +117,68 @@ async function initialization_of_canvasElements() {
 	canvasElement6.width = canvasElement_width;
 	canvasElement6.height = canvasElement_height;
 
-	// Location style: row
-	canvasElement0.style.left = Number(0*canvasElement_width + 40)+'px';
-	canvasElement1.style.left = Number(1*canvasElement_width + 40)+'px';
-	canvasElement2.style.left = Number(2*canvasElement_width + 40)+'px';
-	canvasElement3.style.left = Number(3*canvasElement_width + 40)+'px';
-	canvasElement4.style.left = Number(4*canvasElement_width + 40)+'px';
-	canvasElement5.style.left = Number(5*canvasElement_width + 40)+'px';
-	canvasElement6.style.left = Number(6*canvasElement_width + 40)+'px';
-
-	// Location sytle: triangle
-	// Location sytle: square
-	// Location sytle: 5 sides
-	// Location sytle: hexagon
-	// Location style: 7 sides
+	square_config = await rand_perm([0, 1, 2, 3, 4, 5], 1).then(async function (square_config_array) {  const square_config_scalar = square_config_array.at(0); return square_config_scalar});
+	
+	if (square_config == 0) {
+		// 0: row
+		canvasElement0.style.left = Number(0*canvasElement_width + 40)+'px';
+		canvasElement1.style.left = Number(1*canvasElement_width + 40)+'px';
+		canvasElement2.style.left = Number(2*canvasElement_width + 40)+'px';
+		canvasElement3.style.left = Number(3*canvasElement_width + 40)+'px';
+		canvasElement4.style.left = Number(4*canvasElement_width + 40)+'px';
+		canvasElement5.style.left = Number(5*canvasElement_width + 40)+'px';
+		canvasElement6.style.left = Number(6*canvasElement_width + 40)+'px';
+	} else if (square_config == 1) {
+		// 1: triangle
+		canvasElement0.style.left = Number(0*canvasElement_width + 40)+'px';
+		canvasElement1.style.left = Number(1*canvasElement_width + 40)+'px';
+		canvasElement2.style.left = Number(2*canvasElement_width + 40)+'px';
+		canvasElement3.style.left = Number(3*canvasElement_width + 40)+'px';
+		canvasElement4.style.left = Number(4*canvasElement_width + 40)+'px';
+		canvasElement5.style.left = Number(5*canvasElement_width + 40)+'px';
+		canvasElement6.style.left = Number(6*canvasElement_width + 40)+'px';
+	} else if (square_config == 2) {
+		// 2: square
+		canvasElement0.style.left = Number(0*canvasElement_width + 40)+'px';
+		canvasElement1.style.left = Number(1*canvasElement_width + 40)+'px';
+		canvasElement2.style.left = Number(2*canvasElement_width + 40)+'px';
+		canvasElement3.style.left = Number(3*canvasElement_width + 40)+'px';
+		canvasElement4.style.left = Number(4*canvasElement_width + 40)+'px';
+		canvasElement5.style.left = Number(5*canvasElement_width + 40)+'px';
+		canvasElement6.style.left = Number(6*canvasElement_width + 40)+'px';
+	} else if (square_config == 3) {
+		// 3: 5 sides
+		canvasElement0.style.left = Number(0*canvasElement_width + 40)+'px';
+		canvasElement1.style.left = Number(1*canvasElement_width + 40)+'px';
+		canvasElement2.style.left = Number(2*canvasElement_width + 40)+'px';
+		canvasElement3.style.left = Number(3*canvasElement_width + 40)+'px';
+		canvasElement4.style.left = Number(4*canvasElement_width + 40)+'px';
+		canvasElement5.style.left = Number(5*canvasElement_width + 40)+'px';
+		canvasElement6.style.left = Number(6*canvasElement_width + 40)+'px';
+	} else if (square_config == 4) {
+		// 4: hexagon
+		canvasElement0.style.left = Number(0*canvasElement_width + 40)+'px';
+		canvasElement1.style.left = Number(1*canvasElement_width + 40)+'px';
+		canvasElement2.style.left = Number(2*canvasElement_width + 40)+'px';
+		canvasElement3.style.left = Number(3*canvasElement_width + 40)+'px';
+		canvasElement4.style.left = Number(4*canvasElement_width + 40)+'px';
+		canvasElement5.style.left = Number(5*canvasElement_width + 40)+'px';
+		canvasElement6.style.left = Number(6*canvasElement_width + 40)+'px';
+	} else {
+		// 5: 7 sides
+		canvasElement0.style.left = Number(0*canvasElement_width + 40)+'px';
+		canvasElement1.style.left = Number(1*canvasElement_width + 40)+'px';
+		canvasElement2.style.left = Number(2*canvasElement_width + 40)+'px';
+		canvasElement3.style.left = Number(3*canvasElement_width + 40)+'px';
+		canvasElement4.style.left = Number(4*canvasElement_width + 40)+'px';
+		canvasElement5.style.left = Number(5*canvasElement_width + 40)+'px';
+		canvasElement6.style.left = Number(6*canvasElement_width + 40)+'px';
+	}
+		
+	
+	
+	
+	
 
 	// Set a reference value for the canvasElement
 	canvasElement0.setAttribute("data-id", 0);
@@ -305,7 +357,7 @@ async function verify_user_clicks(){
 	
 	// ------------------------
 
-	data.push([accuracy0+accuracy1, response_time, presentation_time_interval, flash_number]); 
+	data.push([accuracy0+accuracy1, response_time, presentation_time_interval, flash_number+"\n"]); 
 
 	// ------------------------
 
