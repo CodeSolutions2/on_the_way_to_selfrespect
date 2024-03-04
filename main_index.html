@@ -37,7 +37,9 @@ div {position: relative; z-index: 2;},
 var canvasElement_width = 150;
 var canvasElement_height = canvasElement_width;
 
-	
+
+const outp = document.getElementById('output');
+
 // -------------------------------------------------
 	
 // Start off with static canvases in an S-shape - then make the canvases appear dynamically when one scrolls down the page
@@ -82,6 +84,25 @@ canvasElement2.style.top = Number(2*canvasElement_width)+'px';
 canvasElement3.style.left = Number(2*canvasElement_width + marg)+'px';
 canvasElement3.style.top = Number(3*canvasElement_width)+'px';
 
+
+document.body.appendChild(canvasElement0);
+document.body.appendChild(canvasElement1);
+document.body.appendChild(canvasElement2);
+document.body.appendChild(canvasElement3);
+
+// Make all the canvas context objects a certain initial color
+ctx0.fillStyle = "rgb(255 0 0 / 75%)";
+ctx0.fillRect(0, 0, canvasElement_width, canvasElement_height);
+ctx1.fillStyle = '#999c98';  // Background square over image = blue
+ctx1.fillRect(0, 0, canvasElement_width, canvasElement_height);
+ctx2.fillStyle = '#999c98';  // Background square over image = blue
+ctx2.fillRect(0, 0, canvasElement_width, canvasElement_height);
+ctx3.fillStyle = '#999c98';  // Background square over image = blue
+ctx3.fillRect(0, 0, canvasElement_width, canvasElement_height);
+
+
+
+	
 
 
 async function processEvent(event) {
