@@ -21,7 +21,6 @@
 	
 
 <style>
-background-color: rgba(130, 209, 165, .5),
 canvas {border: 1px solid black; position: absolute; display: inline-block; z-index: 1; top: 200px;},
 div {position: relative; z-index: 2;},
 </style>
@@ -68,20 +67,19 @@ canvasElement3.height = canvasElement_height;
 
 // -------------------------------------------------
 // 1st row
-const marg = 50;
-canvasElement0.style.left = Number(1*canvasElement_width + marg)+'px';
+canvasElement0.style.left = Number(1*canvasElement_width + 50)+'px';
 canvasElement0.style.top = Number(0*canvasElement_width)+'px';
 // -----------------------------------
 // 2nd row
-canvasElement1.style.left = Number(0*canvasElement_width + marg)+'px';
+canvasElement1.style.left = Number(0*canvasElement_width + 50)+'px';
 canvasElement1.style.top = Number(1*canvasElement_width)+'px';
 // -----------------------------------
 // 3rd row
-canvasElement2.style.left = Number(1*canvasElement_width + marg)+'px';
+canvasElement2.style.left = Number(1*canvasElement_width + 50)+'px';
 canvasElement2.style.top = Number(2*canvasElement_width)+'px';
 // -----------------------------------
 // 4th row
-canvasElement3.style.left = Number(2*canvasElement_width + marg)+'px';
+canvasElement3.style.left = Number(2*canvasElement_width + 50)+'px';
 canvasElement3.style.top = Number(3*canvasElement_width)+'px';
 
 
