@@ -484,7 +484,7 @@ async function train_flash_number_model() {
 		//.then(async function(csvDataset) { const csvModel_format = await print_a_csvDataset(csvDataset); return csvModel_format; })
 		//.then(async function(csvModel_format) { const flattenedDataset = await csvModel_format.map(({xs, ys}) => { return {xs:Object.values(xs), ys:Object.values(ys)}; }); return flattenedDataset; })
 		.then(async function(csvDataset) { flash_number_model.compile({optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ["accuracy"]});  return csvDataset; })
-		.then(async function(csvDataset) {  await flash_number_model.fitDataset(csvDataset, { epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { console.log(epoch + ':' + logs.loss); } } }); return flash_number_model; })
+		.then(async function(csvDataset) {  await flash_number_model.fit(csvDataset.xs, csvDataset.ys, { epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { console.log(epoch + ':' + logs.loss); } } }); return flash_number_model; })
 		.then(async function(flash_number_model) { const saveResults = await flash_number_model.save('localstorage://flash_number_model');  })
 	;
 }
