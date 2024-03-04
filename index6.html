@@ -475,9 +475,11 @@ async function print_a_csvDataset(csvDataset){
 
 	// Transform to tensorflow.js
 	let rownum = X.length;
-	const xs = tf.tensor2d(X, [rownum, colnum]);
-	const ys = tf.tensor2d(Y, [rownum, 1]);
-	
+	const xs = tf.tensor2d(X, [rownum, colnum]);  // this is size [ 34, 4 ]
+	const ys = tf.tensor1d(Y, 'int32');
+
+	// ys needs to be in one-hot form, size [34, 5]
+	ys = tf.oneHot(ys, 5).print();
 	return {xs: xs, ys: ys};
 
 }
@@ -497,10 +499,10 @@ async function train_flash_number_model() {
 		.then(async function(csvModel_obj) { 
 			console.log('csvModel_obj.xs: ', csvModel_obj.xs); // csvDataset.xs:  undefined
 			console.log('csvModel_obj.ys: ', csvModel_obj.ys); // csvDataset.ys:  undefined
-			// const history = await flash_number_model.fit(csvModel_obj.xs, csvModel_obj.ys, { batchSize: 4, epochs: 10 });
-			const history = await flash_number_model.fit(tf.ones([10, 4]), tf.ones([10, 5]), { batchSize: 1, epochs: 10 });
+			
+			//const history = await flash_number_model.fit(tf.ones([10, 4]), tf.ones([10, 5]), { batchSize: 1, epochs: 10 });
+			const history = await flash_number_model.fit(csvModel_obj.xs, csvModel_obj.ys, { batchSize: 1, epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { console.log(epoch + ':' + logs.loss); } } });
 		})
-		//.then(async function(csvDataset) {  await flash_number_model.fit(tf.tensor2d([1,2,3,4],[8,4]), csvDataset.ys, { epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { console.log(epoch + ':' + logs.loss); } } }); return flash_number_model; })
 		.then(async function(history) { const saveResults = await flash_number_model.save('localstorage://flash_number_model');  })
 	;
 
