@@ -450,28 +450,22 @@ async function print_a_csvDataset(csvDataset){
 	
 	const tensors = await csvDataset.toArray();
 	tensors.forEach(async function(rowdata, index) {
+
+		let col0 = Object.values(rowdata.xs);
+		let col1 = Object.values(rowdata.ys);
 		
 		if (index < 5){
-			console.log("Object.keys: ", Object.keys(rowdata));
+			console.log("Object.keys: ", Object.keys(rowdata)); // output is xs, ys
 			// round_accuracy	total_accuracy	response_time	presentation_time_interval	flash_number
-			
-			col0 = Object.values(rowdata.round_accuracy);
-			col1 = Object.values(rowdata.total_accuracy);
-			col2 = Object.values(rowdata.response_time);
-			col3 = Object.values(rowdata.presentation_time_interval);
-			col4 = Object.values(rowdata.flash_number);
 			
 			console.log("col0: " + col0);
 			console.log("col1: " + col1);
-			console.log("col2: " + col2);
-			console.log("col3: " + col3);
-			console.log("col4: " + col4);
 		}
 
 		// Put in Object correctly
-		xs_array = [col0, col1, col2, col3];
+		xs_array = [col0];
 
-		csvModel_format.push( {xs: x_array, ys: col4});
+		csvModel_format.push( {xs: x_array, ys: col1});
 		
 	});  // end of forEach
 
