@@ -14,12 +14,14 @@
 <button id="user_click_done_button" onclick="user_click_done()" style="display:none">DONE</button>
 
 	
+<button id="train_flash_number_model_button" onclick="train_flash_number_model()" style="display:block">Test train_flash_number_model</button>
+	
 <!-- Output text -->
 <div id="output" style="font-family:courier;font-size:24px;height:300px"></div>
 
 	
 <style>
-canvas {border: 1px solid black; position: absolute; display: inline-block; z-index: 1; top: 200px;},
+canvas {border: 1px solid black; position: absolute; display: inline-block; z-index: 1; top: 300px;},
 div {position: relative; z-index: 2;},
 </style>
 
@@ -179,38 +181,62 @@ async function initialization_of_canvasElements() {
 		canvasElement4.style.left = Number(4*canvasElement_width + 40)+'px';
 		canvasElement5.style.left = Number(5*canvasElement_width + 40)+'px';
 		canvasElement6.style.left = Number(6*canvasElement_width + 40)+'px';
+		
 	} else if (square_config == 1) {
 		// 1: triangle
-    const left_start_row0 = 1.5*canvasElement_width;
+		// -----------------------------------
+		// 1st row
+		const left_start_row0 = 1.5*canvasElement_width;
 		canvasElement0.style.left = Number(0*canvasElement_width + left_start_row0)+'px';
-    // -----------------------------------
-    const left_start_row1 = 0.5*canvasElement_width;
+		// -----------------------------------
+		// 2nd row
+		const left_start_row1 = 0.5*canvasElement_width;
 		canvasElement1.style.left = Number(1*canvasElement_width + left_start_row1)+'px';
-    canvasElement1.style.top = Number(1*canvasElement_width + 40)+'px';
+		canvasElement1.style.top = Number(1*canvasElement_width + 40)+'px';
     
 		canvasElement2.style.left = Number(2*canvasElement_width + left_start_row1)+'px';
-    canvasElement2.style.top = Number(1*canvasElement_width + 40)+'px';
-    // -----------------------------------
+		canvasElement2.style.top = Number(1*canvasElement_width + 40)+'px';
+		// -----------------------------------
+		// 3rd row
 		canvasElement3.style.left = Number(0*canvasElement_width + 40)+'px';
-    canvasElement3.style.top = Number(2*canvasElement_width + 40)+'px';
+		canvasElement3.style.top = Number(2*canvasElement_width + 40)+'px';
     
 		canvasElement4.style.left = Number(1*canvasElement_width + 40)+'px';
-    canvasElement4.style.top = Number(2*canvasElement_width + 40)+'px';
+		canvasElement4.style.top = Number(2*canvasElement_width + 40)+'px';
 		
-    canvasElement5.style.left = Number(2*canvasElement_width + 40)+'px';
-    canvasElement5.style.top = Number(2*canvasElement_width + 40)+'px';
+		canvasElement5.style.left = Number(2*canvasElement_width + 40)+'px';
+		canvasElement5.style.top = Number(2*canvasElement_width + 40)+'px';
     
 		canvasElement6.style.left = Number(3*canvasElement_width + 40)+'px';
-    canvasElement6.style.top = Number(2*canvasElement_width + 40)+'px';
+		canvasElement6.style.top = Number(2*canvasElement_width + 40)+'px';
+		// -----------------------------------
+		
 	} else if (square_config == 2) {
 		// 2: square
+		// -----------------------------------
+		// 1st row
 		canvasElement0.style.left = Number(0*canvasElement_width + 40)+'px';
-		canvasElement1.style.left = Number(1*canvasElement_width + 40)+'px';
-		canvasElement2.style.left = Number(2*canvasElement_width + 40)+'px';
+
+		canvasElement1.style.left = Number(2*canvasElement_width + 40)+'px';
+		// -----------------------------------
+		// 2nd row
+		canvasElement2.style.left = Number(0*canvasElement_width + 40)+'px';
+		canvasElement2.style.top = Number(1*canvasElement_width + 40)+'px';
+		
 		canvasElement3.style.left = Number(3*canvasElement_width + 40)+'px';
-		canvasElement4.style.left = Number(4*canvasElement_width + 40)+'px';
-		canvasElement5.style.left = Number(5*canvasElement_width + 40)+'px';
-		canvasElement6.style.left = Number(6*canvasElement_width + 40)+'px';
+		canvasElement3.style.top = Number(1*canvasElement_width + 40)+'px';
+		// -----------------------------------
+		// 3rd row
+		canvasElement4.style.left = Number(0*canvasElement_width + 40)+'px';
+		canvasElement5.style.top = Number(2*canvasElement_width + 40)+'px';
+		
+		canvasElement5.style.left = Number(1*canvasElement_width + 40)+'px';
+		canvasElement5.style.top = Number(2*canvasElement_width + 40)+'px';
+		
+		canvasElement6.style.left = Number(2*canvasElement_width + 40)+'px';
+		canvasElement5.style.top = Number(2*canvasElement_width + 40)+'px';
+		// -----------------------------------
+		
 	} else if (square_config == 3) {
 		// 3: 5 sides
 		canvasElement0.style.left = Number(0*canvasElement_width + 40)+'px';
