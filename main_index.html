@@ -33,6 +33,13 @@ div {position: relative; z-index: 2;},
   
 <script>
 
+// Set the width and height of the canvas
+var canvasElement_width = 150;
+var canvasElement_height = canvasElement_width;
+
+	
+// -------------------------------------------------
+	
 // Start off with static canvases in an S-shape - then make the canvases appear dynamically when one scrolls down the page
 var canvasElement0 = document.createElement('canvas');
 var ctx0 = canvasElement0.getContext("2d");  // Get the 2D rendering context of the canvas
