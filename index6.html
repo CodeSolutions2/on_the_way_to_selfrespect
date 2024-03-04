@@ -186,29 +186,30 @@ async function initialization_of_canvasElements() {
 		// 1: triangle
 		// -----------------------------------
 		// 1st row
-		const left_start_row0 = 1.5*canvasElement_width;
+		const left_start_row0 = 1.5*canvasElement_width + 40;
 		canvasElement0.style.left = Number(0*canvasElement_width + left_start_row0)+'px';
+		canvasElement0.style.top = Number(0*canvasElement_width)+'px';
 		// -----------------------------------
 		// 2nd row
-		const left_start_row1 = 0.5*canvasElement_width;
+		const left_start_row1 = 1*canvasElement_width + 40;
 		canvasElement1.style.left = Number(1*canvasElement_width + left_start_row1)+'px';
-		canvasElement1.style.top = Number(1*canvasElement_width + 40)+'px';
+		canvasElement1.style.top = Number(1*canvasElement_width)+'px';
     
 		canvasElement2.style.left = Number(2*canvasElement_width + left_start_row1)+'px';
-		canvasElement2.style.top = Number(1*canvasElement_width + 40)+'px';
+		canvasElement2.style.top = Number(1*canvasElement_width)+'px';
 		// -----------------------------------
 		// 3rd row
 		canvasElement3.style.left = Number(0*canvasElement_width + 40)+'px';
-		canvasElement3.style.top = Number(2*canvasElement_width + 40)+'px';
+		canvasElement3.style.top = Number(2*canvasElement_width)+'px';
     
 		canvasElement4.style.left = Number(1*canvasElement_width + 40)+'px';
-		canvasElement4.style.top = Number(2*canvasElement_width + 40)+'px';
+		canvasElement4.style.top = Number(2*canvasElement_width)+'px';
 		
 		canvasElement5.style.left = Number(2*canvasElement_width + 40)+'px';
-		canvasElement5.style.top = Number(2*canvasElement_width + 40)+'px';
+		canvasElement5.style.top = Number(2*canvasElement_width)+'px';
     
 		canvasElement6.style.left = Number(3*canvasElement_width + 40)+'px';
-		canvasElement6.style.top = Number(2*canvasElement_width + 40)+'px';
+		canvasElement6.style.top = Number(2*canvasElement_width)+'px';
 		// -----------------------------------
 		
 	} else if (square_config == 2) {
@@ -442,14 +443,57 @@ async function get_csvDataset() {
 
 	  
 // -------------------------------------------------
-	  
-	  
+
+async function print_a_csvDataset(csvDataset){
+
+	let csvModel_format = []; // each row is a dictionary in an array
+	
+	const tensors = await csvDataset.toArray();
+	tensors.forEach(async function(rowdata, index) {
+		
+		if (index < 5){
+			console.log("Object.keys: ", Object.keys(rowdata));
+			// round_accuracy	total_accuracy	response_time	presentation_time_interval	flash_number
+			
+			col0 = Object.values(rowdata.round_accuracy);
+			col1 = Object.values(rowdata.total_accuracy);
+			col2 = Object.values(rowdata.response_time);
+			col3 = Object.values(rowdata.presentation_time_interval);
+			col4 = Object.values(rowdata.flash_number);
+			
+			console.log("col0: " + col0);
+			console.log("col1: " + col1);
+			console.log("col2: " + col2);
+			console.log("col3: " + col3);
+			console.log("col4: " + col4);
+		}
+
+		// Put in Object correctly
+		xs_array = [col0, col1, col2, col3];
+
+		csvModel_format.push( {xs: x_array, ys: col4});
+		
+	});  // end of forEach
+
+	return csvModel_format;
+
+}
+
+		  
+// -------------------------------------------------
+
+	
 async function train_flash_number_model() {
 
 	// Read dataset from location to tensorflow csvDataset object
 	await get_csvDataset('flash_number')
 		.then(async function(get_csvDataset_URLblob) { const csvDataset = await tf.data.csv(get_csvDataset_URLblob, { columnConfigs: { flash_number: {isLabel: true} } }); return csvDataset; })
-		.then(async function(csvDataset) { const flattenedDataset = await csvDataset.map(({xs, ys}) => { return {xs:Object.values(xs), ys:Object.values(ys)}; }); return flattenedDataset; })
+		.then(async function(csvDataset) { const csvModel_format = await print_a_csvDataset(csvDataset); return csvModel_format; })
+		.then(async function(csvModel_format) { 
+			console.log('figure out how to input data into model:', tf.tensor2d([[1, 2], [3, 4]]).print();); 
+
+			// Need to make all the columns []
+			const flattenedDataset = await csvDataset.map(({xs, ys}) => { return {xs:Object.values(xs), ys:Object.values(ys)}; }); return flattenedDataset; })
 		.then(async function(flattenedDataset) { flash_number_model.compile({optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ["accuracy"]});  return flattenedDataset; })
 		.then(async function(flattenedDataset) {  await flash_number_model.fitDataset(flattenedDataset, { epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { console.log(epoch + ':' + logs.loss); } } }); return flash_number_model; })
 		.then(async function(flash_number_model) { const saveResults = await flash_number_model.save('localstorage://flash_number_model');  })
