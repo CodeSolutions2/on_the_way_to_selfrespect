@@ -503,7 +503,7 @@ async function train_flash_number_model() {
 		.then(async function(csvModel_obj) { 
 			// console.log('csvModel_obj.xs: ', csvModel_obj.xs); // Array [34, 4]
 			// console.log('csvModel_obj.ys: ', csvModel_obj.ys); // Array [34, 5]
-			const history = await flash_number_model.fit(csvModel_obj.xs, csvModel_obj.ys, { batchSize: 1, epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { console.log(epoch + ', loss: ' + logs.loss + ', accuracy: ' + logs.accuracy); } } });
+			const history = await flash_number_model.fit(csvModel_obj.xs, csvModel_obj.ys, { batchSize: 1, epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { console.log(epoch + ', loss: ' + logs.loss + ', accuracy: ' + logs.acc); } } });
 			console.log('history: ', history);
 		})
 		.then(async function(history) { const saveResults = await flash_number_model.save('localstorage://flash_number_model');  })
@@ -517,7 +517,10 @@ async function predict_w_pretrained_flash_number_model() {
 	const flash_number_model = await tf.loadLayersModel('localstorage://flash_number_model');
 
 	// Give previous round data
-	return flash_number_model.predict( [round_accuracy, total_accuracy, response_time, presentation_time_interval] );
+	const xs_test = tf.tensor2d([round_accuracy, total_accuracy, response_time, presentation_time_interval], [1, 4]);
+	console.log('xs_test : ', xs_test);
+	
+	return flash_number_model.predict( xs_test );
 }
 
 
