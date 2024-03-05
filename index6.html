@@ -503,7 +503,7 @@ async function train_flash_number_model() {
 		.then(async function(csvModel_obj) { 
 			// console.log('csvModel_obj.xs: ', csvModel_obj.xs); // Array [34, 4]
 			// console.log('csvModel_obj.ys: ', csvModel_obj.ys); // Array [34, 5]
-			const history = await flash_number_model.fit(csvModel_obj.xs, csvModel_obj.ys, { batchSize: 1, epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { console.log(epoch + ', loss: ' + logs.loss + ', accuracy: 'logs.accuracy); } } });
+			const history = await flash_number_model.fit(csvModel_obj.xs, csvModel_obj.ys, { batchSize: 1, epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { console.log(epoch + ', loss: ' + logs.loss + ', accuracy: ' + logs.accuracy); } } });
 			console.log('history: ', history);
 		})
 		.then(async function(history) { const saveResults = await flash_number_model.save('localstorage://flash_number_model');  })
