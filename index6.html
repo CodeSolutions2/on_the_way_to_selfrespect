@@ -460,12 +460,12 @@ async function print_a_csvDataset(csvDataset){
 		let col0 = Object.values(rowdata.xs);
 		let col1 = Object.values(rowdata.ys);
 		
-		// if (index < 5){
-			// colnum = col0.length;
+		if (index < 1){
+			colnum = col0.length;
 			// console.log("Object.keys: ", Object.keys(rowdata)); // output is xs, ys
 			// console.log("col0: " + col0);
 			// console.log("col1: " + col1);
-		// }
+		}
 
 		// Put in Object correctly
 		X.push(col0);
