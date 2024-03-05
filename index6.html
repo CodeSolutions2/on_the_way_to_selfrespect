@@ -477,11 +477,12 @@ async function print_a_csvDataset(csvDataset){
 	let rownum = X.length;
 	const xs = tf.tensor2d(X, [rownum, colnum]);  // this is size [ 34, 4 ]
 	
-	const ys = tf.tensor2d(Y, [rownum, 1], 'int32').flatten();  // flatten the 2D tensor as a 1Dtensor
-	console.log('ys: ', ys);
+	let ys = tf.tensor2d(Y, [rownum, 1], 'int32').flatten();  // flatten the 2D tensor as a 1Dtensor
+	console.log('ys: ', ys);  // shape: Array [ 34 ]
 	
 	// ys needs to be in one-hot form, size [34, 5]
 	ys = tf.oneHot(ys, 5);
+	console.log('ys: ', ys);
 	
 	return {xs: xs, ys: ys};
 
@@ -667,7 +668,8 @@ async function verify_user_clicks(){
                "Having self-respect means to not blindly follow people or connect yourself to others such that your life and their lives are directly influenced by the other person's actions. One does not have control over other people's lives, one can only control their own life. Having self-respect and respect for others means to make boundaries (ie: an understanding of how one wants to be treated, or an intermediate that prevents direct interaction) such that other people's actions/lives do not directly influence your life, and similarly your life actions should not directly influence other people's lives.",
                "One believes that they are suffering because they only look at the problem from one way. When you look at the problem from multiple perspectives you can see that you are not suffering. Having self-respect means to stay active, and take small actions and steps to change the situation.",
                "People who participate in illegal, irresponsible activities, and lying participate because they believe that they can not obtain societal success without these behaviors. They lack self-respect because there are different ways to behave that are accepted by society to obtain success, taking unnecessary risk to loose one's freedom, money, job, home, or life is a form of self-disrespect. Having self-respect means to not take unnecessary risks, such that one's dignity of one's character is not lost.",
-	       "People who participate in risky activities (lying, joking, etc) may have the luxery to do so because their character is established and trusted in society, such that their dignity, financial stability, and societal reputation are not damaged. Having self-respect means to determine whether you have the 'luxery to participate in risky activities', meaning established enough in society to sustain one's life and character."];
+	       "People who participate in risky activities (lying, joking, etc) may have the luxery to do so because their character is established and trusted in society, such that their dignity, financial stability, and societal reputation are not damaged. Having self-respect means to determine whether you have the 'luxery to participate in risky activities', meaning established enough in society to sustain one's life and character.",
+	       "If one is not yet established in society, like a graduate, their societal reputation strongly depends on what others say and think about them. For this reason, non-established individuals who eventually become established have mentors and positive people honestly speaking about their abilities. Having self-respect as a non-established individual means to not participate in risky activities that may negatively influence people's opinions of you (ie: association where people think of you poorly, lying, joking, etc.)."];
   
   const selfRespect_wisdom_message_dict = Object.fromEntries(array0.map((key, index) => [index, key]));
 	outp.innerHTML += selfRespect_wisdom_message_dict[run_it_count] + "</br>";
