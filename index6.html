@@ -42,6 +42,7 @@ var squarelocation = [0, 1, 2, 3, 4, 5, 6];
 // Set the width and height of the canvas
 var canvasElement_width = 150;
 var canvasElement_height = canvasElement_width;
+var canvasTopStart = 350;
 
 const outp = document.getElementById('output');
 
@@ -174,7 +175,7 @@ async function initialization_of_canvasElements() {
 	canvasElement6.width = canvasElement_width;
 	canvasElement6.height = canvasElement_height;
 
-	square_config = await rand_perm([0, 1, 2, 3, 4, 5], 1).then(async function (square_config_array) {  const square_config_scalar = square_config_array.at(0); return square_config_scalar});
+	square_config = await rand_perm([0, 1, 2], 1).then(async function (square_config_array) {  const square_config_scalar = square_config_array.at(0); return square_config_scalar});
 	console.log("square_config: ", square_config);
 	
 	if (square_config == 0) {
@@ -191,29 +192,28 @@ async function initialization_of_canvasElements() {
 		// 1: triangle
 		// -----------------------------------
 		// 1st row
-		const left_start_row0 = 1.5*canvasElement_width + 40;
-		canvasElement0.style.left = Number(0*canvasElement_width + left_start_row0)+'px';
-		canvasElement0.style.top = Number(0*canvasElement_width)+'px';
+		canvasElement0.style.left = Number(0*canvasElement_width + (1.5*canvasElement_width + 40) + 'px';
+		canvasElement0.style.top = Number(0*canvasElement_width + canvasTopStart)+'px';
 		// -----------------------------------
 		// 2nd row
 		canvasElement1.style.left = Number(1*canvasElement_width) - 40+'px';
-		canvasElement1.style.top = Number(1*canvasElement_width)+'px';
+		canvasElement1.style.top = Number(1*canvasElement_width + canvasTopStart)+'px';
     
 		canvasElement2.style.left = Number(2*canvasElement_width + 40)+'px';
-		canvasElement2.style.top = Number(1*canvasElement_width)+'px';
+		canvasElement2.style.top = Number(1*canvasElement_width + canvasTopStart)+'px';
 		// -----------------------------------
 		// 3rd row
 		canvasElement3.style.left = Number(0*canvasElement_width + 40)+'px';
-		canvasElement3.style.top = Number(2*canvasElement_width)+'px';
+		canvasElement3.style.top = Number(2*canvasElement_width + canvasTopStart)+'px';
     
 		canvasElement4.style.left = Number(1*canvasElement_width + 40)+'px';
-		canvasElement4.style.top = Number(2*canvasElement_width)+'px';
+		canvasElement4.style.top = Number(2*canvasElement_width + canvasTopStart)+'px';
 		
 		canvasElement5.style.left = Number(2*canvasElement_width + 40)+'px';
-		canvasElement5.style.top = Number(2*canvasElement_width)+'px';
+		canvasElement5.style.top = Number(2*canvasElement_width + canvasTopStart)+'px';
     
 		canvasElement6.style.left = Number(3*canvasElement_width + 40)+'px';
-		canvasElement6.style.top = Number(2*canvasElement_width)+'px';
+		canvasElement6.style.top = Number(2*canvasElement_width + canvasTopStart)+'px';
 		// -----------------------------------
 		
 	} else if (square_config == 2) {
@@ -221,54 +221,28 @@ async function initialization_of_canvasElements() {
 		// -----------------------------------
 		// 1st row
 		canvasElement0.style.left = Number(0*canvasElement_width + 40)+'px';
+		canvasElement0.style.top = Number(0*canvasElement_width + canvasTopStart)+'px';
 
 		canvasElement1.style.left = Number(2*canvasElement_width + 40)+'px';
+		canvasElement1.style.top = Number(0*canvasElement_width + canvasTopStart)+'px';
 		// -----------------------------------
 		// 2nd row
 		canvasElement2.style.left = Number(0*canvasElement_width + 40)+'px';
-		canvasElement2.style.top = Number(1*canvasElement_width + 40)+'px';
+		canvasElement2.style.top = Number(1*canvasElement_width + canvasTopStart)+'px';
 		
-		canvasElement3.style.left = Number(3*canvasElement_width + 40)+'px';
-		canvasElement3.style.top = Number(1*canvasElement_width + 40)+'px';
+		canvasElement3.style.left = Number(2*canvasElement_width + 40)+'px';
+		canvasElement3.style.top = Number(1*canvasElement_width + canvasTopStart)+'px';
 		// -----------------------------------
 		// 3rd row
 		canvasElement4.style.left = Number(0*canvasElement_width + 40)+'px';
-		canvasElement5.style.top = Number(2*canvasElement_width + 40)+'px';
+		canvasElement4.style.top = Number(2*canvasElement_width + canvasTopStart)+'px';
 		
 		canvasElement5.style.left = Number(1*canvasElement_width + 40)+'px';
-		canvasElement5.style.top = Number(2*canvasElement_width + 40)+'px';
+		canvasElement5.style.top = Number(2*canvasElement_width + canvasTopStart)+'px';
 		
 		canvasElement6.style.left = Number(2*canvasElement_width + 40)+'px';
-		canvasElement5.style.top = Number(2*canvasElement_width + 40)+'px';
+		canvasElement6.style.top = Number(2*canvasElement_width + canvasTopStart)+'px';
 		// -----------------------------------
-		
-	} else if (square_config == 3) {
-		// 3: 5 sides
-		canvasElement0.style.left = Number(0*canvasElement_width + 40)+'px';
-		canvasElement1.style.left = Number(1*canvasElement_width + 40)+'px';
-		canvasElement2.style.left = Number(2*canvasElement_width + 40)+'px';
-		canvasElement3.style.left = Number(3*canvasElement_width + 40)+'px';
-		canvasElement4.style.left = Number(4*canvasElement_width + 40)+'px';
-		canvasElement5.style.left = Number(5*canvasElement_width + 40)+'px';
-		canvasElement6.style.left = Number(6*canvasElement_width + 40)+'px';
-	} else if (square_config == 4) {
-		// 4: hexagon
-		canvasElement0.style.left = Number(0*canvasElement_width + 40)+'px';
-		canvasElement1.style.left = Number(1*canvasElement_width + 40)+'px';
-		canvasElement2.style.left = Number(2*canvasElement_width + 40)+'px';
-		canvasElement3.style.left = Number(3*canvasElement_width + 40)+'px';
-		canvasElement4.style.left = Number(4*canvasElement_width + 40)+'px';
-		canvasElement5.style.left = Number(5*canvasElement_width + 40)+'px';
-		canvasElement6.style.left = Number(6*canvasElement_width + 40)+'px';
-	} else {
-		// 5: 8 sides
-		canvasElement0.style.left = Number(0*canvasElement_width + 40)+'px';
-		canvasElement1.style.left = Number(1*canvasElement_width + 40)+'px';
-		canvasElement2.style.left = Number(2*canvasElement_width + 40)+'px';
-		canvasElement3.style.left = Number(3*canvasElement_width + 40)+'px';
-		canvasElement4.style.left = Number(4*canvasElement_width + 40)+'px';
-		canvasElement5.style.left = Number(5*canvasElement_width + 40)+'px';
-		canvasElement6.style.left = Number(6*canvasElement_width + 40)+'px';
 	}
 	
 
@@ -503,8 +477,10 @@ async function train_flash_number_model() {
 		.then(async function(csvModel_obj) { 
 			// console.log('csvModel_obj.xs: ', csvModel_obj.xs); // Array [34, 4]
 			// console.log('csvModel_obj.ys: ', csvModel_obj.ys); // Array [34, 5]
-			const history = await flash_number_model.fit(csvModel_obj.xs, csvModel_obj.ys, { batchSize: 1, epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { console.log(epoch + ', loss: ' + logs.loss + ', accuracy: ' + logs.acc); } } });
-			console.log('history: ', history);
+			const history = await flash_number_model.fit(csvModel_obj.xs, csvModel_obj.ys, { batchSize: 1, epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { 
+			// console.log(epoch + ', loss: ' + logs.loss + ', accuracy: ' + logs.acc); 
+			} } });
+			// console.log('history: ', history);
 		})
 		.then(async function(history) { const saveResults = await flash_number_model.save('localstorage://flash_number_model');  })
 	;
@@ -518,7 +494,7 @@ async function predict_w_pretrained_flash_number_model() {
 
 	// Give previous round data
 	const xs_test = tf.tensor2d([round_accuracy, total_accuracy, response_time, presentation_time_interval], [1, 4]);
-	console.log('xs_test : ', xs_test);
+	// console.log('xs_test : ', xs_test);
 	
 	return flash_number_model.predict( xs_test );
 }
@@ -544,7 +520,10 @@ async function predict_w_pretrained_presentation_time_interval_model() {
 	const presentation_time_interval_model = await tf.loadLayersModel('localstorage://presentation_time_interval_model');
 
 	// Give previous round data
-	return presentation_time_interval_model.predict( [round_accuracy, total_accuracy, response_time, flash_number] );
+	let out = presentation_time_interval_model.predict( [round_accuracy, total_accuracy, response_time, flash_number] );
+	console.log('out: ' + out);
+	
+	return out;
 }
 
 	  
