@@ -425,8 +425,16 @@ async function data_2_dictionary(data, num_of_classes, label_name){
 		console.log('rowdata: ', rowdata);
 		console.log('index: ', index);
 
+		// Remove all \n from the string rowdata
+		let regexp = /\n/g;
+		rowdata.replace(regex, '');
+		
 		let out = rowdata.split(",");
 		console.log('out: ', out);
+
+		// Remove empty columns
+		let nonempty_row = out.filter((num) => num.length != 0);
+		console.log('nonempty_row: ', nonempty_row);
 
 		// Remove empty columns
 		let nonempty_row = out.filter((num) => num.length != 0);
