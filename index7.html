@@ -584,8 +584,11 @@ async function predict_w_pretrained_flash_number_model() {
 	const xs_test = tf.tensor2d([round_accuracy, total_accuracy, response_time, presentation_time_interval], [1, 4]);
 	// console.log('xs_test : ', xs_test);
 
-	const prediction = flash_number_model.predict( xs_test );
-	console.log('prediction : ', prediction);
+	const result = flash_number_model.predict( xs_test );
+
+	// Get probability value as a number
+	const prediction = await result.data(); // correct
+	console.log('prediction : ', prediction)
 	
 	return prediction;
 }
@@ -645,8 +648,11 @@ async function predict_w_pretrained_presentation_time_interval_model() {
 	const xs_test = tf.tensor2d([round_accuracy, total_accuracy, response_time, presentation_time_interval], [1, 4]);
 	// console.log('xs_test : ', xs_test);
 
-	const prediction = flash_number_model.predict( xs_test );
-	console.log('prediction : ', prediction);
+	const result = flash_number_model.predict( xs_test );
+
+	// Get probability value as a number
+	const prediction = await result.data(); // correct
+	console.log('prediction : ', prediction)
 	
 	return prediction;
 }
@@ -841,7 +847,7 @@ async function post_text_form() {
 	
   form.setAttribute('headers', {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"});
 
-  const wisdom_message = document.getElementById("self_respect_wisdom_message").value;
+  const wisdom_message = document.getElementById("self_respect_wisdom_message_input").value;
   
   // Just use arrays: each column is a form variable
   let type_parameters = ['text', 'submit'];
