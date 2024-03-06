@@ -441,7 +441,8 @@ async function data_2_dictionary(data, num_of_classes, label_name){
 			console.log('colnum: ', colnum);
 			
 			// get index for what column is xs and ys
-			for (let i=0; i < colnum; i++){
+			// it needs to check all values in nonempty_row
+			for (let i=0; i < nonempty_row.length; i++){
 			      if (nonempty_row[i] == label_name) {
 			        ys_ind.push(Number(i));
 			      } else {
