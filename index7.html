@@ -64,7 +64,7 @@ var order = [];
 
 // var data = ['round_accuracy', 'total_accuracy', 'response_time', 'presentation_time_interval', 'flash_number', '\n'];  // not correct
 // var data = ['round_accuracy', 'total_accuracy', 'response_time', 'presentation_time_interval', 'flash_number\n']; 
-var data = ['', 'round_accuracy', 'total_accuracy', 'response_time', 'presentation_time_interval', 'flash_number\n']; 
+var data = [['', 'round_accuracy', 'total_accuracy', 'response_time', 'presentation_time_interval', 'flash_number']+'\n']; 
 var presentation_time_interval = 2000;
 var flash_number = 3; // scalar from 3 to 7
 var response_time = 0;
@@ -418,7 +418,7 @@ async function data_2_dictionary(data, num_of_classes, label_name){
 	let xs_ind = [];
 	let ys_ind = [];
 
-	const not_empty = (num) => num.length != 0;
+	//const not_empty = (num) => num.length != 0;
 	
 	data.forEach(async function(rowdata, index) {
 
@@ -436,8 +436,8 @@ async function data_2_dictionary(data, num_of_classes, label_name){
 		console.log('nonempty_row: ', nonempty_row);
 
 		// OR
-		let nonempty_row_filter = rowdata.filter(not_empty);
-		console.log('nonempty_row_filter: ', nonempty_row_filter);
+		//let nonempty_row_filter = rowdata.filter(not_empty);
+		//console.log('nonempty_row_filter: ', nonempty_row_filter);
 		
 		if (index == 0){
 			// header, do not save data
