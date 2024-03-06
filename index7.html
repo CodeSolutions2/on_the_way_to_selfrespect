@@ -383,17 +383,14 @@ async function user_click_done() {
 // -------------------------------------------------
 
 	  
-async function get_csvDataset(choice) {
+async function get_csvDataset() {
+	
+	const repoOwner = 'CodeSolutions2';
+	const repoName = 'on_the_way_to_selfrespect';
+	var url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents`;
 
-	let get_csvDataset_URLblob = '';
-		
-	if (choice == 0) {
-	    const repoOwner = 'CodeSolutions2';
-	    const repoName = 'on_the_way_to_selfrespect';
-	    var url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents`;
-
-	    var url_vec = [];
-	    await fetch(url).then(res => res.json()).then(data => {
+	var url_vec = [];
+	await fetch(url).then(res => res.json()).then(data => {
 		    data.forEach(file => {
 		      if (file.type === 'file' && file.name.match(/.(csv|txt)$/i)) {
 			url_vec.push(file.download_url);
@@ -402,12 +399,9 @@ async function get_csvDataset(choice) {
 		  }).catch(error => { outp.innerHTML += error; });
 
    
-	    get_csvDataset_URLblob = url_vec[0];
-	} else {
-	    get_csvDataset_URLblob = data;
-	}
-
-	console.log('get_csvDataset_URLblob: ', get_csvDataset_URLblob);
+	const get_csvDataset_URLblob = url_vec[0];
+	
+	// console.log('get_csvDataset_URLblob: ', get_csvDataset_URLblob);
     
 	return get_csvDataset_URLblob;
 }
@@ -415,6 +409,65 @@ async function get_csvDataset(choice) {
 	
 // -------------------------------------------------
 
+async function data_2_dictionary(data, num_of_classes, label_name){
+
+	let X = [];
+	let Y = [];
+	let colnum;
+	
+	data.forEach(async function(rowdata, index) {
+	
+		// Remove empty columns
+		let nonempty_row = []
+		    for (let i=0; i < rowdata.length; i++){
+		      if (rowdata[i].length != 0) {
+		        nonempty_row.push(rowdata[i])
+		      }
+		    }
+		
+		if (index == 0){
+			// header, do not save data
+			colnum = nonempty_row.length;
+
+			// get index for what column is xs and ys
+			let xs_ind = [];
+			let ys_ind = [];
+			for (let i=0; i < nonempty_row.length; i++){
+			      if (nonempty_row[i] == label_name) {
+			        ys_ind.push(i);
+			      } else {
+				xs_ind.push(i);
+			      }
+			}
+		} else {
+			// Put in Object correctly
+			let x_vals = [];
+			xs_ind.forEach( (val, index) => {
+				x_vals.push(nonempty_row[val]);
+			});
+			X.push(x_vals);
+			Y.push(nonempty_row[ys_ind[0]]);
+		}
+
+		
+		
+	});  // end of forEach
+
+	// Transform to tensorflow.js
+	let rownum = X.length;
+	const xs = tf.tensor2d(X, [rownum, colnum]);  // this is size [ 34, 4 ]
+	
+	let ys = tf.tensor2d(Y, [rownum, 1], 'int32').flatten();  // flatten the 2D tensor as a 1Dtensor
+	// console.log('ys: ', ys);  // shape: Array [ 34 ]
+	
+	// ys needs to be in one-hot form, size [34, 5]
+	ys = tf.oneHot(ys, num_of_classes);  // Array [34, 5]
+	// console.log('ys: ', ys);
+	
+	return {xs: xs, ys: ys};
+}
+
+// -------------------------------------------------
 	
 async function csvDataset_2_dictionary(csvDataset, num_of_classes){
 
@@ -464,10 +517,11 @@ async function train_flash_number_model() {
 	// Read dataset from location to tensorflow csvDataset object
 	// https://js.tensorflow.org/api/1.0.0/
 
-	// get_csvDataset(choice)
 	let choice = 1; // 0=use csv file in repo, 1=use data array variable
 	
-	await get_csvDataset(choice)
+	if (choice == 0) {
+		// 0=use csv file in repo
+		await get_csvDataset()
 		.then(async function(get_csvDataset_URLblob) { const csvDataset = await tf.data.csv(get_csvDataset_URLblob, { columnConfigs: { flash_number: {isLabel: true} } }); return csvDataset; })
 		.then(async function(csvDataset) { const dict_obj = await csvDataset_2_dictionary(csvDataset, 5); return dict_obj; })
 		.then(async function(dict_obj) { flash_number_model.compile({optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ["accuracy"]});  return dict_obj; })
@@ -481,9 +535,25 @@ async function train_flash_number_model() {
 		})
 		.then(async function(history) { const saveResults = await flash_number_model.save('localstorage://flash_number_model');  })
 	;
+		
+	} else {
+		// 1=use data array variable
+		await data_2_dictionary(data, 5, "flash_number").then(async function(dict_obj) { flash_number_model.compile({optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ["accuracy"]});  return dict_obj; })
+		.then(async function(dict_obj) { 
+			// console.log('dict_obj.xs: ', dict_obj.xs); // Array [34, 4]
+			// console.log('dict_obj.ys: ', dict_obj.ys); // Array [34, 5]
+			const history = await flash_number_model.fit(dict_obj.xs, dict_obj.ys, { batchSize: 1, epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { 
+			console.log(epoch + ', loss: ' + logs.loss + ', accuracy: ' + logs.acc); 
+			} } });
+			// console.log('history: ', history);
+		})
+		.then(async function(history) { const saveResults = await flash_number_model.save('localstorage://flash_number_model');  })
+	;
+	}
 	
 }
 
+// -------------------------------------------------
 	  
 async function predict_w_pretrained_flash_number_model() {
 
@@ -506,8 +576,11 @@ async function predict_w_pretrained_flash_number_model() {
 async function train_presentation_time_interval_model() {
 
 	// Read dataset from location to tensorflow csvDataset object
-	let choice = 0; // 0=use csv file in repo, 1=use data array variable
+
+	let choice = 1; // 0=use csv file in repo, 1=use data array variable
 	
+	if (choice == 0) {
+		// 0=use csv file in repo
 	await get_csvDataset(choice)
 		.then(async function(get_csvDataset_URLblob) { const csvDataset = await tf.data.csv(get_csvDataset_URLblob, { columnConfigs: { presentation_time_interval: {isLabel: true} } }); return csvDataset; })
 		.then(async function(csvDataset) { const dict_obj = await csvDataset_2_dictionary(csvDataset, 3); return dict_obj; })
@@ -522,8 +595,26 @@ async function train_presentation_time_interval_model() {
 		})
 		.then(async function(history) { const saveResults = await presentation_time_interval_model.save('localstorage://presentation_time_interval_model');  })
 	;
+		
+	} else {
+		// 1=use data array variable
+		await data_2_dictionary(data, 3, "presentation_time_interval").then(async function(dict_obj) { flash_number_model.compile({optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ["accuracy"]});  return dict_obj; })
+		.then(async function(dict_obj) { 
+			// console.log('dict_obj.xs: ', dict_obj.xs); // Array [34, 4]
+			// console.log('dict_obj.ys: ', dict_obj.ys); // Array [34, 5]
+			const history = await presentation_time_interval_model.fit(dict_obj.xs, dict_obj.ys, { batchSize: 1, epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { 
+			console.log(epoch + ', loss: ' + logs.loss + ', accuracy: ' + logs.acc); 
+			} } });
+			// console.log('history: ', history);
+		})
+		.then(async function(history) { const saveResults = await presentation_time_interval_model.save('localstorage://presentation_time_interval_model');  })
+	;
+	}
 	
 }
+	
+
+// -------------------------------------------------
 
 
 async function predict_w_pretrained_presentation_time_interval_model() {
