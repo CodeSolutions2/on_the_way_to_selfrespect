@@ -66,7 +66,10 @@ var order = [];
 // var data = ['round_accuracy', 'total_accuracy', 'response_time', 'presentation_time_interval', 'flash_number\n']; 
 var data = [['', 'round_accuracy', 'total_accuracy', 'response_time', 'presentation_time_interval', 'flash_number']+'\n']; 
 var presentation_time_interval = 2000;
-var flash_number = 3; // scalar from 3 to 7
+var flash_number = 3;
+const y_choices_flash_number_model = [3, 4, 5, 6, 7];
+const y_choices_presentation_time_interval_model = [2000, 1500, 1000];
+	
 var response_time = 0;
 var accuracy0 = 0;
 var accuracy1 = 0;
@@ -159,7 +162,7 @@ async function initialization_of_canvasElements() {
 		flash_number = await predict_w_pretrained_flash_number_model();
 	} else {
 		// Random selection
-		flash_number = await rand_perm([3, 4, 5, 6, 7], 1).then(async function (flash_number_array) {  const flash_number_scalar = flash_number_array.at(0); return flash_number_scalar});
+		flash_number = await rand_perm(y_choices_flash_number_model, 1).then(async function (flash_number_array) {  const flash_number_scalar = flash_number_array.at(0); return flash_number_scalar});
 	}
 	// console.log("flash_number: ", flash_number);
 	// ------------------------------------------
@@ -173,7 +176,7 @@ async function initialization_of_canvasElements() {
 		presentation_time_interval = await predict_w_pretrained_presentation_time_interval_model();
 	} else {
 		// Random selection
-		presentation_time_interval = await rand_perm([2000, 1500, 1000], 1).then(async function (presentation_time_interval_array) {  const presentation_time_interval_scalar = presentation_time_interval_array.at(0); return presentation_time_interval_scalar});
+		presentation_time_interval = await rand_perm(y_choices_presentation_time_interval_model, 1).then(async function (presentation_time_interval_array) {  const presentation_time_interval_scalar = presentation_time_interval_array.at(0); return presentation_time_interval_scalar});
 	}
 	// console.log("presentation_time_interval: ", presentation_time_interval);
 	// ------------------------------------------
@@ -409,7 +412,7 @@ async function get_csvDataset() {
 	
 // -------------------------------------------------
 
-async function data_2_dictionary(data, num_of_classes, label_name){
+async function data_2_dictionary(data, y_choices, label_name){
 
 	let X = [];
 	let Y = [];
@@ -468,24 +471,40 @@ async function data_2_dictionary(data, num_of_classes, label_name){
 	console.log('X: ', X);
 	console.log('Y: ', Y)
 
+	// -------------------------------------------------
+	
+	// Encode Y 
+	const num_of_classes = y_choices.length;
+	const y_choices_assignment = Object.fromEntries(y_choices.map((key, index) => [key, index));
+	let Yencoded = [];
+ 	Y.forEach(async function(rowdata, index) {
+		Yencoded.push(y_choices_assignment[rowdata]);
+	});  // end of forEach
+
+	// -------------------------------------------------
+	
 	// Transform to tensorflow.js
 	let rownum = X.length;
 	const xs = tf.tensor2d(X, [rownum, colnum]);  // this is size [ 34, 4 ]
 	console.log('xs: ', xs);
+
+	// -------------------------------------------------
 	
-	let ys = tf.tensor2d(Y, [rownum, 1], 'int32').flatten();  // flatten the 2D tensor as a 1Dtensor
+	let ys = tf.tensor2d(Yencoded, [rownum, 1], 'int32').flatten();  // flatten the 2D tensor as a 1Dtensor
 	console.log('ys: ', ys);  // shape: Array [ 34 ]
 	
 	// ys needs to be in one-hot form, size [34, 5]
 	ys = tf.oneHot(ys, num_of_classes);  // Array [34, 5]
 	console.log('ys: ', ys);
+
+	// -------------------------------------------------
 	
 	return {xs: xs, ys: ys};
 }
 
 // -------------------------------------------------
 	
-async function csvDataset_2_dictionary(csvDataset, num_of_classes){
+async function csvDataset_2_dictionary(csvDataset, y_choices){
 
 	let X = [];
 	let Y = [];
@@ -510,20 +529,33 @@ async function csvDataset_2_dictionary(csvDataset, num_of_classes){
 		
 	});  // end of forEach
 
+	// -------------------------------------------------
+	
+	// Encode Y 
+	const num_of_classes = y_choices.length;
+	const y_choices_assignment = Object.fromEntries(y_choices.map((key, index) => [key, index));
+	let Yencoded = [];
+ 	Y.forEach(async function(rowdata, index) {
+		Yencoded.push(y_choices_assignment[rowdata]);
+	});  // end of forEach
+
+	// -------------------------------------------------
+	
 	// Transform to tensorflow.js
 	let rownum = X.length;
 	const xs = tf.tensor2d(X, [rownum, colnum]);  // this is size [ 34, 4 ]
-	// console.log('xs: ', xs);
+	console.log('xs: ', xs);
+
+	// -------------------------------------------------
 	
-	let ys = tf.tensor2d(Y, [rownum, 1], 'int32').flatten();  // flatten the 2D tensor as a 1Dtensor
-	// console.log('ys: ', ys);  // shape: Array [ 34 ]
+	let ys = tf.tensor2d(Yencoded, [rownum, 1], 'int32').flatten();  // flatten the 2D tensor as a 1Dtensor
+	console.log('ys: ', ys);  // shape: Array [ 34 ]
 	
 	// ys needs to be in one-hot form, size [34, 5]
 	ys = tf.oneHot(ys, num_of_classes);  // Array [34, 5]
-	// console.log('ys: ', ys);
+	console.log('ys: ', ys);
 
-
-
+	// -------------------------------------------------
 	
 	return {xs: xs, ys: ys};
 }
@@ -543,7 +575,7 @@ async function train_flash_number_model() {
 		// 0=use csv file in repo
 		await get_csvDataset()
 		.then(async function(get_csvDataset_URLblob) { const csvDataset = await tf.data.csv(get_csvDataset_URLblob, { columnConfigs: { flash_number: {isLabel: true} } }); return csvDataset; })
-		.then(async function(csvDataset) { const dict_obj = await csvDataset_2_dictionary(csvDataset, 5); return dict_obj; })
+		.then(async function(csvDataset) { const dict_obj = await csvDataset_2_dictionary(csvDataset, y_choices_flash_number_model); return dict_obj; })
 		.then(async function(dict_obj) { await flash_number_model.compile({optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ["accuracy"]});  return dict_obj; })
 		.then(async function(dict_obj) { 
 			// console.log('dict_obj.xs: ', dict_obj.xs); // Array [34, 4]
@@ -558,7 +590,7 @@ async function train_flash_number_model() {
 		
 	} else {
 		// 1=use data array variable
-		await data_2_dictionary(data, 5, "flash_number")
+		await data_2_dictionary(data, y_choices_flash_number_model, "flash_number")
 			.then(async function(dict_obj) { await flash_number_model.compile({optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ["accuracy"]});  return dict_obj; })
 		.then(async function(dict_obj) { 
 			// console.log('dict_obj.xs: ', dict_obj.xs); // Array [34, 4]
@@ -587,8 +619,17 @@ async function predict_w_pretrained_flash_number_model() {
 	const result = flash_number_model.predict( xs_test );
 
 	// Get probability value as a number
-	const prediction = await result.data(); // correct
-	console.log('prediction : ', prediction)
+	const probability_array = await result.data(); // correct
+	console.log('probability_array : ', probability_array);
+
+	// Index of maximum softmax probability 
+	const index = result.as1D().argMax().dataSync()[0];
+	
+	// Maximum probability
+	const maxprob = probability_array[index];
+
+	const prediction = y_choices_flash_number_model[index];
+	console.log('prediction : ', prediction);
 	
 	return prediction;
 }
@@ -607,7 +648,7 @@ async function train_presentation_time_interval_model() {
 		// 0=use csv file in repo
 	await get_csvDataset(choice)
 		.then(async function(get_csvDataset_URLblob) { const csvDataset = await tf.data.csv(get_csvDataset_URLblob, { columnConfigs: { presentation_time_interval: {isLabel: true} } }); return csvDataset; })
-		.then(async function(csvDataset) { const dict_obj = await csvDataset_2_dictionary(csvDataset, 3); return dict_obj; })
+		.then(async function(csvDataset) { const dict_obj = await csvDataset_2_dictionary(csvDataset, y_choices_presentation_time_interval_model); return dict_obj; })
 		.then(async function(dict_obj) { await presentation_time_interval_model.compile({optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ["accuracy"]});  return dict_obj; })
 		.then(async function(dict_obj) { 
 			// console.log('dict_obj.xs: ', dict_obj.xs); // Array [34, 4]
@@ -622,7 +663,7 @@ async function train_presentation_time_interval_model() {
 		
 	} else {
 		// 1=use data array variable
-		await data_2_dictionary(data, 3, "presentation_time_interval")
+		await data_2_dictionary(data, y_choices_presentation_time_interval_model, "presentation_time_interval")
 			.then(async function(dict_obj) { await presentation_time_interval_model.compile({optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ["accuracy"]});  return dict_obj; })
 		.then(async function(dict_obj) { 
 			// console.log('dict_obj.xs: ', dict_obj.xs); // Array [34, 4]
@@ -645,14 +686,23 @@ async function predict_w_pretrained_presentation_time_interval_model() {
 	const presentation_time_interval_model = await tf.loadLayersModel('localstorage://presentation_time_interval_model');
 
 	// Give previous round data
-	const xs_test = tf.tensor2d([round_accuracy, total_accuracy, response_time, presentation_time_interval], [1, 4]);
+	const xs_test = tf.tensor2d([round_accuracy, total_accuracy, response_time, flash_number], [1, 4]);
 	// console.log('xs_test : ', xs_test);
 
-	const result = flash_number_model.predict( xs_test );
+	const result = presentation_time_interval_model.predict( xs_test );
 
 	// Get probability value as a number
-	const prediction = await result.data(); // correct
-	console.log('prediction : ', prediction)
+	const probability_array = await result.data(); // correct
+	console.log('probability_array : ', probability_array);
+
+	// Index of maximum softmax probability 
+	const index = result.as1D().argMax().dataSync()[0];
+	
+	// Maximum probability
+	const maxprob = probability_array[index];
+
+	const prediction = y_choices_presentation_time_interval_model[index];
+	console.log('prediction : ', prediction);
 	
 	return prediction;
 }
