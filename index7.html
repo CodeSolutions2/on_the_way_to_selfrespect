@@ -9,16 +9,29 @@
 
 <button id="run_it_button" onclick="run_it()" style="display:block">Run a memory game round</button>
 <button id="download_data_button" onclick="download_data()" style="display:block">download_data</button>
-<button id="save_csvDataset_button" onclick="save_csvDataset()" style="display:block">save_csvDataset</button>
 <button id="resetresponse_button" onclick="resetresponse()" style="display:none">resetresponse</button>	
 <button id="user_click_done_button" onclick="user_click_done()" style="display:none">DONE</button>
 
 	
-<!-- Temporary buttons -->
-<button id="train_flash_number_model_button" onclick="train_flash_number_model()" style="display:block">Test train_flash_number_model</button>
+<!-- Temporary buttons: to be removed -->
+<button id="train_flash_number_model_button" onclick="train_flash_number_model()" style="display:block">Test flash_number_model</button>
 
 <button id="predict_w_pretrained_flash_number_model_button" onclick="predict_w_pretrained_flash_number_model()" style="display:block">Test predict_w_pretrained_flash_number_model</button>
-<!-- ----------------- -->
+
+<button id="train_presentation_time_interval_model_button" onclick="train_presentation_time_interval_model()" style="display:block">Test train_presentation_time_interval_model</button>
+
+<button id="predict_w_pretrained_presentation_time_interval_model_button" onclick="predict_w_pretrained_presentation_time_interval_model()" style="display:block">Test predict_w_pretrained_presentation_time_interval_model</button>
+<!-- --------------------------------- -->
+
+
+	
+<!-- Section to submit self-respect wisdom message -->
+<label for="input_text_label" id="self_respect_wisdom_message_input_label" style="display:none">Enter text to label, each sentence separated by the \n character will be labeled:</label>
+<input type="text" value="" placeholder="Share your self-respect wisdom message with other game users:" id="self_respect_wisdom_message_input" rows="10" cols="500" style="display:none">
+<br>
+<button id="submit_button" onclick="post_text_form()" style="display:none">Submit your wisdom message to the game</button>
+<!-- -------------------------- -->
+
 
 	
 <!-- Output text -->
@@ -140,25 +153,31 @@ async function initialization_of_canvasElements() {
 	// ------------------------------------------
 	// Predict flash_number based on past performance
 	// ------------------------------------------
-	// Random selection
-	flash_number = await rand_perm([3, 4, 5, 6, 7], 1).then(async function (flash_number_array) {  const flash_number_scalar = flash_number_array.at(0); return flash_number_scalar});
-	// OR
 	// Model predicted selection
-	// flash_number = await predict_w_pretrained_flash_number_model();
+	flash_number = await predict_w_pretrained_flash_number_model();
+	
+	if (flash_number < 3 | flash_number > 7) {
+		// Not enough data so, can not predict reliably yet - select the values randomly
+		// Random selection
+		flash_number = await rand_perm([3, 4, 5, 6, 7], 1).then(async function (flash_number_array) {  const flash_number_scalar = flash_number_array.at(0); return flash_number_scalar});
+	}
+	// console.log("flash_number: ", flash_number);
 	// ------------------------------------------
 
 
 	// ------------------------------------------
 	// Predict presentation_time_interval based on past performance
 	// ------------------------------------------
-	// Random selection
-	presentation_time_interval = await rand_perm([2000, 1500, 1000], 1).then(async function (presentation_time_interval_array) {  const presentation_time_interval_scalar = presentation_time_interval_array.at(0); return presentation_time_interval_scalar});
-	// console.log("presentation_time_interval: ", presentation_time_interval);
-	// OR
 	// Model predicted selection
-	// presentation_time_interval = await predict_w_pretrained_presentation_time_interval_model();
-	// ------------------------------------------
+	presentation_time_interval = await predict_w_pretrained_presentation_time_interval_model();
 	
+	if (presentation_time_interval != 2000 | presentation_time_interval != 1500 | presentation_time_interval != 1000) {
+		// Not enough data so, can not predict reliably yet - select the values randomly
+		// Random selection
+		presentation_time_interval = await rand_perm([2000, 1500, 1000], 1).then(async function (presentation_time_interval_array) {  const presentation_time_interval_scalar = presentation_time_interval_array.at(0); return presentation_time_interval_scalar});
+	}
+	// console.log("presentation_time_interval: ", presentation_time_interval);
+	// ------------------------------------------
 	
 	canvasElement0.width = canvasElement_width;
 	canvasElement0.height = canvasElement_height;
@@ -291,11 +310,28 @@ async function initialization_of_canvasElements() {
 async function run_it() {
 
 	// -------------------------------------------------
-
-	// console.log("user_click in run_it: ", user_click);  // user_click = [];
-
 	// Reset screen text after a previous run
+	// -------------------------------------------------
+	
+	// Remove all messages
 	outp.innerHTML = "";
+	
+	// Remove inputs for self-respect message sharing 
+	document.getElementById("self_respect_wisdom_message_input_label").style.display = "none";
+	document.getElementById("self_respect_wisdom_message_input").style.display = "none";
+	document.getElementById("submit_button").style.display = "none";
+	// ------------------------
+
+	// Make canvas display setting visible
+	document.getElementById("canvasElement0").style.display = "block";
+	document.getElementById("canvasElement1").style.display = "block";
+	document.getElementById("canvasElement2").style.display = "block";
+	document.getElementById("canvasElement3").style.display = "block";
+	document.getElementById("canvasElement4").style.display = "block";
+	document.getElementById("canvasElement5").style.display = "block";
+	document.getElementById("canvasElement6").style.display = "block";
+
+	// -------------------------------------------------
 
 	order = await initialization_of_canvasElements()
 		.then(async function(flash_number) { 
@@ -321,7 +357,6 @@ async function run_it() {
 
 	// Count the number of times it is run
 	run_it_count += 1;
-	outp.innerHTML = 'run_it_count: ' + run_it_count;
 	
 	// -------------------------------------------------
 
@@ -345,67 +380,21 @@ async function user_click_done() {
 		.then(async function() { await verify_user_clicks(); });
 }
 
-	  
-// -------------------------------------------------
-
-async function save_csvDataset() {
-
-	const repoOwner = 'CodeSolutions2';
-	const repoName = 'on_the_way_to_selfrespect';
-	var url = `https://api.github.com/repos/${repoOwner}/${repoName}`;
-
-	var bloburl = await download_data();
-	
-	// Download CSV here: blob: https://codesolutions2.github.io/2e7701d0-559c-4be8-87de-61c72fce9a96
-	// Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at ‘https://api.github.com/repos/CodeSolutions2/on_the_way_to_selfrespect’. (Reason: Credential is not supported if the CORS header ‘Access-Control-Allow-Origin’ is ‘*’)
-
-	// If you are trying to transfer files to and from the same domain URL, do not use "Access-Control-Allow-Credentials": true, using settings [mode: 'cors', "Access-Control-Allow-Origin": "*"]
-	
-	// The Same Origin Policy disallows reading the remote resource at https://api.github.com/repos/CodeSolutions2/on_the_way_to_selfrespect. (Reason: header ‘access-control-allow-credentials’ is not allowed according to header ‘Access-Control-Allow-Headers’ from CORS preflight response).
-
-
-	// Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at https://api.github.com/repos/CodeSolutions2/on_the_way_to_selfrespect. (Reason: header ‘access-control-allow-origin’ is not allowed according to header ‘Access-Control-Allow-Headers’ from CORS preflight response) - Removed ["Access-Control-Allow-Origin": "*", ]
-	
-	let headers = {"Content-Type": "application/octet-stream", 
-		       "Connection": "keep-alive",
-		      "processData": false};
-
-	//  If you are trying to transfer files to and from the same domain URL or a different domain URL, one can use [mode: 'cors']. credentials: "include" can not be included for "Access-Control-Allow-Origin": "*" cors because * means it is open to the public, so credentials are not necessary
-
-	// Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at https://api.github.com/repos/CodeSolutions2/on_the_way_to_selfrespect. (Reason: header ‘processdata’ is not allowed according to header ‘Access-Control-Allow-Headers’ from CORS preflight response). -  Changed [mode: 'cors' to mode: 'no-cors' ]
-	
-	let options = {method : 'POST', 
-		       headers: headers, 
-		       mode: 'no-cors', 
-		       cache: "no-cache", 
-		       redirect: "follow", 
-		       referrerPolicy: "origin",
-		      body: bloburl};
-
-	try {
-		 await fetch(url, options).then(res => res.json()).then(res => {
-			console.log('Fetch response success: ', res);
-		  }).catch(error => { console.log('Fetch response error: ', error); });
-
-
-	} catch (error) {
-	      console.log('Try response error of Fetch: ', error);
-	}
-
-}
-
 	
 // -------------------------------------------------
 
 	  
-async function get_csvDataset() {
+async function get_csvDataset(choice) {
 
-    const repoOwner = 'CodeSolutions2';
-    const repoName = 'on_the_way_to_selfrespect';
-    var url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents`;
+	const get_csvDataset_URLblob = '';
+		
+	if (choice == 0) {
+	    const repoOwner = 'CodeSolutions2';
+	    const repoName = 'on_the_way_to_selfrespect';
+	    var url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents`;
 
-	var url_vec = [];
-	await fetch(url).then(res => res.json()).then(data => {
+	    var url_vec = [];
+	    await fetch(url).then(res => res.json()).then(data => {
 		    data.forEach(file => {
 		      if (file.type === 'file' && file.name.match(/.(csv|txt)$/i)) {
 			url_vec.push(file.download_url);
@@ -414,15 +403,19 @@ async function get_csvDataset() {
 		  }).catch(error => { outp.innerHTML += error; });
 
    
-	const get_csvDataset_URLblob = url_vec[0];
-	
+	    get_csvDataset_URLblob = url_vec[0];
+	} else {
+	    get_csvDataset_URLblob = data;
+	}
+    
 	return get_csvDataset_URLblob;
 }
 
-	  
+	
 // -------------------------------------------------
 
-async function print_a_csvDataset(csvDataset){
+	
+async function csvDataset_2_dictionary(csvDataset, num_of_classes){
 
 	let X = [];
 	let Y = [];
@@ -455,7 +448,7 @@ async function print_a_csvDataset(csvDataset){
 	// console.log('ys: ', ys);  // shape: Array [ 34 ]
 	
 	// ys needs to be in one-hot form, size [34, 5]
-	ys = tf.oneHot(ys, 5);  // Array [34, 5]
+	ys = tf.oneHot(ys, num_of_classes);  // Array [34, 5]
 	// console.log('ys: ', ys);
 	
 	return {xs: xs, ys: ys};
@@ -469,16 +462,18 @@ async function train_flash_number_model() {
 
 	// Read dataset from location to tensorflow csvDataset object
 	// https://js.tensorflow.org/api/1.0.0/
+
+	// get_csvDataset(choice)
 	
-	await get_csvDataset('flash_number')
+	await get_csvDataset(1)
 		.then(async function(get_csvDataset_URLblob) { const csvDataset = await tf.data.csv(get_csvDataset_URLblob, { columnConfigs: { flash_number: {isLabel: true} } }); return csvDataset; })
-		.then(async function(csvDataset) { const csvModel_obj = await print_a_csvDataset(csvDataset); return csvModel_obj; })
-		.then(async function(csvModel_obj) { flash_number_model.compile({optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ["accuracy"]});  return csvModel_obj; })
-		.then(async function(csvModel_obj) { 
-			// console.log('csvModel_obj.xs: ', csvModel_obj.xs); // Array [34, 4]
-			// console.log('csvModel_obj.ys: ', csvModel_obj.ys); // Array [34, 5]
-			const history = await flash_number_model.fit(csvModel_obj.xs, csvModel_obj.ys, { batchSize: 1, epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { 
-			// console.log(epoch + ', loss: ' + logs.loss + ', accuracy: ' + logs.acc); 
+		.then(async function(csvDataset) { const dict_obj = await csvDataset_2_dictionary(csvDataset, 5); return dict_obj; })
+		.then(async function(dict_obj) { flash_number_model.compile({optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ["accuracy"]});  return dict_obj; })
+		.then(async function(dict_obj) { 
+			// console.log('dict_obj.xs: ', dict_obj.xs); // Array [34, 4]
+			// console.log('dict_obj.ys: ', dict_obj.ys); // Array [34, 5]
+			const history = await flash_number_model.fit(dict_obj.xs, dict_obj.ys, { batchSize: 1, epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { 
+			console.log(epoch + ', loss: ' + logs.loss + ', accuracy: ' + logs.acc); 
 			} } });
 			// console.log('history: ', history);
 		})
@@ -495,23 +490,35 @@ async function predict_w_pretrained_flash_number_model() {
 	// Give previous round data
 	const xs_test = tf.tensor2d([round_accuracy, total_accuracy, response_time, presentation_time_interval], [1, 4]);
 	// console.log('xs_test : ', xs_test);
+
+	const prediction = flash_number_model.predict( xs_test );
+	console.log('prediction : ', prediction);
 	
-	return flash_number_model.predict( xs_test );
+	return prediction;
 }
 
 
 // -------------------------------------------------
 
+	
 async function train_presentation_time_interval_model() {
 
 	// Read dataset from location to tensorflow csvDataset object
-	await get_csvDataset('presentation_time_interval')
+	await get_csvDataset(0)
 		.then(async function(get_csvDataset_URLblob) { const csvDataset = await tf.data.csv(get_csvDataset_URLblob, { columnConfigs: { presentation_time_interval: {isLabel: true} } }); return csvDataset; })
-		.then(async function(csvDataset) { const flattenedDataset = await csvDataset.map(({xs, ys}) => { return {xs:Object.values(xs), ys:Object.values(ys)}; }); return flattenedDataset; })
-		.then(async function(flattenedDataset) { presentation_time_interval_model.compile({optimizer: 'adam', loss: 'sparse_categorical_crossentropy', metrics: ["accuracy"]});  return flattenedDataset; })
-		.then(async function(flattenedDataset) {  await presentation_time_interval_model.fitDataset(flattenedDataset, { epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { console.log(epoch + ':' + logs.loss); } } }); return presentation_time_interval_model; })
-		.then(async function(presentation_time_interval_model) { const saveResults = await presentation_time_interval_model.save('localstorage://presentation_time_interval_model');  })
+		.then(async function(csvDataset) { const dict_obj = await csvDataset_2_dictionary(csvDataset, 3); return dict_obj; })
+		.then(async function(dict_obj) { presentation_time_interval_model.compile({optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ["accuracy"]});  return dict_obj; })
+		.then(async function(dict_obj) { 
+			// console.log('dict_obj.xs: ', dict_obj.xs); // Array [34, 4]
+			// console.log('dict_obj.ys: ', dict_obj.ys); // Array [34, 5]
+			const history = await presentation_time_interval_model.fit(dict_obj.xs, dict_obj.ys, { batchSize: 1, epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { 
+			console.log(epoch + ', loss: ' + logs.loss + ', accuracy: ' + logs.acc); 
+			} } });
+			// console.log('history: ', history);
+		})
+		.then(async function(history) { const saveResults = await presentation_time_interval_model.save('localstorage://presentation_time_interval_model');  })
 	;
+	
 }
 
 
@@ -520,10 +527,13 @@ async function predict_w_pretrained_presentation_time_interval_model() {
 	const presentation_time_interval_model = await tf.loadLayersModel('localstorage://presentation_time_interval_model');
 
 	// Give previous round data
-	let out = presentation_time_interval_model.predict( [round_accuracy, total_accuracy, response_time, flash_number] );
-	console.log('out: ' + out);
+	const xs_test = tf.tensor2d([round_accuracy, total_accuracy, response_time, presentation_time_interval], [1, 4]);
+	// console.log('xs_test : ', xs_test);
+
+	const prediction = flash_number_model.predict( xs_test );
+	console.log('prediction : ', prediction);
 	
-	return out;
+	return prediction;
 }
 
 	  
@@ -543,7 +553,7 @@ async function listen_for_user_clicks() {
 		.then(async function() { await start_one_eventlister(4); })
 		.then(async function() { await start_one_eventlister(5); })
 		.then(async function() { await start_one_eventlister(6); })
-		.then(function() { document.getElementById("resetresponse_button").style = 'block'; })
+		.then(function() { document.getElementById("resetresponse_button").style.display = 'block'; })
 	;
 	
 }
@@ -563,7 +573,7 @@ async function stop_listening_for_user_clicks() {
 		.then(async function() { await stop_one_eventlister(5); })
 		.then(async function() { await stop_one_eventlister(6); })
 		.then(async () => { await new Promise(r => setTimeout(r, 200)); })
-		.then(function() { document.getElementById("resetresponse_button").style = 'none'; })
+		.then(function() { document.getElementById("resetresponse_button").style.display = "none"; })
 		;
 
 	endTime = await currentTime();
@@ -597,16 +607,28 @@ async function calculate_sequence_selection_correct(){
 async function verify_user_clicks(){
 
 	// ------------------------
-	console.log('IN verify_user_clicks: order - ', order); // Array(3) [ 1, 5, 3 ]
-	const order_string = order.toString();
+	// Hide the canvas
+	// ------------------------
+	// Make canvas display setting not visible
+	document.getElementById("canvasElement0").style.display = "none";
+	document.getElementById("canvasElement1").style.display = "none";
+	document.getElementById("canvasElement2").style.display = "none";
+	document.getElementById("canvasElement3").style.display = "none";
+	document.getElementById("canvasElement4").style.display = "none";
+	document.getElementById("canvasElement5").style.display = "none";
+	document.getElementById("canvasElement6").style.display = "none";
 	// ------------------------
 
+	
 	// ------------------------
+	// Calculate accuracy
+	// ------------------------
+	console.log('IN verify_user_clicks: order - ', order); // Array(3) [ 1, 5, 3 ]
+	const order_string = order.toString();
+	
 	console.log('IN verify_user_clicks: user_click - ', user_click);
 	const user_click_string = user_click.toString();
 	
-	// ------------------------
-
 	round_accuracy = (accuracy0+accuracy1)/order.length;
 	total_accuracy = (total_accuracy + round_accuracy)/2;
 
@@ -614,31 +636,31 @@ async function verify_user_clicks(){
 	outp.innerHTML = ' Round accuracy: ' + round_accuracy + ', Total accuracy: ' + total_accuracy + '<br/>';
 
 	// ------------------------
-	
-	// Save to dataset
-	// var data = ['round_accuracy', 'total_accuracy', 'response_time', 'presentation_time_interval', 'flash_number', '\n']; 
-	// var data = ['round_accuracy', 'total_accuracy', 'response_time', 'presentation_time_interval', 'flash_number\n']; 
 
-	// Not correct, appends the data in one long row
-	// data.push([round_accuracy, total_accuracy, response_time, presentation_time_interval, flash_number]); 
-
-	// Not correct: It returns but it leaves the first column empty, so data is shifted by one column to the right
-	// data.push([round_accuracy, total_accuracy, response_time, presentation_time_interval, flash_number+'\n']);
 	
+	// ------------------------
+	// Save round data as an array
+	// ------------------------
 	data.push([round_accuracy, total_accuracy, response_time, presentation_time_interval, flash_number]+'\n'); 
-
 	// ------------------------
 
+	
+	// ------------------------
+	// Print accuracy results
+	// ------------------------
 	if (order_string == user_click_string) {
 		// Correct 
 		outp.innerHTML = "Correct: the pattern was " + order_string + ", you performed " + user_click_string + "</br>";
 	} else {
 		outp.innerHTML = "Incorrect: the pattern was " + order_string + ", you performed " + user_click_string + "</br>";
 	}
+	// ------------------------
 
-  // Temporary Self-respect Wisdom messages in order of wisdom rating
-  // In order from least wise to most wise
-  var array0 = ["To know 'the value of your things' is to maximize one's resources to accomplish a goal. Having self-respect means to know the values of your things.", 
+
+	// ------------------------
+	// Print a Self-respect Wisdom messages so that users learn self-respect (Goal of playing the game)
+	// ------------------------
+	var array0 = ["To know 'the value of your things' is to maximize one's resources to accomplish a goal. Having self-respect means to know the values of your things.", 
                 "When one uses their resources in the best possible way without complaining of lack to realize a goal, one is often more responsible to manage more resources (ie: money, opportunity, work, etc). Having self-respect means to realize a goal without complaining.", 
                 "People/society/'the system' reinforce 'states of being and doing'. People who have success and those who do not have suceess have experiences that reinforce their state of suceess and non-success. Having self-respect means to change your actions daily so that you reinforce success in your life.", 
                 "Following age, gender, race, and religion paradigms could lead to discrimination, violence, poor decision making, self-disrespect, disrespect to others, lonliness, and gossiping. Having self-respect means to not pay attention to age, gender, race, and religion paradigms, but focus on associations created by education, skill, and practice because they allow for societal success.",
@@ -647,13 +669,32 @@ async function verify_user_clicks(){
                "One believes that they are suffering because they only look at the problem from one way. When you look at the problem from multiple perspectives you can see that you are not suffering. Having self-respect means to stay active, and take small actions and steps to change the situation.",
                "People who participate in illegal, irresponsible activities, and lying participate because they believe that they can not obtain societal success without these behaviors. They lack self-respect because there are different ways to behave that are accepted by society to obtain success, taking unnecessary risk to loose one's freedom, money, job, home, or life is a form of self-disrespect. Having self-respect means to not take unnecessary risks, such that one's dignity of one's character is not lost.",
 	       "People who participate in risky activities (lying, joking, etc) may have the luxery to do so because their character is established and trusted in society, such that their dignity, financial stability, and societal reputation are not damaged. Having self-respect means to determine whether you have the 'luxery to participate in risky activities', meaning established enough in society to sustain one's life and character.",
-	       "If one is not yet established in society, like a graduate, their societal reputation strongly depends on what others say and think about them. For this reason, non-established individuals who eventually become established have mentors and positive people honestly speaking about their abilities. Having self-respect as a non-established individual means to not participate in risky activities that may negatively influence people's opinions of you (ie: associate with people who think of you poorly/negatively, lying, joking, etc.)."];
-  
-  const selfRespect_wisdom_message_dict = Object.fromEntries(array0.map((key, index) => [index, key]));
-	outp.innerHTML += selfRespect_wisdom_message_dict[run_it_count] + "</br>";
+	       "If one is not yet established in society, like a graduate, their societal reputation strongly depends on what others say and think about them. For this reason, non-established individuals who eventually become established have mentors and positive people honestly speaking about their abilities. Having self-respect as a non-established individual means to not participate in risky activities that may negatively influence people's opinions of you (ie: associate with people who think of you poorly/negatively, lying, joking, etc.).",
+	       "Believing that you are less good, not worthy, or that you need to be forgiven all the time, means that you disrespect your self. Self-respect is knowing that one can always 'do better', learn, and achieve the necessary things in life to live in society responsibily and happily; proper esteem or regard for the dignity of one's character."];
+
+	const ind = run_it_count % array0.length; // allow messages to cycle wrt the length of array0
+  	const selfRespect_wisdom_message_dict = Object.fromEntries(array0.map((key, index) => [index, key]));
+	
+	outp.innerHTML += selfRespect_wisdom_message_dict[ind] + "</br>";
+	// ------------------------
+	
 
 	// ------------------------
+	// Print a small map of where the user is on their path to self-respect
+	// ------------------------
+	outp.innerHTML += 'On-the-way-to-self-respect map: you have seen '  + run_it_count + ' self-respect messages! You are on your way to self-respect! ⬆️' + '</br>;
+	// ------------------------
 
+
+	// ------------------------
+	// Make inputs visible for self-respect message sharing 
+	// ------------------------
+	document.getElementById("self_respect_wisdom_message_input_label").style.display = "block";
+	document.getElementById("self_respect_wisdom_message_input").style.display = "block";
+	document.getElementById("submit_button").style.display = "block";
+	// ------------------------
+
+	
 	// Reset user_click
 	user_click = [];
 
@@ -661,7 +702,53 @@ async function verify_user_clicks(){
 
 }
 
+// -------------------------------------------------
 
+async function post_text_form() {
+	
+  // Create <form> element to submit parameters to endpoint
+  var form = document.createElement('form');
+	
+  form.setAttribute('method', 'POST'); 
+
+  // Step 0: The browser navigates to the URL given in the action attribute : the user is taken away from the current page and redirected to a new page.
+  // The action attribute is used to indicate where the form’s data is sent to when it is submitted.
+	
+  var url = "https://script.google.com/macros/s/AKfycbzLVDIXdxw8MH-XO9d0wVApvykUOCmvWScnL5n6VGmEE4E-8KbfKM2rpuOPWHdEKC4cBA/exec";
+	
+  form.setAttribute('action', url);
+	
+  // The form submission result will open in a new tab or window, depending on the user's browser settings.
+  // form.setAttribute('target', "_blank");
+	
+  form.setAttribute('headers', {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"});
+
+  const wisdom_message = document.getElementById("self_respect_wisdom_message").value;
+  
+  // Just use arrays: each column is a form variable
+  let type_parameters = ['text', 'submit'];
+  var name_parameters = ['key', 'confirm_submit'] 
+  var value_parameters = [wisdom_message, 'Submit'];
+	
+  type_parameters.forEach(async function(type_val, index) {
+	  let type = type_val;
+	  let name = name_parameters[index];
+	  let value = value_parameters[index];
+	  
+    var input = document.createElement('input');
+    input.innerHTML = '<input style="display:none;" type=' +type+ ' name=' +name+ 'value=' +value+ '>';
+          
+     form.appendChild(input);
+    });
+
+  // Add form to page and submit it to open the endpoint.
+  document.body.appendChild(form);
+	
+  form.submit();
+  
+}  // end of post_text_form
+
+	
 // -------------------------------------------------
 	
 
