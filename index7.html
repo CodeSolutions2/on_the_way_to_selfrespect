@@ -797,6 +797,7 @@ async function verify_user_clicks(){
 
 	// Print to screen: user accuracy
 	outp.innerHTML = "";
+	outp.innerHTML += '<hr />';
 	outp.innerHTML += ' Round accuracy: ' + round_accuracy + ', Total accuracy: ' + total_accuracy + '<br/><hr />';
 	// ------------------------
 
@@ -853,9 +854,9 @@ async function verify_user_clicks(){
 	// ------------------------
 	// Make inputs visible for self-respect message sharing 
 	// ------------------------
-	document.getElementById("self_respect_wisdom_message_input_label").style.display = "block";
-	document.getElementById("self_respect_wisdom_message_input").style.display = "block";
-	document.getElementById("submit_button").style.display = "block";
+	document.getElementById("self_respect_wisdom_message_input_label").style.display = "none";
+	document.getElementById("self_respect_wisdom_message_input").style.display = "none";
+	document.getElementById("submit_button").style.display = "none";
 	// ------------------------
 
 
@@ -877,7 +878,12 @@ async function verify_user_clicks(){
 async function post_text_email() {
 
 	const wisdom_message = document.getElementById("self_respect_wisdom_message_input").value;
-	
+
+	document.getElementById("self_respect_wisdom_message_input_label").style.display = "none";
+	document.getElementById("self_respect_wisdom_message_input").style.display = "none";
+	document.getElementById("submit_button").style.display = "none";
+
+	outp.innerHTML += 'Thank you for your submission!' + '</br><hr />';
 
 }
 
