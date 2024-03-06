@@ -704,7 +704,7 @@ async function listen_for_user_clicks() {
 		.then(async function() { await start_one_eventlister(4); })
 		.then(async function() { await start_one_eventlister(5); })
 		.then(async function() { await start_one_eventlister(6); })
-		.then(function() { document.getElementById("resetresponse_button").style.display = 'block'; })
+		.then(function() { document.getElementById("resetresponse_button").style.display = 'block'; document.getElementById("run_it_button").style.display = 'none';})
 	;
 	
 }
@@ -818,7 +818,7 @@ async function verify_user_clicks(){
                 "When one uses their resources in the best possible way without complaining of lack to realize a goal, one is often more responsible to manage more resources (ie: money, opportunity, work, etc). Having self-respect means to realize a goal without complaining.", 
                 "People/society/'the system' reinforce 'states of being and doing'. People who have success and those who do not have suceess have experiences that reinforce their state of suceess and non-success. Having self-respect means to change your actions daily so that you reinforce success in your life.", 
                 "Following age, gender, race, and religion paradigms could lead to discrimination, violence, poor decision making, self-disrespect, disrespect to others, lonliness, and gossiping. Having self-respect means to not pay attention to age, gender, race, and religion paradigms, but focus on associations created by education, skill, and practice because they allow for societal success.",
-               "Some people who have low self-respect practice lying due to fear of not being able to obtain the things that they need in life, and they even lie when they do not need to lie because it becomes an engrained response mechanism. Having self-respect means to be aware that lying is an excuse to not be present, have the courage to participate honestly in difficult situations without causing offense and/or violence.",
+               "Some people who have low self-respect may practice lying due to fear of not being able to obtain the things that they need in life, and they even lie when they do not need to lie because it becomes an engrained response mechanism. Having self-respect means to be aware that lying is an excuse to not be present, have the courage to participate honestly in difficult situations without causing offense and/or violence.",
                "Having self-respect means to not blindly follow people or connect yourself to others such that your life and their lives are directly influenced by the other person's actions. One does not have control over other people's lives, one can only control their own life. Having self-respect and respect for others means to make boundaries (ie: an understanding of how one wants to be treated, or an intermediate that prevents direct interaction) such that other people's actions/lives do not directly influence your life, and similarly your life actions should not directly influence other people's lives.",
                "One believes that they are suffering because they only look at the problem from one way. When you look at the problem from multiple perspectives you can see that you are not suffering. Having self-respect means to stay active, and take small actions and steps to change the situation.",
                "People who participate in illegal, irresponsible activities, and lying participate because they believe that they can not obtain societal success without these behaviors. They lack self-respect because there are different ways to behave that are accepted by society to obtain success, taking unnecessary risk to loose one's freedom, money, job, home, or life is a form of self-disrespect. Having self-respect means to not take unnecessary risks, such that one's dignity of one's character is not lost.",
@@ -848,6 +848,11 @@ async function verify_user_clicks(){
 	document.getElementById("submit_button").style.display = "block";
 	// ------------------------
 
+	// ------------------------
+	// Make run a new game button visible
+	// ------------------------
+	document.getElementById("run_it_button").style.display = 'block';
+	// ------------------------
 	
 	// Reset user_click
 	user_click = [];
