@@ -418,26 +418,19 @@ async function data_2_dictionary(data, num_of_classes, label_name){
 	let xs_ind = [];
 	let ys_ind = [];
 
-	//const not_empty = (num) => num.length != 0;
+	//const not_empty = ;
 	
 	data.forEach(async function(rowdata, index) {
 
 		console.log('rowdata: ', rowdata);
 		console.log('index: ', index);
-	
+
+		let out = rowdata.split(",");
+		console.log('out: ', out);
+
 		// Remove empty columns
-		let nonempty_row = []
-		    for (let i=0; i < rowdata.length; i++){
-		      if (rowdata[i].length != 0) {
-		        nonempty_row.push(rowdata[i])
-		      }
-		    }
-
+		let nonempty_row = out.filter((num) => num.length != 0);
 		console.log('nonempty_row: ', nonempty_row);
-
-		// OR
-		//let nonempty_row_filter = rowdata.filter(not_empty);
-		//console.log('nonempty_row_filter: ', nonempty_row_filter);
 		
 		if (index == 0){
 			// header, do not save data
