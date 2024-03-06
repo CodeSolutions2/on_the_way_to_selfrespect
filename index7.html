@@ -417,6 +417,8 @@ async function data_2_dictionary(data, num_of_classes, label_name){
 
 	let xs_ind = [];
 	let ys_ind = [];
+
+	const not_empty = (num) => num.length != 0;
 	
 	data.forEach(async function(rowdata, index) {
 	
@@ -427,10 +429,17 @@ async function data_2_dictionary(data, num_of_classes, label_name){
 		        nonempty_row.push(rowdata[i])
 		      }
 		    }
+
+		console.log('nonempty_row: ', nonempty_row);
+
+		// OR
+		let nonempty_row_filter = rowdata.filter(not_empty);
+		console.log('nonempty_row_filter: ', nonempty_row_filter);
 		
 		if (index == 0){
 			// header, do not save data
 			colnum = nonempty_row.length;
+			console.log('colnum: ', colnum);
 
 			// get index for what column is xs and ys
 			for (let i=0; i < colnum; i++){
@@ -452,10 +461,11 @@ async function data_2_dictionary(data, num_of_classes, label_name){
 			X.push(x_vals);
 			Y.push(nonempty_row[ys_ind[0]]);
 		}
-
-		
 		
 	});  // end of forEach
+
+	console.log('X: ', X);
+	console.log('Y: ', Y)
 
 	// Transform to tensorflow.js
 	let rownum = X.length;
@@ -501,6 +511,7 @@ async function csvDataset_2_dictionary(csvDataset, num_of_classes){
 	// Transform to tensorflow.js
 	let rownum = X.length;
 	const xs = tf.tensor2d(X, [rownum, colnum]);  // this is size [ 34, 4 ]
+	// console.log('xs: ', xs);
 	
 	let ys = tf.tensor2d(Y, [rownum, 1], 'int32').flatten();  // flatten the 2D tensor as a 1Dtensor
 	// console.log('ys: ', ys);  // shape: Array [ 34 ]
@@ -508,6 +519,9 @@ async function csvDataset_2_dictionary(csvDataset, num_of_classes){
 	// ys needs to be in one-hot form, size [34, 5]
 	ys = tf.oneHot(ys, num_of_classes);  // Array [34, 5]
 	// console.log('ys: ', ys);
+
+
+
 	
 	return {xs: xs, ys: ys};
 }
