@@ -632,10 +632,11 @@ async function verify_user_clicks(){
 	total_accuracy = (total_accuracy + round_accuracy)/2;
 
 	// Print to screen: user accuracy
-	outp.innerHTML = ' Round accuracy: ' + round_accuracy + ', Total accuracy: ' + total_accuracy + '<br/>';
+	outp.innerHTML += ' Round accuracy: ' + round_accuracy + ', Total accuracy: ' + total_accuracy + '<br/>';
 
 	// ------------------------
 
+	<hr />
 	
 	// ------------------------
 	// Save round data as an array
@@ -655,6 +656,7 @@ async function verify_user_clicks(){
 	}
 	// ------------------------
 
+	<hr />
 
 	// ------------------------
 	// Print a Self-respect Wisdom messages so that users learn self-respect (Goal of playing the game)
@@ -676,7 +678,8 @@ async function verify_user_clicks(){
 	
 	outp.innerHTML += selfRespect_wisdom_message_dict[ind] + "</br>";
 	// ------------------------
-	
+
+	<hr />
 
 	// ------------------------
 	// Print a small map of where the user is on their path to self-respect
@@ -684,6 +687,7 @@ async function verify_user_clicks(){
 	outp.innerHTML += 'On-the-way-to-self-respect map: you have seen '  + run_it_count + ' self-respect messages! You are on your way to self-respect! ⬆️' + '</br>';
 	// ------------------------
 
+	<hr />
 
 	// ------------------------
 	// Make inputs visible for self-respect message sharing 
