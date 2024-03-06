@@ -457,9 +457,9 @@ async function data_2_dictionary(data, num_of_classes, label_name){
 			// Put in Object correctly
 			let x_vals = [];
 			xs_ind.forEach( (val, index) => {
-				x_vals.push(nonempty_row[val]);
+				x_vals.push(Number(nonempty_row[val]));
 			});
-			X.push(Number(x_vals));
+			X.push(x_vals);
 			Y.push(Number(nonempty_row[ys_ind[0]]));
 		}
 		
