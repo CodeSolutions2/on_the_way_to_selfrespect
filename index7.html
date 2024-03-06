@@ -406,6 +406,8 @@ async function get_csvDataset(choice) {
 	} else {
 	    get_csvDataset_URLblob = data;
 	}
+
+	console.log('get_csvDataset_URLblob: ', get_csvDataset_URLblob);
     
 	return get_csvDataset_URLblob;
 }
@@ -463,8 +465,9 @@ async function train_flash_number_model() {
 	// https://js.tensorflow.org/api/1.0.0/
 
 	// get_csvDataset(choice)
+	let choice = 1; // 0=use csv file in repo, 1=use data array variable
 	
-	await get_csvDataset(1)
+	await get_csvDataset(choice)
 		.then(async function(get_csvDataset_URLblob) { const csvDataset = await tf.data.csv(get_csvDataset_URLblob, { columnConfigs: { flash_number: {isLabel: true} } }); return csvDataset; })
 		.then(async function(csvDataset) { const dict_obj = await csvDataset_2_dictionary(csvDataset, 5); return dict_obj; })
 		.then(async function(dict_obj) { flash_number_model.compile({optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ["accuracy"]});  return dict_obj; })
@@ -503,7 +506,9 @@ async function predict_w_pretrained_flash_number_model() {
 async function train_presentation_time_interval_model() {
 
 	// Read dataset from location to tensorflow csvDataset object
-	await get_csvDataset(0)
+	let choice = 0; // 0=use csv file in repo, 1=use data array variable
+	
+	await get_csvDataset(choice)
 		.then(async function(get_csvDataset_URLblob) { const csvDataset = await tf.data.csv(get_csvDataset_URLblob, { columnConfigs: { presentation_time_interval: {isLabel: true} } }); return csvDataset; })
 		.then(async function(csvDataset) { const dict_obj = await csvDataset_2_dictionary(csvDataset, 3); return dict_obj; })
 		.then(async function(dict_obj) { presentation_time_interval_model.compile({optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ["accuracy"]});  return dict_obj; })
@@ -632,6 +637,7 @@ async function verify_user_clicks(){
 	total_accuracy = (total_accuracy + round_accuracy)/2;
 
 	// Print to screen: user accuracy
+	outp.innerHTML = "";
 	outp.innerHTML += ' Round accuracy: ' + round_accuracy + ', Total accuracy: ' + total_accuracy + '<br/><hr />';
 	// ------------------------
 
