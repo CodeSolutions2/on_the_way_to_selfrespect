@@ -881,8 +881,11 @@ async function post_text_form() {
 	
   // Create <form> element to submit parameters to endpoint
   var form = document.createElement('form');
+
+ form.setAttribute('method', 'POST'); 
 	
-  form.setAttribute('method', 'GET'); 
+  // form.setAttribute('method', 'GET'); 
+  // GET goes to page : https://script.google.com/macros/s/AKfycbzLVDIXdxw8MH-XO9d0wVApvykUOCmvWScnL5n6VGmEE4E-8KbfKM2rpuOPWHdEKC4cBA/exec?keyvalue%3Dtttt=
 
   // form.setAttribute('mode', 'cors'); 
   form.setAttribute('redirect', 'follow'); 
@@ -941,8 +944,8 @@ async function post_text_fetch() {
 
 	
 	let headers = {
-		//"Content-Type": "application/octet-stream", 
-		"Content-Type": "application/json;charset=UTF-8", 
+		"Content-Type": "application/octet-stream", 
+		//"Content-Type": "application/json;charset=UTF-8", 
 		"Access-Control-Allow-Origin": "*",
 		       "Connection": "keep-alive",
 		      "processData": false};
