@@ -12,6 +12,12 @@
 <button id="resetresponse_button" onclick="resetresponse()" style="display:none">resetresponse</button>	
 <button id="user_click_done_button" onclick="user_click_done()" style="display:none">DONE</button>
 
+
+<!-- Section to submit self-respect wisdom message -->
+<label for="input_text_label" id="self_respect_wisdom_message_input_label" style="display:none">Share a self-respect wisdom message! If you have some life wisdom that you would like to share with others, please submit your message below:</label>
+<input type="text" value="" placeholder="Share your self-respect wisdom message with other game users:" id="self_respect_wisdom_message_input" rows="10" cols="500" style="display:none">
+<br>
+<button id="submit_button" onclick="post_text_email()" style="display:none">Submit your wisdom message to the game</button>
 	
 <!-- -------------------------- -->
 
@@ -20,7 +26,7 @@
 
 	
 <style>
-canvas {border: 1px solid black; position: absolute; display: inline-block; z-index: 1; top: 350px;},
+canvas {border: 1px solid black; position: absolute; display: inline-block; z-index: 1; top: 100px;},
 div {position: relative; z-index: 2;},
 </style>
 
@@ -35,7 +41,7 @@ var squarelocation = [0, 1, 2, 3, 4, 5, 6];
 // Set the width and height of the canvas
 var canvasElement_width = 150;
 var canvasElement_height = canvasElement_width;
-var canvasTopStart = 350;
+var canvasTopStart = 100; // 350;
 
 const outp = document.getElementById('output');
 
