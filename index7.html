@@ -77,6 +77,7 @@ var startTime = [];
 var endTime = [];
 
 var run_it_count = 0;
+var decide_to_predict = false;
 
 
 // ----------------------------
@@ -153,11 +154,10 @@ async function initialization_of_canvasElements() {
 	// ------------------------------------------
 	// Predict flash_number based on past performance
 	// ------------------------------------------
-	// Model predicted selection
-	flash_number = await predict_w_pretrained_flash_number_model();
-	
-	if (flash_number < 3 | flash_number > 7) {
-		// Not enough data so, can not predict reliably yet - select the values randomly
+	if (decide_to_predict == true) {
+		// Model predicted selection
+		flash_number = await predict_w_pretrained_flash_number_model();
+	} else {
 		// Random selection
 		flash_number = await rand_perm([3, 4, 5, 6, 7], 1).then(async function (flash_number_array) {  const flash_number_scalar = flash_number_array.at(0); return flash_number_scalar});
 	}
@@ -168,11 +168,10 @@ async function initialization_of_canvasElements() {
 	// ------------------------------------------
 	// Predict presentation_time_interval based on past performance
 	// ------------------------------------------
-	// Model predicted selection
-	presentation_time_interval = await predict_w_pretrained_presentation_time_interval_model();
-	
-	if (presentation_time_interval != 2000 | presentation_time_interval != 1500 | presentation_time_interval != 1000) {
-		// Not enough data so, can not predict reliably yet - select the values randomly
+	if (decide_to_predict == true) {
+		// Model predicted selection
+		presentation_time_interval = await predict_w_pretrained_presentation_time_interval_model();
+	} else {
 		// Random selection
 		presentation_time_interval = await rand_perm([2000, 1500, 1000], 1).then(async function (presentation_time_interval_array) {  const presentation_time_interval_scalar = presentation_time_interval_array.at(0); return presentation_time_interval_scalar});
 	}
@@ -1039,11 +1038,14 @@ async function processEvent(event) {
 	    // Click on thhe invisible button
 	    await user_click_done();
 
-	    // Train the model every round, or every XX rounds
-	  //   if (run_it_count % 2){
-		//     await train_flash_number_model();
-		//     await train_presentation_time_interval_model();
-	 //    }
+	    // Train the model every XX rounds
+	    if (run_it_count % 2){
+		    await train_flash_number_model();
+		    await train_presentation_time_interval_model();
+		    decide_to_predict = true;
+	     } else {
+		    decide_to_predict = false;
+	    }
     }
 
     // When the user clicks the square, flash the square and make the square full color
