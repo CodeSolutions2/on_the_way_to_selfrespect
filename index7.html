@@ -544,7 +544,7 @@ async function train_flash_number_model() {
 		await get_csvDataset()
 		.then(async function(get_csvDataset_URLblob) { const csvDataset = await tf.data.csv(get_csvDataset_URLblob, { columnConfigs: { flash_number: {isLabel: true} } }); return csvDataset; })
 		.then(async function(csvDataset) { const dict_obj = await csvDataset_2_dictionary(csvDataset, 5); return dict_obj; })
-		.then(async function(dict_obj) { flash_number_model.compile({optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ["accuracy"]});  return dict_obj; })
+		.then(async function(dict_obj) { await flash_number_model.compile({optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ["accuracy"]});  return dict_obj; })
 		.then(async function(dict_obj) { 
 			// console.log('dict_obj.xs: ', dict_obj.xs); // Array [34, 4]
 			// console.log('dict_obj.ys: ', dict_obj.ys); // Array [34, 5]
@@ -558,7 +558,8 @@ async function train_flash_number_model() {
 		
 	} else {
 		// 1=use data array variable
-		await data_2_dictionary(data, 5, "flash_number").then(async function(dict_obj) { flash_number_model.compile({optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ["accuracy"]});  return dict_obj; })
+		await data_2_dictionary(data, 5, "flash_number")
+			.then(async function(dict_obj) { await flash_number_model.compile({optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ["accuracy"]});  return dict_obj; })
 		.then(async function(dict_obj) { 
 			// console.log('dict_obj.xs: ', dict_obj.xs); // Array [34, 4]
 			// console.log('dict_obj.ys: ', dict_obj.ys); // Array [34, 5]
@@ -604,7 +605,7 @@ async function train_presentation_time_interval_model() {
 	await get_csvDataset(choice)
 		.then(async function(get_csvDataset_URLblob) { const csvDataset = await tf.data.csv(get_csvDataset_URLblob, { columnConfigs: { presentation_time_interval: {isLabel: true} } }); return csvDataset; })
 		.then(async function(csvDataset) { const dict_obj = await csvDataset_2_dictionary(csvDataset, 3); return dict_obj; })
-		.then(async function(dict_obj) { presentation_time_interval_model.compile({optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ["accuracy"]});  return dict_obj; })
+		.then(async function(dict_obj) { await presentation_time_interval_model.compile({optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ["accuracy"]});  return dict_obj; })
 		.then(async function(dict_obj) { 
 			// console.log('dict_obj.xs: ', dict_obj.xs); // Array [34, 4]
 			// console.log('dict_obj.ys: ', dict_obj.ys); // Array [34, 5]
@@ -618,13 +619,12 @@ async function train_presentation_time_interval_model() {
 		
 	} else {
 		// 1=use data array variable
-		await data_2_dictionary(data, 3, "presentation_time_interval").then(async function(dict_obj) { flash_number_model.compile({optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ["accuracy"]});  return dict_obj; })
+		await data_2_dictionary(data, 3, "presentation_time_interval")
+			.then(async function(dict_obj) { await presentation_time_interval_model.compile({optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ["accuracy"]});  return dict_obj; })
 		.then(async function(dict_obj) { 
 			// console.log('dict_obj.xs: ', dict_obj.xs); // Array [34, 4]
 			// console.log('dict_obj.ys: ', dict_obj.ys); // Array [34, 5]
-			const history = await presentation_time_interval_model.fit(dict_obj.xs, dict_obj.ys, { batchSize: 1, epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { 
-			console.log(epoch + ', loss: ' + logs.loss + ', accuracy: ' + logs.acc); 
-			} } });
+			const history = await presentation_time_interval_model.fit(dict_obj.xs, dict_obj.ys, { batchSize: 1, epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { console.log(epoch + ', loss: ' + logs.loss + ', accuracy: ' + logs.acc); } } });
 			// console.log('history: ', history);
 		})
 		.then(async function(history) { const saveResults = await presentation_time_interval_model.save('localstorage://presentation_time_interval_model');  })
