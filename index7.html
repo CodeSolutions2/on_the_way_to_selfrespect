@@ -421,6 +421,9 @@ async function data_2_dictionary(data, num_of_classes, label_name){
 	const not_empty = (num) => num.length != 0;
 	
 	data.forEach(async function(rowdata, index) {
+
+		console.log('rowdata: ', rowdata);
+		console.log('index: ', index);
 	
 		// Remove empty columns
 		let nonempty_row = []
