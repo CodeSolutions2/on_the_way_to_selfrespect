@@ -26,7 +26,7 @@
 
 	
 <style>
-canvas {border: 1px solid black; position: absolute; display: inline-block; z-index: 1; top: 100px;},
+canvas {border: 1px solid black; position: absolute; display: inline-block; z-index: 1; top: 150px;},
 div {position: relative; z-index: 2;},
 </style>
 
@@ -41,7 +41,7 @@ var squarelocation = [0, 1, 2, 3, 4, 5, 6];
 // Set the width and height of the canvas
 var canvasElement_width = 150;
 var canvasElement_height = canvasElement_width;
-var canvasTopStart = 100; // 350;
+var canvasTopStart = 150; // 350;
 
 const outp = document.getElementById('output');
 
@@ -311,6 +311,13 @@ async function run_it() {
 	// Remove all messages
 	outp.innerHTML = "";
 	
+	// ------------------------
+
+	// Remove inputs for self-respect message sharing 
+	document.getElementById("self_respect_wisdom_message_input_label").style.display = "none";
+	document.getElementById("self_respect_wisdom_message_input").style.display = "none";
+	document.getElementById("submit_button").style.display = "none";
+
 	// ------------------------
 
 	// Make canvas display setting visible
@@ -843,6 +850,14 @@ async function verify_user_clicks(){
 	outp.innerHTML += 'On-the-way-to-self-respect map: you have seen '  + run_it_count + ' self-respect messages! You are on your way to self-respect! ⬆️' + '</br><hr />';
 	// ------------------------
 
+	// ------------------------
+	// Make inputs visible for self-respect message sharing 
+	// ------------------------
+	document.getElementById("self_respect_wisdom_message_input_label").style.display = "block";
+	document.getElementById("self_respect_wisdom_message_input").style.display = "block";
+	document.getElementById("submit_button").style.display = "block";
+	// ------------------------
+
 
 	// ------------------------
 	// Make run a new game button visible
@@ -857,6 +872,16 @@ async function verify_user_clicks(){
 
 }
 
+// -------------------------------------------------
+
+async function post_text_email() {
+
+	const wisdom_message = document.getElementById("self_respect_wisdom_message_input").value;
+	
+
+}
+
+	
 // -------------------------------------------------
 
 
