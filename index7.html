@@ -184,7 +184,7 @@ async function initialization_of_canvasElements() {
 	canvasElement6.height = canvasElement_height;
 
 	square_config = await rand_perm([0, 1, 2], 1).then(async function (square_config_array) {  const square_config_scalar = square_config_array.at(0); return square_config_scalar});
-	console.log("square_config: ", square_config);
+	// console.log("square_config: ", square_config);
 	
 	if (square_config == 0) {
 		// 0: row
@@ -322,9 +322,12 @@ async function run_it() {
 
 	// -------------------------------------------------
 
+	document.getElementById("run_it_button").style.display = 'none';
+
+	// -------------------------------------------------
+
 	order = await initialization_of_canvasElements()
 		.then(async function(flash_number) { 
-			console.log("flash_number: ", flash_number);
 			if (flash_number == 3) {
 				order = await flash_sequence_difficulty3();
 			} else if (flash_number == 4) {
@@ -704,7 +707,7 @@ async function listen_for_user_clicks() {
 		.then(async function() { await start_one_eventlister(4); })
 		.then(async function() { await start_one_eventlister(5); })
 		.then(async function() { await start_one_eventlister(6); })
-		.then(function() { document.getElementById("resetresponse_button").style.display = 'block'; document.getElementById("run_it_button").style.display = 'none';})
+		.then(function() { document.getElementById("resetresponse_button").style.display = 'block'; })
 	;
 	
 }
@@ -774,10 +777,10 @@ async function verify_user_clicks(){
 	// ------------------------
 	// Calculate accuracy
 	// ------------------------
-	console.log('IN verify_user_clicks: order - ', order); // Array(3) [ 1, 5, 3 ]
+	// console.log('IN verify_user_clicks: order - ', order); // Array(3) [ 1, 5, 3 ]
 	const order_string = order.toString();
 	
-	console.log('IN verify_user_clicks: user_click - ', user_click);
+	// console.log('IN verify_user_clicks: user_click - ', user_click);
 	const user_click_string = user_click.toString();
 	
 	round_accuracy = (accuracy0+accuracy1)/order.length;
