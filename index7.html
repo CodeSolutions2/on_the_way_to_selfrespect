@@ -435,6 +435,10 @@ async function data_2_dictionary(data, num_of_classes, label_name){
 		
 		if (index == 0){
 			// header, do not save data
+
+			// Obtain the number of columns in the xs matrix
+			colnum = nonempty_row.length - 1;
+			console.log('colnum: ', colnum);
 			
 			// get index for what column is xs and ys
 			for (let i=0; i < colnum; i++){
@@ -444,10 +448,6 @@ async function data_2_dictionary(data, num_of_classes, label_name){
 				xs_ind.push(Number(i));
 			      }
 			}
-
-			// Obtain the number of columns in the xs matrix
-			colnum = xs_ind.length;
-			console.log('colnum: ', colnum);
 			
 			console.log('xs_ind: ', xs_ind);
 			console.log('ys_ind: ', ys_ind);
