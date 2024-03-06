@@ -414,6 +414,9 @@ async function data_2_dictionary(data, num_of_classes, label_name){
 	let X = [];
 	let Y = [];
 	let colnum;
+
+	let xs_ind = [];
+	let ys_ind = [];
 	
 	data.forEach(async function(rowdata, index) {
 	
@@ -430,15 +433,16 @@ async function data_2_dictionary(data, num_of_classes, label_name){
 			colnum = nonempty_row.length;
 
 			// get index for what column is xs and ys
-			let xs_ind = [];
-			let ys_ind = [];
-			for (let i=0; i < nonempty_row.length; i++){
+			for (let i=0; i < colnum; i++){
 			      if (nonempty_row[i] == label_name) {
 			        ys_ind.push(i);
 			      } else {
 				xs_ind.push(i);
 			      }
 			}
+			console.log('xs_ind: ', xs_ind);
+			console.log('ys_ind: ', ys_ind);
+			
 		} else {
 			// Put in Object correctly
 			let x_vals = [];
