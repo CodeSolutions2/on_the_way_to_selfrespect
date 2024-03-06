@@ -417,8 +417,6 @@ async function data_2_dictionary(data, num_of_classes, label_name){
 
 	let xs_ind = [];
 	let ys_ind = [];
-
-	//const not_empty = ;
 	
 	data.forEach(async function(rowdata, index) {
 
@@ -437,17 +435,20 @@ async function data_2_dictionary(data, num_of_classes, label_name){
 		
 		if (index == 0){
 			// header, do not save data
-			colnum = nonempty_row.length;
-			console.log('colnum: ', colnum);
-
+			
 			// get index for what column is xs and ys
 			for (let i=0; i < colnum; i++){
 			      if (nonempty_row[i] == label_name) {
-			        ys_ind.push(i);
+			        ys_ind.push(Number(i));
 			      } else {
-				xs_ind.push(i);
+				xs_ind.push(Number(i));
 			      }
 			}
+
+			// Obtain the number of columns in the xs matrix
+			colnum = xs_ind.length;
+			console.log('colnum: ', colnum);
+			
 			console.log('xs_ind: ', xs_ind);
 			console.log('ys_ind: ', ys_ind);
 			
@@ -457,8 +458,8 @@ async function data_2_dictionary(data, num_of_classes, label_name){
 			xs_ind.forEach( (val, index) => {
 				x_vals.push(nonempty_row[val]);
 			});
-			X.push(x_vals);
-			Y.push(nonempty_row[ys_ind[0]]);
+			X.push(Number(x_vals));
+			Y.push(Number(nonempty_row[ys_ind[0]]));
 		}
 		
 	});  // end of forEach
@@ -469,13 +470,14 @@ async function data_2_dictionary(data, num_of_classes, label_name){
 	// Transform to tensorflow.js
 	let rownum = X.length;
 	const xs = tf.tensor2d(X, [rownum, colnum]);  // this is size [ 34, 4 ]
+	console.log('xs: ', xs);
 	
 	let ys = tf.tensor2d(Y, [rownum, 1], 'int32').flatten();  // flatten the 2D tensor as a 1Dtensor
-	// console.log('ys: ', ys);  // shape: Array [ 34 ]
+	console.log('ys: ', ys);  // shape: Array [ 34 ]
 	
 	// ys needs to be in one-hot form, size [34, 5]
 	ys = tf.oneHot(ys, num_of_classes);  // Array [34, 5]
-	// console.log('ys: ', ys);
+	console.log('ys: ', ys);
 	
 	return {xs: xs, ys: ys};
 }
