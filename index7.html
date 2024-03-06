@@ -13,18 +13,6 @@
 <button id="user_click_done_button" onclick="user_click_done()" style="display:none">DONE</button>
 
 	
-<!-- Temporary buttons: to be removed -->
-<button id="train_flash_number_model_button" onclick="train_flash_number_model()" style="display:block">Test flash_number_model</button>
-
-<button id="predict_w_pretrained_flash_number_model_button" onclick="predict_w_pretrained_flash_number_model()" style="display:block">Test predict_w_pretrained_flash_number_model</button>
-
-<button id="train_presentation_time_interval_model_button" onclick="train_presentation_time_interval_model()" style="display:block">Test train_presentation_time_interval_model</button>
-
-<button id="predict_w_pretrained_presentation_time_interval_model_button" onclick="predict_w_pretrained_presentation_time_interval_model()" style="display:block">Test predict_w_pretrained_presentation_time_interval_model</button>
-<!-- --------------------------------- -->
-
-
-	
 <!-- Section to submit self-respect wisdom message -->
 <label for="input_text_label" id="self_respect_wisdom_message_input_label" style="display:none">Enter text to label, each sentence separated by the \n character will be labeled:</label>
 <input type="text" value="" placeholder="Share your self-respect wisdom message with other game users:" id="self_respect_wisdom_message_input" rows="10" cols="500" style="display:none">
@@ -62,8 +50,6 @@ const outp = document.getElementById('output');
 var user_click = [];
 var order = [];
 
-// var data = ['round_accuracy', 'total_accuracy', 'response_time', 'presentation_time_interval', 'flash_number', '\n'];  // not correct
-// var data = ['round_accuracy', 'total_accuracy', 'response_time', 'presentation_time_interval', 'flash_number\n']; 
 var data = [['', 'round_accuracy', 'total_accuracy', 'response_time', 'presentation_time_interval', 'flash_number']+'\n']; 
 var presentation_time_interval = 2000;
 var flash_number = 3;
@@ -82,6 +68,7 @@ var endTime = [];
 var run_it_count = 0;
 var decide_to_predict = false;
 
+var choice = 1; // 0=use csv file in repo, 1=use data array variable
 
 // ----------------------------
 // Create all the elements
@@ -142,6 +129,7 @@ async function currentTime() {
 }
 			
 
+// -------------------------------------------------
 
 async function elapsedTime(startTime, endTime) {
 	return (endTime[0]*60*60 + endTime[1]*60 + endTime[2]) - (startTime[0]*60*60 + startTime[1]*60 + startTime[2]);
@@ -403,7 +391,6 @@ async function get_csvDataset() {
 
    
 	const get_csvDataset_URLblob = url_vec[0];
-	
 	// console.log('get_csvDataset_URLblob: ', get_csvDataset_URLblob);
     
 	return get_csvDataset_URLblob;
@@ -423,25 +410,25 @@ async function data_2_dictionary(data, y_choices, label_name){
 	
 	data.forEach(async function(rowdata, index) {
 
-		console.log('rowdata: ', rowdata);
-		console.log('index: ', index);
+		// console.log('rowdata: ', rowdata);
+		// console.log('index: ', index);
 
 		// Remove all \n from the string rowdata
 		rowdata = rowdata.replace(/\n/g, '');
 		
 		let out = rowdata.split(",");
-		console.log('out: ', out);
+		// console.log('out: ', out);
 
 		// Remove empty columns
 		let nonempty_row = out.filter((num) => num.length != 0);
-		console.log('nonempty_row: ', nonempty_row);
+		// console.log('nonempty_row: ', nonempty_row);
 		
 		if (index == 0){
 			// header, do not save data
 
 			// Obtain the number of columns in the xs matrix
 			colnum = nonempty_row.length - 1;
-			console.log('colnum: ', colnum);
+			// console.log('colnum: ', colnum);
 			
 			// get index for what column is xs and ys
 			// it needs to check all values in nonempty_row
@@ -452,9 +439,8 @@ async function data_2_dictionary(data, y_choices, label_name){
 				xs_ind.push(Number(i));
 			      }
 			}
-			
-			console.log('xs_ind: ', xs_ind);
-			console.log('ys_ind: ', ys_ind);
+			// console.log('xs_ind: ', xs_ind);
+			// console.log('ys_ind: ', ys_ind);
 			
 		} else {
 			// Put in Object correctly
@@ -468,8 +454,8 @@ async function data_2_dictionary(data, y_choices, label_name){
 		
 	});  // end of forEach
 
-	console.log('X: ', X);
-	console.log('Y: ', Y)
+	// console.log('X: ', X);
+	// console.log('Y: ', Y)
 
 	// -------------------------------------------------
 	
@@ -486,16 +472,16 @@ async function data_2_dictionary(data, y_choices, label_name){
 	// Transform to tensorflow.js
 	let rownum = X.length;
 	const xs = tf.tensor2d(X, [rownum, colnum]);  // this is size [ 34, 4 ]
-	console.log('xs: ', xs);
+	// console.log('xs: ', xs);
 
 	// -------------------------------------------------
 	
 	let ys = tf.tensor2d(Yencoded, [rownum, 1], 'int32').flatten();  // flatten the 2D tensor as a 1Dtensor
-	console.log('ys: ', ys);  // shape: Array [ 34 ]
+	// console.log('ys: ', ys);  // shape: Array [ 34 ]
 	
 	// ys needs to be in one-hot form, size [34, 5]
 	ys = tf.oneHot(ys, num_of_classes);  // Array [34, 5]
-	console.log('ys: ', ys);
+	// console.log('ys: ', ys);
 
 	// -------------------------------------------------
 	
@@ -569,8 +555,6 @@ async function train_flash_number_model() {
 	// Read dataset from location to tensorflow csvDataset object
 	// https://js.tensorflow.org/api/1.0.0/
 
-	let choice = 1; // 0=use csv file in repo, 1=use data array variable
-	
 	if (choice == 0) {
 		// 0=use csv file in repo
 		await get_csvDataset()
@@ -620,7 +604,7 @@ async function predict_w_pretrained_flash_number_model() {
 
 	// Get probability value as a number
 	const probability_array = await result.data(); // correct
-	console.log('probability_array : ', probability_array);
+	// console.log('probability_array : ', probability_array);
 
 	// Index of maximum softmax probability 
 	const index = result.as1D().argMax().dataSync()[0];
@@ -641,9 +625,6 @@ async function predict_w_pretrained_flash_number_model() {
 async function train_presentation_time_interval_model() {
 
 	// Read dataset from location to tensorflow csvDataset object
-
-	let choice = 1; // 0=use csv file in repo, 1=use data array variable
-	
 	if (choice == 0) {
 		// 0=use csv file in repo
 	await get_csvDataset(choice)
@@ -693,7 +674,7 @@ async function predict_w_pretrained_presentation_time_interval_model() {
 
 	// Get probability value as a number
 	const probability_array = await result.data(); // correct
-	console.log('probability_array : ', probability_array);
+	// console.log('probability_array : ', probability_array);
 
 	// Index of maximum softmax probability 
 	const index = result.as1D().argMax().dataSync()[0];
@@ -884,6 +865,8 @@ async function post_text_form() {
   var form = document.createElement('form');
 	
   form.setAttribute('method', 'POST'); 
+
+  form.setAttribute('mode', 'cors'); 
 
   // Step 0: The browser navigates to the URL given in the action attribute : the user is taken away from the current page and redirected to a new page.
   // The action attribute is used to indicate where the form’s data is sent to when it is submitted.
