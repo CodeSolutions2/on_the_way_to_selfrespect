@@ -17,7 +17,9 @@
 <label for="input_text_label" id="self_respect_wisdom_message_input_label" style="display:none">Enter text to label, each sentence separated by the \n character will be labeled:</label>
 <input type="text" value="" placeholder="Share your self-respect wisdom message with other game users:" id="self_respect_wisdom_message_input" rows="10" cols="500" style="display:none">
 <br>
-<button id="submit_button" onclick="post_text_form()" style="display:none">Submit your wisdom message to the game</button>
+<button id="submit_button" onclick="post_text_form()" style="display:none">Form: Submit your wisdom message to the game</button>
+<br>
+<button id="post_text_fetch_button" onclick="post_text_fetch()" style="display:none">Fetch: Submit your wisdom message to the game</button>
 
 <!-- -------------------------- -->
 
@@ -316,6 +318,7 @@ async function run_it() {
 	document.getElementById("self_respect_wisdom_message_input_label").style.display = "none";
 	document.getElementById("self_respect_wisdom_message_input").style.display = "none";
 	document.getElementById("submit_button").style.display = "none";
+	document.getElementById("post_text_fetch_button").style.display = "none";
 	// ------------------------
 
 	// Make canvas display setting visible
@@ -856,6 +859,7 @@ async function verify_user_clicks(){
 	document.getElementById("self_respect_wisdom_message_input_label").style.display = "block";
 	document.getElementById("self_respect_wisdom_message_input").style.display = "block";
 	document.getElementById("submit_button").style.display = "block";
+	document.getElementById("post_text_fetch_button").style.display = "block";
 	// ------------------------
 
 	// ------------------------
@@ -880,7 +884,7 @@ async function post_text_form() {
 	
   form.setAttribute('method', 'POST'); 
 
-  form.setAttribute('mode', 'cors'); 
+  // form.setAttribute('mode', 'cors'); 
   form.setAttribute('redirect', 'follow'); 
 
   // Step 0: The browser navigates to the URL given in the action attribute : the user is taken away from the current page and redirected to a new page.
@@ -893,7 +897,8 @@ async function post_text_form() {
   // The form submission result will open in a new tab or window, depending on the user's browser settings.
   // form.setAttribute('target', "_blank");
 	
-  form.setAttribute('headers', {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"});
+  // form.setAttribute('headers', {"Content-Type": "application/json;charset=UTF-8", "Access-Control-Allow-Origin": "*"});
+  form.setAttribute('headers', {"Content-Type": "application/json;charset=UTF-8"});
 
   const wisdom_message = document.getElementById("self_respect_wisdom_message_input").value;
   
@@ -920,6 +925,53 @@ async function post_text_form() {
   
 }  // end of post_text_form
 
+// -------------------------------------------------
+
+async function post_text_fetch() {
+	
+	// Download CSV here: blob: https://codesolutions2.github.io/2e7701d0-559c-4be8-87de-61c72fce9a96
+	// Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at ‘https://api.github.com/repos/CodeSolutions2/on_the_way_to_selfrespect’. (Reason: Credential is not supported if the CORS header ‘Access-Control-Allow-Origin’ is ‘*’)
+
+	// If you are trying to transfer files to and from the same domain URL, do not use "Access-Control-Allow-Credentials": true, using settings [mode: 'cors', "Access-Control-Allow-Origin": "*"]
+	
+	// The Same Origin Policy disallows reading the remote resource at https://api.github.com/repos/CodeSolutions2/on_the_way_to_selfrespect. (Reason: header ‘access-control-allow-credentials’ is not allowed according to header ‘Access-Control-Allow-Headers’ from CORS preflight response).
+
+
+	// Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at https://api.github.com/repos/CodeSolutions2/on_the_way_to_selfrespect. (Reason: header ‘access-control-allow-origin’ is not allowed according to header ‘Access-Control-Allow-Headers’ from CORS preflight response) - Removed ["Access-Control-Allow-Origin": "*", ]
+
+	
+	let headers = {
+		//"Content-Type": "application/octet-stream", 
+		"Content-Type": "application/json;charset=UTF-8", 
+		       "Connection": "keep-alive",
+		      "processData": false};
+
+	//  If you are trying to transfer files to and from the same domain URL or a different domain URL, one can use [mode: 'cors']. credentials: "include" can not be included for "Access-Control-Allow-Origin": "*" cors because * means it is open to the public, so credentials are not necessary
+
+	// Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at https://api.github.com/repos/CodeSolutions2/on_the_way_to_selfrespect. (Reason: header ‘processdata’ is not allowed according to header ‘Access-Control-Allow-Headers’ from CORS preflight response). -  Changed [mode: 'cors' to mode: 'no-cors' ]
+
+ const wisdom_message = document.getElementById("self_respect_wisdom_message_input").value;
+ 
+	let options = {method : 'POST', 
+		       headers: headers, 
+		  //     mode: 'cors', 
+		 //      cache: "no-cache", 
+		       redirect: "follow", 
+		    //   referrerPolicy: "origin",
+		      body: JSON.stringify(wisdom_message)};
+
+	try {
+		 await fetch(url, options).then(res => res.json()).then(res => {
+			console.log('Fetch response: ', res);
+		  }).catch(error => { console.log('Fetch response error: ', error); });
+
+
+	} catch (error) {
+	      console.log('Try response error of Fetch: ', error);
+	}
+
+}
+	
 	
 // -------------------------------------------------
 	
