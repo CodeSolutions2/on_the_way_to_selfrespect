@@ -426,7 +426,7 @@ async function data_2_dictionary(data, num_of_classes, label_name){
 		console.log('index: ', index);
 
 		// Remove all \n from the string rowdata
-		rowdata.replace(/\n/g, '');
+		rowdata = rowdata.replace(/\n/g, '');
 		
 		let out = rowdata.split(",");
 		console.log('out: ', out);
