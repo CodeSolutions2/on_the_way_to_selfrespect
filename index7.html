@@ -632,11 +632,10 @@ async function verify_user_clicks(){
 	total_accuracy = (total_accuracy + round_accuracy)/2;
 
 	// Print to screen: user accuracy
-	outp.innerHTML += ' Round accuracy: ' + round_accuracy + ', Total accuracy: ' + total_accuracy + '<br/>';
-
+	outp.innerHTML += ' Round accuracy: ' + round_accuracy + ', Total accuracy: ' + total_accuracy + '<br/><hr />';
 	// ------------------------
 
-	<hr />
+	
 	
 	// ------------------------
 	// Save round data as an array
@@ -650,13 +649,14 @@ async function verify_user_clicks(){
 	// ------------------------
 	if (order_string == user_click_string) {
 		// Correct 
-		outp.innerHTML = "Correct: the pattern was " + order_string + ", you performed " + user_click_string + "</br>";
+		outp.innerHTML += "Correct: the pattern was " + order_string + ", you performed " + user_click_string + "</br>";
 	} else {
-		outp.innerHTML = "Incorrect: the pattern was " + order_string + ", you performed " + user_click_string + "</br>";
+		outp.innerHTML += "Incorrect: the pattern was " + order_string + ", you performed " + user_click_string + "</br>";
 	}
+	outp.innerHTML += '<hr />';
 	// ------------------------
 
-	<hr />
+	
 
 	// ------------------------
 	// Print a Self-respect Wisdom messages so that users learn self-respect (Goal of playing the game)
@@ -676,18 +676,16 @@ async function verify_user_clicks(){
 	const ind = run_it_count % array0.length; // allow messages to cycle wrt the length of array0
   	const selfRespect_wisdom_message_dict = Object.fromEntries(array0.map((key, index) => [index, key]));
 	
-	outp.innerHTML += selfRespect_wisdom_message_dict[ind] + "</br>";
+	outp.innerHTML += selfRespect_wisdom_message_dict[ind] + "</br><hr />";
 	// ------------------------
 
-	<hr />
 
 	// ------------------------
 	// Print a small map of where the user is on their path to self-respect
 	// ------------------------
-	outp.innerHTML += 'On-the-way-to-self-respect map: you have seen '  + run_it_count + ' self-respect messages! You are on your way to self-respect! ⬆️' + '</br>';
+	outp.innerHTML += 'On-the-way-to-self-respect map: you have seen '  + run_it_count + ' self-respect messages! You are on your way to self-respect! ⬆️' + '</br><hr />';
 	// ------------------------
 
-	<hr />
 
 	// ------------------------
 	// Make inputs visible for self-respect message sharing 
