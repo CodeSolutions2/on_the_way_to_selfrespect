@@ -475,7 +475,7 @@ async function data_2_dictionary(data, y_choices, label_name){
 	
 	// Encode Y 
 	const num_of_classes = y_choices.length;
-	const y_choices_assignment = Object.fromEntries(y_choices.map((key, index) => [key, index));
+	const y_choices_assignment = Object.fromEntries(y_choices.map((key, index) => [key, index]));
 	let Yencoded = [];
  	Y.forEach(async function(rowdata, index) {
 		Yencoded.push(y_choices_assignment[rowdata]);
@@ -533,7 +533,7 @@ async function csvDataset_2_dictionary(csvDataset, y_choices){
 	
 	// Encode Y 
 	const num_of_classes = y_choices.length;
-	const y_choices_assignment = Object.fromEntries(y_choices.map((key, index) => [key, index));
+	const y_choices_assignment = Object.fromEntries(y_choices.map((key, index) => [key, index]));
 	let Yencoded = [];
  	Y.forEach(async function(rowdata, index) {
 		Yencoded.push(y_choices_assignment[rowdata]);
