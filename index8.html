@@ -942,13 +942,9 @@ form_object.addEventListener("submit", (event) => {
 	event.preventDefault();
 
 	console.log('data sent');
-	localStorage.setItem('event_target_action', event.target.action);
 	console.log('webscrape url_server: ', event.target.action);
 	
-    fetch(event.target.action, {
-        method: 'POST',
-        body: new URLSearchParams(new FormData(event.target)) // event.target is the form
-    }).then((response) => {
+    fetch(event.target.action, {method: 'GET'}).then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -973,13 +969,9 @@ document.getElementById("id_of_form").addEventListener("submit", (event) => {
 	event.preventDefault();
 
 	console.log('data sent');
-	localStorage.setItem('event_target_action', event.target.action);
 	console.log('webscrape url_server: ', event.target.action);
-	
-    fetch(event.target.action, {
-        method: 'POST',
-        body: new URLSearchParams(new FormData(event.target)) // event.target is the form
-    }).then((response) => {
+
+    fetch(event.target.action, {method: 'GET'}).then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
