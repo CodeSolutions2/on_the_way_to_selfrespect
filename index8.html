@@ -15,6 +15,8 @@
 
 <!-- Section to submit self-respect wisdom message -->
 <button id="submit_button" onclick="POST_text_popup()" style="display:none">Submit your wisdom message to the game</button>
+<button id="submit_GET_button" onclick="GET_text_form()" style="display:none">Test webscraping the messages from server</button>
+	
 	
 <!-- -------------------------- -->
 
@@ -89,7 +91,9 @@ var ctx5 = canvasElement5.getContext("2d");  // Get the 2D rendering context of 
 var canvasElement6 = document.createElement('canvas');
 var ctx6 = canvasElement6.getContext("2d");  // Get the 2D rendering context of the canvas
 
-
+// Create <form> element to submit parameters to endpoint
+var form_object = document.createElement('form');
+	
 // -------------------------------------------------
 	  
 // Load flash_number model Object when page loads
@@ -312,7 +316,8 @@ async function run_it() {
 
 	// Remove inputs for self-respect message sharing 
 	document.getElementById("submit_button").style.display = "none";
-
+	document.getElementById("submit_GET_button").style.display = "none";
+	
 	// ------------------------
 
 	// Make canvas display setting visible
@@ -851,6 +856,7 @@ async function verify_user_clicks(){
 	// Make inputs visible for self-respect message sharing 
 	// ------------------------
 	document.getElementById("submit_button").style.display = "block";
+	document.getElementById("submit_GET_button").style.display = "block";
 	// ------------------------
 
 	// ------------------------
@@ -873,14 +879,85 @@ async function POST_text_popup() {
   let url = "https://script.google.com/macros/s/AKfycbytCiSzc7qPehkC3h_Sj7QltSMCjusBvAG6GJQVpUfv/dev";
   winRef = window.open(url, "winRef", target="width=1300,height=700");
   console.log("winRef: ", winRef);
-	
 }
 
 	
 // -------------------------------------------------
 
+async function GET_text_form() {
+	
+  form_object.setAttribute('id', 'formID'); 
+	
+  form_object.setAttribute('method', 'GET'); 
+
+  // form_object.setAttribute('mode', 'cors'); 
+  form_object.setAttribute('redirect', 'follow'); 
+
+  // Step 0: The browser navigates to the URL given in the action attribute : the user is taken away from the current page and redirected to a new page.
+  // The action attribute is used to indicate where the form’s data is sent to when it is submitted.
+	
+  var url = "https://script.google.com/macros/s/AKfycbytCiSzc7qPehkC3h_Sj7QltSMCjusBvAG6GJQVpUfv/dev";
+	
+  form_object.setAttribute('action', url);
+	
+  // The form submission result will open in a new tab or window, depending on the user's browser settings.
+  // form_object.setAttribute('target', "_blank");
+	
+  // form_object.setAttribute('headers', {"Content-Type": "application/json;charset=UTF-8", "Access-Control-Allow-Origin": "*"});
+  form_object.setAttribute('headers', {"Content-Type": "application/json;charset=UTF-8"});
+  
+  // Just use arrays: each column is a form variable
+  let type_parameters = ['submit'];
+  var name_parameters = ['confirm_submit'] 
+  var value_parameters = ['Submit'];
+	
+  type_parameters.forEach(async function(type_val, index) {
+	  let type = type_val;
+	  let name = name_parameters[index];
+	  let value = value_parameters[index];
+	  
+	  var input = document.createElement('input');
+	  input.innerHTML = '<input style="display:none;" type=' +type+ ' name=' +name+ 'value=' +value+ '>';
+          
+	  form_object.appendChild(input);
+    });
+
+  // Add form to page and submit it to open the endpoint.
+  document.body.appendChild(form_object);
+	
+  form_object.submit();
+  
+}  // end of post_text_form
 
 
+	
+
+form_object.addEventListener("submit", (event) => {
+	
+	// Do not redirect page to the page that we want to perform GET,POST requests with
+	event.preventDefault();
+
+	console.log('data sent');
+	console.log('webscrape url: ', event.target.action);
+	
+    fetch(event.target.action, {
+        method: 'POST',
+        body: new URLSearchParams(new FormData(event.target)) // event.target is the form
+    }).then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json(); // or response.text() or whatever the server sends
+    }).then((body) => {
+        // handle body
+        console.log('body: ', body);
+    }).catch((error) => {
+        // handle error
+        console.log('error: ', error);
+    });
+
+});
+	
 	
 // -------------------------------------------------
 
