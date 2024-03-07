@@ -19,7 +19,7 @@
 	
 <form action=url_server method="GET" id="id_of_form" onsubmit="return checkForm(this)">
 <input type="text" name="XXX" id="XXX" value="XXX" style="display:none;">
-<button name="submit_button" value='submit' id="submit" style="display:none">Test webscraping the messages from server2</button>
+<button id="submit" name="submit_button" value='submit' type="submit" style="display:none">Test webscraping the messages from server2</button>
 </form>
 <!-- -------------------------- -->
 
@@ -322,7 +322,7 @@ async function run_it() {
 	// Remove inputs for self-respect message sharing 
 	document.getElementById("submit_button").style.display = "none";
 	document.getElementById("submit_GET_button").style.display = "none";
-	
+	document.getElementById("submit").style.display = "none";
 	// ------------------------
 
 	// Make canvas display setting visible
@@ -862,6 +862,7 @@ async function verify_user_clicks(){
 	// ------------------------
 	document.getElementById("submit_button").style.display = "block";
 	document.getElementById("submit_GET_button").style.display = "block";
+	document.getElementById("submit").style.display = "block";
 	// ------------------------
 
 	// ------------------------
