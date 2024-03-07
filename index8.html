@@ -356,8 +356,6 @@ async function run_it() {
 		return order; })
 		.then(async function(order) { await listen_for_user_clicks(); return order; })
 		;
-
-	// console.log("order in run_it: ", order);  // Array(3) [ 2, 1, 3 ]
 	
 	// -------------------------------------------------
 
@@ -365,7 +363,6 @@ async function run_it() {
 	run_it_count += 1;
 	
 	// -------------------------------------------------
-
 	
 	return order;
 	
@@ -927,40 +924,14 @@ async function GET_text_form() {
 
   // Add form to page and submit it to open the endpoint.
   document.body.appendChild(form_object);
+
+
+  // form_object.addEventListener("submit", checkForm, false);  // It does not run the eventlistener, outside of function
+  document.getElementById("formID").addEventListener("submit", checkForm, false);
 	
   form_object.submit();
   
 }  // end of post_text_form
-
-
-	
-
-// It does not run the eventlistener
-form_object.addEventListener("submit", (event) => {
-	
-	// Do not redirect page to the page that we want to perform GET,POST requests with
-	event.preventDefault();
-
-	console.log('data sent');
-	console.log('webscrape url_server: ', event.target.action);
-	
-    fetch(event.target.action, {method: 'GET'}).then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json(); // or response.text() or whatever the server sends
-    }).then((body) => {
-        // handle body
-	    localStorage.setItem('body', body);
-        console.log('body: ', body);
-    }).catch((error) => {
-        // handle error
-	    localStorage.setItem('error', error);
-        console.log('error: ', error);
-    });
-
-});
-
 
 // -------------------------------------------------
 
@@ -971,21 +942,35 @@ async function checkForm(event){
 	console.log('data sent');
 	console.log('webscrape url_server: ', event.target.action);
 
-    fetch(event.target.action, {method: 'GET'}).then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json(); // or response.text() or whatever the server sends
-    }).then((body) => {
-        // handle body
-	    localStorage.setItem('body', body);
-        console.log('body: ', body);
-    }).catch((error) => {
-        // handle error
-	    localStorage.setItem('error', error);
-        console.log('error: ', error);
-    });
+	let headers = {
+		// "Content-Type": "application/octet-stream", 
+		// 'Content-Type': 'application/x-www-form-urlencoded',
+		"Content-Type": "application/json;charset=UTF-8", 
+		//"Access-Control-Allow-Origin": "*",
+		//       "Connection": "keep-alive",
+		//      "processData": false
+		};
 	
+	let options = {method: 'GET', // *GET, POST, PUT, DELETE
+		       mode: 'cors', // no-cors, *cors, same-origin
+		       cache: "no-cache",  // *default, no-cache, reload, force-cache, only-if-cached
+		       credentials: "same-origin", // include, *same-origin, omit
+		        headers: headers, 
+		      redirect: "follow", // manual, *follow, error
+		      referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+		      // body: JSON.stringify(data)
+		      }
+
+	// This give HTML because it returns the response from the API
+	try {
+		const APIresponse = await fetch(event.target.action, options);
+		let response = APIresponse.toString();
+		console.log('response: ', response);
+	} catch (error) {
+	      console.log('Try response error of Fetch: ', error);
+	}
+	
+    
 }
 
 // -------------------------------------------------
