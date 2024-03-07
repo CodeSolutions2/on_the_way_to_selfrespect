@@ -908,8 +908,8 @@ async function GET_text_form() {
   
   // Just use arrays: each column is a form variable
   let type_parameters = ['submit'];
-  var name_parameters = ['confirm_submit'] 
-  var value_parameters = ['Submit'];
+  var name_parameters = ['submit'] 
+  var value_parameters = ['submit'];
 	
   type_parameters.forEach(async function(type_val, index) {
 	  let type = type_val;
@@ -932,6 +932,7 @@ async function GET_text_form() {
 
 	
 
+// It does not run the eventlistener
 form_object.addEventListener("submit", (event) => {
 	
 	// Do not redirect page to the page that we want to perform GET,POST requests with
