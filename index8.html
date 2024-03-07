@@ -14,7 +14,7 @@
 
 
 <!-- Section to submit self-respect wisdom message -->
-<button id="submit_button" onclick="post_text_popup()" style="display:none">Submit your wisdom message to the game</button>
+<button id="submit_button" onclick="POST_text_popup()" style="display:none">Submit your wisdom message to the game</button>
 	
 <!-- -------------------------- -->
 
@@ -868,16 +868,18 @@ async function verify_user_clicks(){
 
 // -------------------------------------------------
 
-async function post_text_popup() {
-
+async function POST_text_popup() {
 
   let url = "https://script.google.com/macros/s/AKfycbytCiSzc7qPehkC3h_Sj7QltSMCjusBvAG6GJQVpUfv/dev";
-
   winRef = window.open(url, "winRef", target="width=1300,height=700");
-
-  // if (winRef) {  winRef.close();
+  console.log("winRef: ", winRef);
 	
 }
+
+	
+// -------------------------------------------------
+
+
 
 	
 // -------------------------------------------------
