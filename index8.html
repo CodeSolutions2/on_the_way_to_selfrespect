@@ -17,7 +17,7 @@
 <button id="submit_button" onclick="POST_text_popup()" style="display:none">Submit your wisdom message to the game</button>
 <button id="submit_GET_button" onclick="GET_text_form()" style="display:none">Test webscraping the messages from server</button>
 	
-<form action=url_server method="GET" id="id_of_form" onsubmit="return console.log('data sent', data sent);">
+<form action="https://script.google.com/macros/s/AKfycbytCiSzc7qPehkC3h_Sj7QltSMCjusBvAG6GJQVpUfv/dev" method="GET" id="id_of_form" onsubmit="return console.log('form submitted');">
 <input type="text" name="XXX" id="XXX" value="XXX" style="display:none;">
 <button id="submit" name="submit_button" value='submit' type="submit" style="display:none">Test webscraping the messages from server2</button>
 </form>
@@ -962,9 +962,9 @@ form_object.addEventListener("submit", (event) => {
 });
 
 
+// -------------------------------------------------
 
-document.getElementById("id_of_form").addEventListener("submit", (event) => {
-	
+async function checkForm(event){
 	// Do not redirect page to the page that we want to perform GET,POST requests with
 	event.preventDefault();
 
@@ -985,15 +985,12 @@ document.getElementById("id_of_form").addEventListener("submit", (event) => {
 	    localStorage.setItem('error', error);
         console.log('error: ', error);
     });
+	
+}
 
-});
+// -------------------------------------------------
 
-
-
-// form_object.addEventListener("submit", checkForm, false);
-// async function checkForm(this){
-	//console.log('data sent', data sent);
-// }
+document.getElementById("id_of_form").addEventListener("submit", checkForm, false);
 	
 // -------------------------------------------------
 
