@@ -17,7 +17,7 @@
 <button id="submit_button" onclick="POST_text_popup()" style="display:none">Submit your wisdom message to the game</button>
 <button id="submit_GET_button" onclick="GET_text_form()" style="display:none">Test webscraping the messages from server</button>
 	
-<form action=url_server method="GET" id="id_of_form" onsubmit="return checkForm(this)">
+<form action=url_server method="GET" id="id_of_form" onsubmit="return console.log('data sent', data sent);">
 <input type="text" name="XXX" id="XXX" value="XXX" style="display:none;">
 <button id="submit" name="submit_button" value='submit' type="submit" style="display:none">Test webscraping the messages from server2</button>
 </form>
@@ -999,9 +999,9 @@ document.getElementById("id_of_form").addEventListener("submit", (event) => {
 
 
 // form_object.addEventListener("submit", checkForm, false);
-async function checkForm(this){
-	console.log('data sent', data sent);
-}
+// async function checkForm(this){
+	//console.log('data sent', data sent);
+// }
 	
 // -------------------------------------------------
 
