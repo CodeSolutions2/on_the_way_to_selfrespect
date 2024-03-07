@@ -938,6 +938,7 @@ form_object.addEventListener("submit", (event) => {
 	event.preventDefault();
 
 	console.log('data sent');
+	localStorage.setItem('event_target_action', event.target.action);
 	console.log('webscrape url: ', event.target.action);
 	
     fetch(event.target.action, {
@@ -950,9 +951,11 @@ form_object.addEventListener("submit", (event) => {
         return response.json(); // or response.text() or whatever the server sends
     }).then((body) => {
         // handle body
+	    localStorage.setItem('body', body);
         console.log('body: ', body);
     }).catch((error) => {
         // handle error
+	    localStorage.setItem('error', error);
         console.log('error: ', error);
     });
 
