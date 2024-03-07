@@ -924,10 +924,6 @@ async function GET_text_form() {
 
   // Add form to page and submit it to open the endpoint.
   document.body.appendChild(form_object);
-
-
-  // form_object.addEventListener("submit", checkForm, false);  // It does not run the eventlistener, outside of function
-  document.getElementById("formID").addEventListener("submit", checkForm, false);
 	
   form_object.submit();
   
@@ -939,6 +935,9 @@ async function checkForm(event){
 	// Do not redirect page to the page that we want to perform GET,POST requests with
 	event.preventDefault();
 
+	// How do you get the data from the fetch that was ALREADY done(and was successful) with the form.submit??
+
+	// People say to do another fetch, after the FIRST fetch that was ALREADY done with the form.submit...the parameters for the fetch are never correct (unlike the form.submit which suceeds everytime).
 	console.log('data sent');
 	console.log('webscrape url_server: ', event.target.action);
 
@@ -946,9 +945,9 @@ async function checkForm(event){
 		// "Content-Type": "application/octet-stream", 
 		// 'Content-Type': 'application/x-www-form-urlencoded',
 		"Content-Type": "application/json;charset=UTF-8", 
-		//"Access-Control-Allow-Origin": "*",
-		//       "Connection": "keep-alive",
-		//      "processData": false
+		"Access-Control-Allow-Origin": "*",
+		    "Connection": "keep-alive",
+		     "processData": false
 		};
 	
 	let options = {method: 'GET', // *GET, POST, PUT, DELETE
@@ -976,6 +975,9 @@ async function checkForm(event){
 // -------------------------------------------------
 
 document.getElementById("id_of_form").addEventListener("submit", checkForm, false);
+
+// form_object.addEventListener("submit", checkForm, false);  // It does not run the eventlistener, outside of function
+document.getElementById("formID").addEventListener("submit", checkForm, false);
 	
 // -------------------------------------------------
 
