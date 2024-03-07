@@ -15,12 +15,6 @@
 
 <!-- Section to submit self-respect wisdom message -->
 <button id="submit_button" onclick="POST_text_popup()" style="display:none">Submit your wisdom message to the game</button>
-<button id="submit_GET_button" onclick="GET_text_form()" style="display:none">Test webscraping the messages from server</button>
-	
-<form action="https://script.google.com/macros/s/AKfycbytCiSzc7qPehkC3h_Sj7QltSMCjusBvAG6GJQVpUfv/dev" method="GET" id="id_of_form" onsubmit="return console.log('form submitted');">
-<input type="text" name="XXX" id="XXX" value="XXX" style="display:none;">
-<button id="submit" name="submit_button" value='submit' type="submit" style="display:none">Test webscraping the messages from server2</button>
-</form>
 <!-- -------------------------- -->
 
 <!-- Output text -->
@@ -321,8 +315,6 @@ async function run_it() {
 
 	// Remove inputs for self-respect message sharing 
 	document.getElementById("submit_button").style.display = "none";
-	document.getElementById("submit_GET_button").style.display = "none";
-	document.getElementById("submit").style.display = "none";
 	// ------------------------
 
 	// Make canvas display setting visible
@@ -858,8 +850,6 @@ async function verify_user_clicks(){
 	// Make inputs visible for self-respect message sharing 
 	// ------------------------
 	document.getElementById("submit_button").style.display = "block";
-	document.getElementById("submit_GET_button").style.display = "block";
-	document.getElementById("submit").style.display = "block";
 	// ------------------------
 
 	// ------------------------
@@ -880,106 +870,8 @@ async function verify_user_clicks(){
 async function POST_text_popup() {
 	
   winRef = window.open(url_server, "winRef", target="width=1300,height=700");
-  console.log("winRef: ", winRef);
 }
 
-	
-// -------------------------------------------------
-
-async function GET_text_form() {
-	
-  form_object.setAttribute('id', 'formID'); 
-	
-  form_object.setAttribute('method', 'GET'); 
-
-  // form_object.setAttribute('mode', 'cors'); 
-  form_object.setAttribute('redirect', 'follow'); 
-
-  // Step 0: The browser navigates to the URL given in the action attribute : the user is taken away from the current page and redirected to a new page.
-  // The action attribute is used to indicate where the form’s data is sent to when it is submitted.
-	
-  form_object.setAttribute('action', url_server);
-	
-  // The form submission result will open in a new tab or window, depending on the user's browser settings.
-  // form_object.setAttribute('target', "_blank");
-	
-  // form_object.setAttribute('headers', {"Content-Type": "application/json;charset=UTF-8", "Access-Control-Allow-Origin": "*"});
-  form_object.setAttribute('headers', {"Content-Type": "application/json;charset=UTF-8"});
-  
-  // Just use arrays: each column is a form variable
-  let type_parameters = ['submit'];
-  var name_parameters = ['submit'] 
-  var value_parameters = ['submit'];
-	
-  type_parameters.forEach(async function(type_val, index) {
-	  let type = type_val;
-	  let name = name_parameters[index];
-	  let value = value_parameters[index];
-	  
-	  var input = document.createElement('input');
-	  input.innerHTML = '<input style="display:none;" type=' +type+ ' name=' +name+ 'value=' +value+ '>';
-          
-	  form_object.appendChild(input);
-    });
-
-  // Add form to page and submit it to open the endpoint.
-  document.body.appendChild(form_object);
-	
-  form_object.submit();
-  
-}  // end of post_text_form
-
-// -------------------------------------------------
-
-async function checkForm(event){
-	// Do not redirect page to the page that we want to perform GET,POST requests with
-	event.preventDefault();
-
-	// How do you get the data from the fetch that was ALREADY done(and was successful) with the form.submit??
-
-	// People say to do another fetch, after the FIRST fetch that was ALREADY done with the form.submit...the parameters for the fetch are never correct (unlike the form.submit which suceeds everytime).
-	console.log('data sent');
-	console.log('webscrape url_server: ', event.target.action);
-
-	let headers = {
-		// "Content-Type": "application/octet-stream", 
-		// 'Content-Type': 'application/x-www-form-urlencoded',
-		// "Content-Type": "application/json;charset=UTF-8", 
-		"Content-Type": "text/html; charset=utf-8", 
-		"Access-Control-Allow-Origin": "*",
-		    "Connection": "keep-alive",
-		     "processData": false
-		};
-	
-	let options = {method: 'GET', // *GET, POST, PUT, DELETE
-		       mode: 'cors', // no-cors, *cors, same-origin
-		       cache: "no-cache",  // *default, no-cache, reload, force-cache, only-if-cached
-		       credentials: "same-origin", // include, *same-origin, omit
-		        headers: headers, 
-		      redirect: "follow", // manual, *follow, error
-		      referrerPolicy: "strict-origin-when-cross-origin", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-		      // body: JSON.stringify(data)
-		      }
-
-	// This give HTML because it returns the response from the API
-	try {
-		const APIresponse = await fetch(event.target.action, options);
-		let response = APIresponse.toString();
-		console.log('response: ', response);
-	} catch (error) {
-	      console.log('Try response error of Fetch: ', error);
-	}
-
-	
-    
-}
-
-// -------------------------------------------------
-
-document.getElementById("id_of_form").addEventListener("submit", checkForm, false);
-
-// form_object.addEventListener("submit", checkForm, false);  // It does not run the eventlistener, outside of function
-document.getElementById("formID").addEventListener("submit", checkForm, false);
 	
 // -------------------------------------------------
 
