@@ -944,7 +944,8 @@ async function checkForm(event){
 	let headers = {
 		// "Content-Type": "application/octet-stream", 
 		// 'Content-Type': 'application/x-www-form-urlencoded',
-		"Content-Type": "application/json;charset=UTF-8", 
+		// "Content-Type": "application/json;charset=UTF-8", 
+		"Content-Type": "text/html; charset=utf-8", 
 		"Access-Control-Allow-Origin": "*",
 		    "Connection": "keep-alive",
 		     "processData": false
@@ -956,7 +957,7 @@ async function checkForm(event){
 		       credentials: "same-origin", // include, *same-origin, omit
 		        headers: headers, 
 		      redirect: "follow", // manual, *follow, error
-		      referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+		      referrerPolicy: "strict-origin-when-cross-origin", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
 		      // body: JSON.stringify(data)
 		      }
 
@@ -968,6 +969,7 @@ async function checkForm(event){
 	} catch (error) {
 	      console.log('Try response error of Fetch: ', error);
 	}
+
 	
     
 }
