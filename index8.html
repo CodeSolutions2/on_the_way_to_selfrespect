@@ -17,7 +17,10 @@
 <button id="submit_button" onclick="POST_text_popup()" style="display:none">Submit your wisdom message to the game</button>
 <button id="submit_GET_button" onclick="GET_text_form()" style="display:none">Test webscraping the messages from server</button>
 	
-	
+<form action=url_server method="GET" id="id_of_form" onsubmit="return checkForm(this)">
+<input type="text" name="XXX" id="XXX" value="XXX" style="display:none;">
+<button name="submit_button" value='submit' id="submit" style="display:none">Test webscraping the messages from server2</button>
+</form>
 <!-- -------------------------- -->
 
 <!-- Output text -->
@@ -66,6 +69,8 @@ var run_it_count = 0;
 var decide_to_predict = false;
 
 var choice = 1; // 0=use csv file in repo, 1=use data array variable
+
+var url_server = "https://script.google.com/macros/s/AKfycbytCiSzc7qPehkC3h_Sj7QltSMCjusBvAG6GJQVpUfv/dev";
 
 // ----------------------------
 // Create all the elements
@@ -875,9 +880,8 @@ async function verify_user_clicks(){
 // -------------------------------------------------
 
 async function POST_text_popup() {
-
-  let url = "https://script.google.com/macros/s/AKfycbytCiSzc7qPehkC3h_Sj7QltSMCjusBvAG6GJQVpUfv/dev";
-  winRef = window.open(url, "winRef", target="width=1300,height=700");
+	
+  winRef = window.open(url_server, "winRef", target="width=1300,height=700");
   console.log("winRef: ", winRef);
 }
 
@@ -896,9 +900,7 @@ async function GET_text_form() {
   // Step 0: The browser navigates to the URL given in the action attribute : the user is taken away from the current page and redirected to a new page.
   // The action attribute is used to indicate where the form’s data is sent to when it is submitted.
 	
-  var url = "https://script.google.com/macros/s/AKfycbytCiSzc7qPehkC3h_Sj7QltSMCjusBvAG6GJQVpUfv/dev";
-	
-  form_object.setAttribute('action', url);
+  form_object.setAttribute('action', url_server);
 	
   // The form submission result will open in a new tab or window, depending on the user's browser settings.
   // form_object.setAttribute('target', "_blank");
@@ -940,7 +942,7 @@ form_object.addEventListener("submit", (event) => {
 
 	console.log('data sent');
 	localStorage.setItem('event_target_action', event.target.action);
-	console.log('webscrape url: ', event.target.action);
+	console.log('webscrape url_server: ', event.target.action);
 	
     fetch(event.target.action, {
         method: 'POST',
@@ -961,6 +963,41 @@ form_object.addEventListener("submit", (event) => {
     });
 
 });
+
+
+
+document.getElementById("id_of_form").addEventListener("submit", (event) => {
+	
+	// Do not redirect page to the page that we want to perform GET,POST requests with
+	event.preventDefault();
+
+	console.log('data sent');
+	localStorage.setItem('event_target_action', event.target.action);
+	console.log('webscrape url_server: ', event.target.action);
+	
+    fetch(event.target.action, {
+        method: 'POST',
+        body: new URLSearchParams(new FormData(event.target)) // event.target is the form
+    }).then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json(); // or response.text() or whatever the server sends
+    }).then((body) => {
+        // handle body
+	    localStorage.setItem('body', body);
+        console.log('body: ', body);
+    }).catch((error) => {
+        // handle error
+	    localStorage.setItem('error', error);
+        console.log('error: ', error);
+    });
+
+});
+
+function checkForm(thisForm){
+	console.log('data sent', data sent);
+}
 	
 	
 // -------------------------------------------------
