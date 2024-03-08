@@ -11,6 +11,6 @@ When one thinks that they can not "do better", they think that they are a victim
 
 Thus, "Victim belivers"/low self-respect/esteem people disrespect themselves and they disrespect others. Please learn about self-respect such that everyone can suceed in life together, and the world can be a less violent place.
 
-This memorization game is to help people to start to think about self-respect.
+This memorization game was made to help people to start to think about self-respect.
 
 [Completed working version] https://CodeSolutions2.github.io/on_the_way_to_selfrespect/index8.html
