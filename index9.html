@@ -1036,11 +1036,31 @@ async function flash_sequence_when_clicked_on(val){
 	  
 // -------------------------------------------------
 
-async function onErrorFunction_red() {
+async function onErrorFunction(val) {
 	
 	    const image = new Image();
+	if (val == 0) {
 	       image.src = "red.png";
 		image.onload = async () => { ctx0.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
+	} else if (val == 1) {
+		image.onload = async () => { ctx1.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
+		image.src = "green.png";
+	    } else if (val == 2) {
+		image.onload = async () => { ctx2.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
+		image.src = "blue.png";
+	    } else if (val == 3) {
+		image.onload = async () => { ctx3.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
+		image.src = "cyan.png";
+	    } else if (val == 4) {
+		image.onload = async () => { ctx4.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
+		image.src = "yellow.png";
+	    } else if (val == 5) {
+		image.onload = async () => { ctx5.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
+		image.src = "magenta.png";
+	    } else {
+		image.onload = async () => { ctx6.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
+		image.src = "orange.png";
+	    }
 }
 
 // -------------------------------------------------
@@ -1055,25 +1075,31 @@ async function show_one_image_square(val) {
 	    if (val == 0) {
 		image.onload = async () => { ctx0.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
 		image.src = "https://storage.googleapis.com/on-the-way2selfrespect/red.png";
-		image.onerror = onErrorFunction_red;
+		image.onerror = onErrorFunction(val);
 	    } else if (val == 1) {
 		image.onload = async () => { ctx1.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
 		image.src = "https://storage.googleapis.com/on-the-way2selfrespect/green.png";
+		image.onerror = onErrorFunction(val);
 	    } else if (val == 2) {
 		image.onload = async () => { ctx2.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
 		image.src = "https://storage.googleapis.com/on-the-way2selfrespect/blue.png";
+		image.onerror = onErrorFunction(val);
 	    } else if (val == 3) {
 		image.onload = async () => { ctx3.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
 		image.src = "https://storage.googleapis.com/on-the-way2selfrespect/cyan.png";
+		image.onerror = onErrorFunction(val);
 	    } else if (val == 4) {
 		image.onload = async () => { ctx4.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
 		image.src = "https://storage.googleapis.com/on-the-way2selfrespect/yellow.png";
+		image.onerror = onErrorFunction(val);
 	    } else if (val == 5) {
 		image.onload = async () => { ctx5.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
 		image.src = "https://storage.googleapis.com/on-the-way2selfrespect/magenta.png";
+		image.onerror = onErrorFunction(val);
 	    } else {
 		image.onload = async () => { ctx6.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
 		image.src = "https://storage.googleapis.com/on-the-way2selfrespect/orange.png";
+		image.onerror = onErrorFunction(val);
 	    }
 
 	
