@@ -13,6 +13,6 @@ Thus, "Victim belivers"/low self-respect/esteem people disrespect themselves and
 
 This memorization game was made to help people to start to think about self-respect.
 
-[Completed working version] https://CodeSolutions2.github.io/on_the_way_to_selfrespect/index8.html
+[Completed working version] https://CodeSolutions2.github.io/on_the_way_to_selfrespect/index9.html
 
 [Blog post] https://medium.com/@j622amilah/javascript-tensorflow-js-webapp-game-d17aa84422f0
