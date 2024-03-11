@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+
+<!-- https://CodeSolutions2.github.io/on_the_way_to_selfrespect/index7.html -->
+<h1 style='text-align: center; margin-bottom: -35px;'>On the way to self-respect webapp</h1>
+<br><br>
+
+<button id="run_it_button" onclick="run_it()" style="display:block">Run a memory game round</button>
+<!-- <button id="download_data_button" onclick="download_data()" style="display:block">download_data</button> -->
+<button id="resetresponse_button" onclick="resetresponse()" style="display:none">resetresponse</button>	
+<button id="user_click_done_button" onclick="user_click_done()" style="display:none">DONE</button>
+
+
+<!-- Section to submit self-respect wisdom message -->
+<button id="submit_button" onclick="POST_text_popup()" style="display:none">Submit your wisdom message to the game</button>
+<!-- -------------------------- -->
+
+<!-- Output text -->
+<div id="output" style="font-family:courier;font-size:24px;height:300px"></div>
+
+	
+<style>
+canvas {border: 1px solid black; position: absolute; display: inline-block; z-index: 1; top: 150px;},
+div {position: relative; z-index: 2;},
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+<script>
+
+// -------------------------------------------------
+
+var squarelocation = [0, 1, 2, 3, 4, 5, 6];
+	  
+// Set the width and height of the canvas
+var canvasElement_width = 150;
+var canvasElement_height = canvasElement_width;
+var canvasTopStart = 150; // 350;
+
+const outp = document.getElementById('output');
+
+var user_click = [];
+var order = [];
+
+var data = [['', 'round_accuracy', 'total_accuracy', 'response_time', 'presentation_time_interval', 'flash_number']+'\n']; 
+var presentation_time_interval = 2000;
+var flash_number = 3;
+const y_choices_flash_number_model = [3, 4, 5, 6, 7];
+const y_choices_presentation_time_interval_model = [2000, 1500, 1000];
+	
+var response_time = 0;
+var accuracy0 = 0;
+var accuracy1 = 0;
+var round_accuracy = 0;
+var total_accuracy = 0;
+
+var startTime = []; 
+var endTime = [];
+
+var run_it_count = 0;
+var decide_to_predict = false;
+
+var choice = 1; // 0=use csv file in repo, 1=use data array variable
+
+var url_server = "https://script.google.com/macros/s/AKfycbytCiSzc7qPehkC3h_Sj7QltSMCjusBvAG6GJQVpUfv/dev";
+
+// ----------------------------
+// Create all the elements
+// ----------------------------
+var canvasElement0 = document.createElement('canvas');
+var ctx0 = canvasElement0.getContext("2d");  // Get the 2D rendering context of the canvas
+
+var canvasElement1 = document.createElement('canvas');
+var ctx1 = canvasElement1.getContext("2d");
+
+var canvasElement2 = document.createElement('canvas');
+var ctx2 = canvasElement2.getContext("2d");  // Get the 2D rendering context of the canvas
+
+var canvasElement3 = document.createElement('canvas');
+var ctx3 = canvasElement3.getContext("2d");  // Get the 2D rendering context of the canvas
+
+var canvasElement4 = document.createElement('canvas');
+var ctx4 = canvasElement4.getContext("2d");  // Get the 2D rendering context of the canvas
+
+var canvasElement5 = document.createElement('canvas');
+var ctx5 = canvasElement5.getContext("2d");  // Get the 2D rendering context of the canvas
+
+var canvasElement6 = document.createElement('canvas');
+var ctx6 = canvasElement6.getContext("2d");  // Get the 2D rendering context of the canvas
+
+// Create <form> element to submit parameters to endpoint
+var form_object = document.createElement('form');
+	
+// -------------------------------------------------
+	  
+// Load flash_number model Object when page loads
+const inputs_m0 = tf.input({shape: [4]}); // there are 4 columns in xs
+const denseLayer1_m0 = tf.layers.dense({units: 64, activation: 'relu'});
+const denseLayer2_m0 = tf.layers.dense({units: 64, activation: 'relu'});
+const denseLayer3_m0 = tf.layers.dense({units: 64, activation: 'relu'});
+const denseLayer4_m0 = tf.layers.dense({units: 5, activation: 'softmax'});  // there are 5 possible outputs for game parameter flash_number= [3, 4, 5, 6, 7] that one can predict
+const outputs_m0 = denseLayer4_m0.apply(denseLayer3_m0.apply(denseLayer2_m0.apply(denseLayer1_m0.apply(inputs_m0))));
+const flash_number_model = tf.model({inputs: inputs_m0, outputs: outputs_m0});
+
+	  
+// -------------------------------------------------
+	  
+// Load presentation_time_interval model Object when page loads
+const inputs_m1 = tf.input({shape: [4]}); // there are 4 columns in xs
+const denseLayer1_m1 = tf.layers.dense({units: 64, activation: 'relu'});
+const denseLayer2_m1 = tf.layers.dense({units: 64, activation: 'relu'});
+const denseLayer3_m1 = tf.layers.dense({units: 64, activation: 'relu'});
+const denseLayer4_m1 = tf.layers.dense({units: 3, activation: 'softmax'});  // there are 3 possible outputs for game parameter presentation_time_interval= [2000, 1500, 1000] that one can predict
+const outputs_m1 = denseLayer4_m1.apply(denseLayer3_m1.apply(denseLayer2_m1.apply(denseLayer1_m1.apply(inputs_m1))));
+const presentation_time_interval_model = tf.model({inputs: inputs_m1, outputs: outputs_m1});
+	  
+// -------------------------------------------------
+
+async function currentTime() { 
+	let date = new Date(); 
+	let hh = date.getHours(); 
+	let mm = date.getMinutes(); 
+	let ss = date.getSeconds();
+	return [hh, mm, ss];
+}
+			
+
+// -------------------------------------------------
+
+async function elapsedTime(startTime, endTime) {
+	return (endTime[0]*60*60 + endTime[1]*60 + endTime[2]) - (startTime[0]*60*60 + startTime[1]*60 + startTime[2]);
+	
+}
+			
+
+// -------------------------------------------------
+
+
+async function initialization_of_canvasElements() {
+
+	// ------------------------------------------
+	// Predict flash_number based on past performance
+	// ------------------------------------------
+	if (decide_to_predict == true) {
+		// Model predicted selection
+		flash_number = await predict_w_pretrained_flash_number_model();
+	} else {
+		// Random selection
+		flash_number = await rand_perm(y_choices_flash_number_model, 1).then(async function (flash_number_array) {  const flash_number_scalar = flash_number_array.at(0); return flash_number_scalar});
+	}
+	// console.log("flash_number: ", flash_number);
+	// ------------------------------------------
+
+
+	// ------------------------------------------
+	// Predict presentation_time_interval based on past performance
+	// ------------------------------------------
+	if (decide_to_predict == true) {
+		// Model predicted selection
+		presentation_time_interval = await predict_w_pretrained_presentation_time_interval_model();
+	} else {
+		// Random selection
+		presentation_time_interval = await rand_perm(y_choices_presentation_time_interval_model, 1).then(async function (presentation_time_interval_array) {  const presentation_time_interval_scalar = presentation_time_interval_array.at(0); return presentation_time_interval_scalar});
+	}
+	// console.log("presentation_time_interval: ", presentation_time_interval);
+	// ------------------------------------------
+	
+	canvasElement0.width = canvasElement_width;
+	canvasElement0.height = canvasElement_height;
+	canvasElement1.width = canvasElement_width;
+	canvasElement1.height = canvasElement_height;
+	canvasElement2.width = canvasElement_width;
+	canvasElement2.height = canvasElement_height;
+	canvasElement3.width = canvasElement_width;
+	canvasElement3.height = canvasElement_height;
+	canvasElement4.width = canvasElement_width;
+	canvasElement4.height = canvasElement_height;
+	canvasElement5.width = canvasElement_width;
+	canvasElement5.height = canvasElement_height;
+	canvasElement6.width = canvasElement_width;
+	canvasElement6.height = canvasElement_height;
+
+	square_config = await rand_perm([0, 1, 2], 1).then(async function (square_config_array) {  const square_config_scalar = square_config_array.at(0); return square_config_scalar});
+	// console.log("square_config: ", square_config);
+	
+	if (square_config == 0) {
+		// 0: row
+		canvasElement0.style.left = Number(0*canvasElement_width + 40)+'px';
+		canvasElement1.style.left = Number(1*canvasElement_width + 40)+'px';
+		canvasElement2.style.left = Number(2*canvasElement_width + 40)+'px';
+		canvasElement3.style.left = Number(3*canvasElement_width + 40)+'px';
+		canvasElement4.style.left = Number(4*canvasElement_width + 40)+'px';
+		canvasElement5.style.left = Number(5*canvasElement_width + 40)+'px';
+		canvasElement6.style.left = Number(6*canvasElement_width + 40)+'px';
+		
+	} else if (square_config == 1) {
+		// 1: triangle
+		// -----------------------------------
+		// 1st row
+		canvasElement0.style.left = Number(0*canvasElement_width + (1*canvasElement_width + canvasElement_width/2 + 40)) + 'px';
+		canvasElement0.style.top = Number(0*canvasElement_width + canvasTopStart)+'px';
+		// -----------------------------------
+		// 2nd row
+		canvasElement1.style.left = Number(1*canvasElement_width) - 40+'px';
+		canvasElement1.style.top = Number(1*canvasElement_width + canvasTopStart)+'px';
+    
+		canvasElement2.style.left = Number(2*canvasElement_width + canvasElement_width/2 + 40)+'px';
+		canvasElement2.style.top = Number(1*canvasElement_width + canvasTopStart)+'px';
+		// -----------------------------------
+		// 3rd row
+		canvasElement3.style.left = Number(0*canvasElement_width + 40)+'px';
+		canvasElement3.style.top = Number(2*canvasElement_width + canvasTopStart)+'px';
+    
+		canvasElement4.style.left = Number(1*canvasElement_width + 40)+'px';
+		canvasElement4.style.top = Number(2*canvasElement_width + canvasTopStart)+'px';
+		
+		canvasElement5.style.left = Number(2*canvasElement_width + 40)+'px';
+		canvasElement5.style.top = Number(2*canvasElement_width + canvasTopStart)+'px';
+    
+		canvasElement6.style.left = Number(3*canvasElement_width + 40)+'px';
+		canvasElement6.style.top = Number(2*canvasElement_width + canvasTopStart)+'px';
+		// -----------------------------------
+		
+	} else if (square_config == 2) {
+		// 2: square
+		// -----------------------------------
+		// 1st row
+		canvasElement0.style.left = Number(0*canvasElement_width + 40)+'px';
+		canvasElement0.style.top = Number(0*canvasElement_width + canvasTopStart)+'px';
+
+		canvasElement1.style.left = Number(2*canvasElement_width + 40)+'px';
+		canvasElement1.style.top = Number(0*canvasElement_width + canvasTopStart)+'px';
+		// -----------------------------------
+		// 2nd row
+		canvasElement2.style.left = Number(0*canvasElement_width + 40)+'px';
+		canvasElement2.style.top = Number(1*canvasElement_width + canvasTopStart)+'px';
+		
+		canvasElement3.style.left = Number(2*canvasElement_width + 40)+'px';
+		canvasElement3.style.top = Number(1*canvasElement_width + canvasTopStart)+'px';
+		// -----------------------------------
+		// 3rd row
+		canvasElement4.style.left = Number(0*canvasElement_width + 40)+'px';
+		canvasElement4.style.top = Number(2*canvasElement_width + canvasTopStart)+'px';
+		
+		canvasElement5.style.left = Number(1*canvasElement_width + 40)+'px';
+		canvasElement5.style.top = Number(2*canvasElement_width + canvasTopStart)+'px';
+		
+		canvasElement6.style.left = Number(2*canvasElement_width + 40)+'px';
+		canvasElement6.style.top = Number(2*canvasElement_width + canvasTopStart)+'px';
+		// -----------------------------------
+	}
+
+	canvasElement0.style.position = "absolute";
+	canvasElement1.style.position = "absolute";
+	canvasElement2.style.position = "absolute";
+	canvasElement3.style.position = "absolute";
+	canvasElement4.style.position = "absolute";
+	canvasElement5.style.position = "absolute";
+	canvasElement6.style.position = "absolute";
+
+	// Set a reference value for the canvasElement
+	canvasElement0.setAttribute("data-id", 0);
+	canvasElement1.setAttribute("data-id", 1);
+	canvasElement2.setAttribute("data-id", 2);
+	canvasElement3.setAttribute("data-id", 3);
+	canvasElement4.setAttribute("data-id", 4);
+	canvasElement5.setAttribute("data-id", 5);
+	canvasElement6.setAttribute("data-id", 6);
+
+	// Add the canvas to the document body or any other desired element
+	document.body.appendChild(canvasElement0);
+	document.body.appendChild(canvasElement1);
+	document.body.appendChild(canvasElement2);
+	document.body.appendChild(canvasElement3);
+	document.body.appendChild(canvasElement4);
+	document.body.appendChild(canvasElement5);
+	document.body.appendChild(canvasElement6); 
+
+	// Make all the canvas context objects a certain initial color
+	ctx0.fillStyle = '#999c98';  // Background square over image = blue
+	ctx0.fillRect(0, 0, canvasElement_width, canvasElement_height);
+	ctx1.fillStyle = '#999c98';  // Background square over image = blue
+	ctx1.fillRect(0, 0, canvasElement_width, canvasElement_height);
+	ctx2.fillStyle = '#999c98';  // Background square over image = blue
+	ctx2.fillRect(0, 0, canvasElement_width, canvasElement_height);
+	ctx3.fillStyle = '#999c98';  // Background square over image = blue
+	ctx3.fillRect(0, 0, canvasElement_width, canvasElement_height);
+	ctx4.fillStyle = '#999c98';  // Background square over image = blue
+	ctx4.fillRect(0, 0, canvasElement_width, canvasElement_height);
+	ctx5.fillStyle = '#999c98';  // Background square over image = blue
+	ctx5.fillRect(0, 0, canvasElement_width, canvasElement_height);
+	ctx6.fillStyle = '#999c98';  // Background square over image = blue
+	ctx6.fillRect(0, 0, canvasElement_width, canvasElement_height);
+
+	return flash_number;
+}
+
+
+
+// -------------------------------------------------
+
+	  
+async function run_it() {
+
+	// -------------------------------------------------
+	// Reset screen text after a previous run
+	// -------------------------------------------------
+	
+	// Remove all messages
+	outp.innerHTML = "";
+	
+	// ------------------------
+
+	// Remove inputs for self-respect message sharing 
+	document.getElementById("submit_button").style.display = "none";
+	// ------------------------
+
+	// Make canvas display setting visible
+	canvasElement0.style.display = "block";
+	canvasElement1.style.display = "block";
+	canvasElement2.style.display = "block";
+	canvasElement3.style.display = "block";
+	canvasElement4.style.display = "block";
+	canvasElement5.style.display = "block";
+	canvasElement6.style.display = "block";
+
+	// -------------------------------------------------
+
+	document.getElementById("run_it_button").style.display = 'none';
+
+	// -------------------------------------------------
+
+	order = await initialization_of_canvasElements()
+		.then(async function(flash_number) { 
+			if (flash_number == 3) {
+				order = await flash_sequence_difficulty3();
+			} else if (flash_number == 4) {
+				order = await flash_sequence_difficulty4();
+			} else if (flash_number == 5) {
+				order = await flash_sequence_difficulty5();
+			} else if (flash_number == 6) {
+				order = await flash_sequence_difficulty6();
+			} else {
+				order = await flash_sequence_difficulty7();
+			}
+		return order; })
+		.then(async function(order) { await listen_for_user_clicks(); return order; })
+		;
+	
+	// -------------------------------------------------
+
+	// Count the number of times it is run
+	run_it_count += 1;
+	
+	// -------------------------------------------------
+	
+	return order;
+	
+}  // end of run_it
+	  
+
+// -------------------------------------------------
+
+	  
+// Exploit the onclick with the button
+async function user_click_done() {
+
+	// The first stop_one_eventlister has the correct user_click
+	return await stop_listening_for_user_clicks()
+		.then(async function() { accuracy0 = await calculate_sequence_selection_correct(); })
+		.then(async function() { accuracy1 = await calculate_color_selection_correct(); })
+		.then(async function() { response_time = await elapsedTime(startTime, endTime); })
+		.then(async function() { await verify_user_clicks(); });
+}
+
+	
+// -------------------------------------------------
+
+	  
+async function get_csvDataset() {
+	
+	const repoOwner = 'CodeSolutions2';
+	const repoName = 'on_the_way_to_selfrespect';
+	var url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents`;
+
+	var url_vec = [];
+	await fetch(url).then(res => res.json()).then(data => {
+		    data.forEach(file => {
+		      if (file.type === 'file' && file.name.match(/.(csv|txt)$/i)) {
+			url_vec.push(file.download_url);
+		      }
+		    });
+		  }).catch(error => { outp.innerHTML += error; });
+
+   
+	const get_csvDataset_URLblob = url_vec[0];
+	// console.log('get_csvDataset_URLblob: ', get_csvDataset_URLblob);
+    
+	return get_csvDataset_URLblob;
+}
+
+	
+// -------------------------------------------------
+
+async function data_2_dictionary(data, y_choices, label_name){
+
+	let X = [];
+	let Y = [];
+	let colnum;
+
+	let xs_ind = [];
+	let ys_ind = [];
+	
+	data.forEach(async function(rowdata, index) {
+
+		// console.log('rowdata: ', rowdata);
+		// console.log('index: ', index);
+
+		// Remove all \n from the string rowdata
+		rowdata = rowdata.replace(/\n/g, '');
+		
+		let out = rowdata.split(",");
+		// console.log('out: ', out);
+
+		// Remove empty columns
+		let nonempty_row = out.filter((num) => num.length != 0);
+		// console.log('nonempty_row: ', nonempty_row);
+		
+		if (index == 0){
+			// header, do not save data
+
+			// Obtain the number of columns in the xs matrix
+			colnum = nonempty_row.length - 1;
+			// console.log('colnum: ', colnum);
+			
+			// get index for what column is xs and ys
+			// it needs to check all values in nonempty_row
+			for (let i=0; i < nonempty_row.length; i++){
+			      if (nonempty_row[i] == label_name) {
+			        ys_ind.push(Number(i));
+			      } else {
+				xs_ind.push(Number(i));
+			      }
+			}
+			// console.log('xs_ind: ', xs_ind);
+			// console.log('ys_ind: ', ys_ind);
+			
+		} else {
+			// Put in Object correctly
+			let x_vals = [];
+			xs_ind.forEach( (val, index) => {
+				x_vals.push(Number(nonempty_row[val]));
+			});
+			X.push(x_vals);
+			Y.push(Number(nonempty_row[ys_ind[0]]));
+		}
+		
+	});  // end of forEach
+
+	// console.log('X: ', X);
+	// console.log('Y: ', Y)
+
+	// -------------------------------------------------
+	
+	// Encode Y 
+	const num_of_classes = y_choices.length;
+	const y_choices_assignment = Object.fromEntries(y_choices.map((key, index) => [key, index]));
+	let Yencoded = [];
+ 	Y.forEach(async function(rowdata, index) {
+		Yencoded.push(y_choices_assignment[rowdata]);
+	});  // end of forEach
+
+	// -------------------------------------------------
+	
+	// Transform to tensorflow.js
+	let rownum = X.length;
+	const xs = tf.tensor2d(X, [rownum, colnum]);  // this is size [ 34, 4 ]
+	// console.log('xs: ', xs);
+
+	// -------------------------------------------------
+	
+	let ys = tf.tensor2d(Yencoded, [rownum, 1], 'int32').flatten();  // flatten the 2D tensor as a 1Dtensor
+	// console.log('ys: ', ys);  // shape: Array [ 34 ]
+	
+	// ys needs to be in one-hot form, size [34, 5]
+	ys = tf.oneHot(ys, num_of_classes);  // Array [34, 5]
+	// console.log('ys: ', ys);
+
+	// -------------------------------------------------
+	
+	return {xs: xs, ys: ys};
+}
+
+// -------------------------------------------------
+	
+async function csvDataset_2_dictionary(csvDataset, y_choices){
+
+	let X = [];
+	let Y = [];
+	let colnum;
+	
+	const tensors = await csvDataset.toArray();
+	tensors.forEach(async function(rowdata, index) {
+
+		let col0 = Object.values(rowdata.xs);
+		let col1 = Object.values(rowdata.ys);
+		
+		if (index < 1){
+			colnum = col0.length;
+			// console.log("Object.keys: ", Object.keys(rowdata)); // output is xs, ys
+			// console.log("col0: " + col0);
+			// console.log("col1: " + col1);
+		}
+
+		// Put in Object correctly
+		X.push(col0);
+		Y.push(col1);
+		
+	});  // end of forEach
+
+	// -------------------------------------------------
+	
+	// Encode Y 
+	const num_of_classes = y_choices.length;
+	const y_choices_assignment = Object.fromEntries(y_choices.map((key, index) => [key, index]));
+	let Yencoded = [];
+ 	Y.forEach(async function(rowdata, index) {
+		Yencoded.push(y_choices_assignment[rowdata]);
+	});  // end of forEach
+
+	// -------------------------------------------------
+	
+	// Transform to tensorflow.js
+	let rownum = X.length;
+	const xs = tf.tensor2d(X, [rownum, colnum]);  // this is size [ 34, 4 ]
+	console.log('xs: ', xs);
+
+	// -------------------------------------------------
+	
+	let ys = tf.tensor2d(Yencoded, [rownum, 1], 'int32').flatten();  // flatten the 2D tensor as a 1Dtensor
+	console.log('ys: ', ys);  // shape: Array [ 34 ]
+	
+	// ys needs to be in one-hot form, size [34, 5]
+	ys = tf.oneHot(ys, num_of_classes);  // Array [34, 5]
+	console.log('ys: ', ys);
+
+	// -------------------------------------------------
+	
+	return {xs: xs, ys: ys};
+}
+
+		  
+// -------------------------------------------------
+
+	
+async function train_flash_number_model() {
+
+	// Read dataset from location to tensorflow csvDataset object
+	// https://js.tensorflow.org/api/1.0.0/
+
+	if (choice == 0) {
+		// 0=use csv file in repo
+		await get_csvDataset()
+		.then(async function(get_csvDataset_URLblob) { const csvDataset = await tf.data.csv(get_csvDataset_URLblob, { columnConfigs: { flash_number: {isLabel: true} } }); return csvDataset; })
+		.then(async function(csvDataset) { const dict_obj = await csvDataset_2_dictionary(csvDataset, y_choices_flash_number_model); return dict_obj; })
+		.then(async function(dict_obj) { await flash_number_model.compile({optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ["accuracy"]});  return dict_obj; })
+		.then(async function(dict_obj) { 
+			// console.log('dict_obj.xs: ', dict_obj.xs); // Array [34, 4]
+			// console.log('dict_obj.ys: ', dict_obj.ys); // Array [34, 5]
+			const history = await flash_number_model.fit(dict_obj.xs, dict_obj.ys, { batchSize: 1, epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { 
+			console.log(epoch + ', loss: ' + logs.loss + ', accuracy: ' + logs.acc); 
+			} } });
+			// console.log('history: ', history);
+		})
+		.then(async function(history) { const saveResults = await flash_number_model.save('localstorage://flash_number_model');  })
+	;
+		
+	} else {
+		// 1=use data array variable
+		await data_2_dictionary(data, y_choices_flash_number_model, "flash_number")
+			.then(async function(dict_obj) { await flash_number_model.compile({optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ["accuracy"]});  return dict_obj; })
+		.then(async function(dict_obj) { 
+			// console.log('dict_obj.xs: ', dict_obj.xs); // Array [34, 4]
+			// console.log('dict_obj.ys: ', dict_obj.ys); // Array [34, 5]
+			const history = await flash_number_model.fit(dict_obj.xs, dict_obj.ys, { batchSize: 1, epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { 
+			console.log(epoch + ', loss: ' + logs.loss + ', accuracy: ' + logs.acc); 
+			} } });
+			// console.log('history: ', history);
+		})
+		.then(async function(history) { const saveResults = await flash_number_model.save('localstorage://flash_number_model');  })
+	;
+	}
+	
+}
+
+// -------------------------------------------------
+	  
+async function predict_w_pretrained_flash_number_model() {
+
+	const flash_number_model = await tf.loadLayersModel('localstorage://flash_number_model');
+
+	// Give previous round data
+	const xs_test = tf.tensor2d([round_accuracy, total_accuracy, response_time, presentation_time_interval], [1, 4]);
+	// console.log('xs_test : ', xs_test);
+
+	const result = flash_number_model.predict( xs_test );
+
+	// Get probability value as a number
+	const probability_array = await result.data(); // correct
+	// console.log('probability_array : ', probability_array);
+
+	// Index of maximum softmax probability 
+	const index = result.as1D().argMax().dataSync()[0];
+	
+	// Maximum probability
+	const maxprob = probability_array[index];
+
+	const prediction = y_choices_flash_number_model[index];
+	console.log('prediction : ', prediction);
+	
+	return prediction;
+}
+
+
+// -------------------------------------------------
+
+	
+async function train_presentation_time_interval_model() {
+
+	// Read dataset from location to tensorflow csvDataset object
+	if (choice == 0) {
+		// 0=use csv file in repo
+	await get_csvDataset(choice)
+		.then(async function(get_csvDataset_URLblob) { const csvDataset = await tf.data.csv(get_csvDataset_URLblob, { columnConfigs: { presentation_time_interval: {isLabel: true} } }); return csvDataset; })
+		.then(async function(csvDataset) { const dict_obj = await csvDataset_2_dictionary(csvDataset, y_choices_presentation_time_interval_model); return dict_obj; })
+		.then(async function(dict_obj) { await presentation_time_interval_model.compile({optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ["accuracy"]});  return dict_obj; })
+		.then(async function(dict_obj) { 
+			// console.log('dict_obj.xs: ', dict_obj.xs); // Array [34, 4]
+			// console.log('dict_obj.ys: ', dict_obj.ys); // Array [34, 5]
+			const history = await presentation_time_interval_model.fit(dict_obj.xs, dict_obj.ys, { batchSize: 1, epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { 
+			console.log(epoch + ', loss: ' + logs.loss + ', accuracy: ' + logs.acc); 
+			} } });
+			// console.log('history: ', history);
+		})
+		.then(async function(history) { const saveResults = await presentation_time_interval_model.save('localstorage://presentation_time_interval_model');  })
+	;
+		
+	} else {
+		// 1=use data array variable
+		await data_2_dictionary(data, y_choices_presentation_time_interval_model, "presentation_time_interval")
+			.then(async function(dict_obj) { await presentation_time_interval_model.compile({optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ["accuracy"]});  return dict_obj; })
+		.then(async function(dict_obj) { 
+			// console.log('dict_obj.xs: ', dict_obj.xs); // Array [34, 4]
+			// console.log('dict_obj.ys: ', dict_obj.ys); // Array [34, 5]
+			const history = await presentation_time_interval_model.fit(dict_obj.xs, dict_obj.ys, { batchSize: 1, epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { console.log(epoch + ', loss: ' + logs.loss + ', accuracy: ' + logs.acc); } } });
+			// console.log('history: ', history);
+		})
+		.then(async function(history) { const saveResults = await presentation_time_interval_model.save('localstorage://presentation_time_interval_model');  })
+	;
+	}
+	
+}
+	
+
+// -------------------------------------------------
+
+
+async function predict_w_pretrained_presentation_time_interval_model() {
+
+	const presentation_time_interval_model = await tf.loadLayersModel('localstorage://presentation_time_interval_model');
+
+	// Give previous round data
+	const xs_test = tf.tensor2d([round_accuracy, total_accuracy, response_time, flash_number], [1, 4]);
+	// console.log('xs_test : ', xs_test);
+
+	const result = presentation_time_interval_model.predict( xs_test );
+
+	// Get probability value as a number
+	const probability_array = await result.data(); // correct
+	// console.log('probability_array : ', probability_array);
+
+	// Index of maximum softmax probability 
+	const index = result.as1D().argMax().dataSync()[0];
+	
+	// Maximum probability
+	const maxprob = probability_array[index];
+
+	const prediction = y_choices_presentation_time_interval_model[index];
+	console.log('prediction : ', prediction);
+	
+	return prediction;
+}
+
+	  
+// -------------------------------------------------
+
+	  
+
+async function listen_for_user_clicks() {
+
+	// Launch eventListeners on all of the canvasElements, then Make the DONE button visible
+	startTime = await currentTime();
+	
+	await start_one_eventlister(0)
+		.then(async function() {outp.innerHTML = "Click on the same pattern that was presented, then click the 'DONE' button."; await start_one_eventlister(1); })
+		.then(async function() { await start_one_eventlister(2); })
+		.then(async function() { await start_one_eventlister(3); })
+		.then(async function() { await start_one_eventlister(4); })
+		.then(async function() { await start_one_eventlister(5); })
+		.then(async function() { await start_one_eventlister(6); })
+		.then(function() { document.getElementById("resetresponse_button").style.display = 'block'; })
+	;
+	
+}
+	  
+
+// -------------------------------------------------
+
+
+async function stop_listening_for_user_clicks() {
+	 
+	// Launch eventListeners on all of the canvasElements, then Remove DONE button
+	await stop_one_eventlister(0)
+		.then(async function() { await stop_one_eventlister(1); })
+		.then(async function() { await stop_one_eventlister(2); })
+		.then(async function() { await stop_one_eventlister(3); })
+		.then(async function() { await stop_one_eventlister(4); })
+		.then(async function() { await stop_one_eventlister(5); })
+		.then(async function() { await stop_one_eventlister(6); })
+		.then(async () => { await new Promise(r => setTimeout(r, 200)); })
+		.then(function() { document.getElementById("resetresponse_button").style.display = "none"; })
+		;
+
+	endTime = await currentTime();
+}
+
+	  
+// -------------------------------------------------
+
+async function calculate_color_selection_correct(){
+
+	// Points for the squares selected, order is not important
+	const combined  = [... new Set(order.concat(user_click))];
+	
+	return (flash_number - (combined.length-user_click.length))/2; // Max is half of flash_number
+}
+
+// -------------------------------------------------
+
+async function calculate_sequence_selection_correct(){
+
+	// Points for the correct order
+	if (order.toString() == user_click.toString()) {
+		accuracy0 = flash_number/2; // Max is half of flash_number
+	}
+	
+	return accuracy0;
+}
+
+// -------------------------------------------------
+
+async function verify_user_clicks(){
+
+	// ------------------------
+	// Hide the canvas
+	// ------------------------
+	// Make canvas display setting not visible
+	canvasElement0.style.display = "none";
+	canvasElement1.style.display = "none";
+	canvasElement2.style.display = "none";
+	canvasElement3.style.display = "none";
+	canvasElement4.style.display = "none";
+	canvasElement5.style.display = "none";
+	canvasElement6.style.display = "none";
+	// ------------------------
+
+	
+	// ------------------------
+	// Calculate accuracy
+	// ------------------------
+	// console.log('IN verify_user_clicks: order - ', order); // Array(3) [ 1, 5, 3 ]
+	const order_string = order.toString();
+	
+	// console.log('IN verify_user_clicks: user_click - ', user_click);
+	const user_click_string = user_click.toString();
+	
+	round_accuracy = (accuracy0+accuracy1)/order.length;
+	total_accuracy = (total_accuracy + round_accuracy)/2;
+
+	// Print to screen: user accuracy
+	outp.innerHTML = "";
+	outp.innerHTML += '<hr />';
+	outp.innerHTML += ' Round accuracy: ' + round_accuracy + ', Total accuracy: ' + total_accuracy + '<br/><hr />';
+	// ------------------------
+
+	
+	
+	// ------------------------
+	// Save round data as an array
+	// ------------------------
+	data.push([round_accuracy, total_accuracy, response_time, presentation_time_interval, flash_number]+'\n'); 
+	// ------------------------
+
+	
+	// ------------------------
+	// Print accuracy results
+	// ------------------------
+	if (order_string == user_click_string) {
+		// Correct 
+		outp.innerHTML += "Correct: the pattern was " + order_string + ", you performed " + user_click_string + "</br>";
+	} else {
+		outp.innerHTML += "Incorrect: the pattern was " + order_string + ", you performed " + user_click_string + "</br>";
+	}
+	outp.innerHTML += '<hr />';
+	// ------------------------
+
+
+	// ------------------------
+	// Print a Self-respect Wisdom messages so that users learn self-respect (Goal of playing the game)
+	// ------------------------
+	var array0 = ["To know 'the value of your things' is to maximize one's resources to accomplish a goal. Having self-respect means to know the values of your things.", 
+                "When one uses their resources in the best possible way without complaining of lack to realize a goal, one is often more responsible to manage more resources (ie: money, opportunity, work, etc). Having self-respect means to realize a goal without complaining.", 
+                "People/society/'the system' reinforce 'states of being and doing'. People who have success and those who do not have suceess have experiences that reinforce their state of suceess and non-success. Having self-respect means to change your actions daily so that you reinforce success in your life.", 
+                "Following age, gender, race, and religion paradigms could lead to discrimination, violence, poor decision making, self-disrespect, disrespect to others, lonliness, and gossiping. Having self-respect means to not pay attention to age, gender, race, and religion paradigms, but focus on associations created by education, skill, and practice because they allow for societal success.",
+               "Some people who have low self-respect may practice lying due to fear of not being able to obtain the things that they need in life, and they even lie when they do not need to lie because it becomes an engrained response mechanism. Having self-respect means to be aware that lying is an excuse to not be present, have the courage to participate honestly in difficult situations without causing offense and/or violence.",
+               "Having self-respect means to not blindly follow people or connect yourself to others such that your life and their lives are directly influenced by the other person's actions. One does not have control over other people's lives, one can only control their own life. Having self-respect and respect for others means to make boundaries (ie: an understanding of how one wants to be treated, or an intermediate that prevents direct interaction) such that other people's actions/lives do not directly influence your life, and similarly your life actions should not directly influence other people's lives.",
+               "One believes that they are suffering because they only look at the problem from one way. When you look at the problem from multiple perspectives you can see that you are not suffering. Having self-respect means to stay active, and take small actions and steps to change the situation.",
+               "People who participate in illegal, irresponsible activities, and lying participate because they believe that they can not obtain societal success without these behaviors. They lack self-respect because there are different ways to behave that are accepted by society to obtain success, taking unnecessary risk to loose one's freedom, money, job, home, or life is a form of self-disrespect. Having self-respect means to not take unnecessary risks, such that one's dignity of one's character is not lost.",
+	       "People who participate in risky activities (lying, joking, etc) may have the luxery to do so because their character is established and trusted in society, such that their dignity, financial stability, and societal reputation are not damaged. Having self-respect means to determine whether you have the 'luxery to participate in risky activities', meaning established enough in society to sustain one's life and character.",
+	       "If one is not yet established in society, like a graduate, their societal reputation strongly depends on what others say and think about them. For this reason, non-established individuals who eventually become established have mentors and positive people honestly speaking about their abilities. Having self-respect as a non-established individual means to not participate in risky activities that may negatively influence people's opinions of you (ie: associate with people who think of you poorly/negatively, lying, joking, etc.).",
+	       "Believing that you are less good, not worthy, or that you need to be forgiven all the time, means that you disrespect your self. Self-respect is knowing that one can always 'do better', learn, and achieve the necessary things in life to live in society responsibily and happily; proper esteem or regard for the dignity of one's character.",
+               "Having self-respect means having the courage to want 'to be yourself' and take responsibility for your life, without unnecessary help from others."];
+
+	const ind = run_it_count % array0.length; // allow messages to cycle wrt the length of array0
+  	const selfRespect_wisdom_message_dict = Object.fromEntries(array0.map((key, index) => [index, key]));
+	
+	outp.innerHTML += selfRespect_wisdom_message_dict[ind] + "</br><hr />";
+	// ------------------------
+
+
+	// ------------------------
+	// Print a small map of where the user is on their path to self-respect
+	// ------------------------
+	outp.innerHTML += 'On-the-way-to-self-respect map: you have seen '  + run_it_count + ' self-respect message/s! You are on your way to self-respect! ⬆️' + '</br><hr />';
+	// ------------------------
+
+	// ------------------------
+	// Make inputs visible for self-respect message sharing 
+	// ------------------------
+	document.getElementById("submit_button").style.display = "block";
+	// ------------------------
+
+	// ------------------------
+	// Make run a new game button visible
+	// ------------------------
+	document.getElementById("run_it_button").style.display = 'block';
+	// ------------------------
+	
+	// Reset user_click
+	user_click = [];
+
+	// ------------------------
+
+}
+
+// -------------------------------------------------
+
+async function POST_text_popup() {
+	
+  winRef = window.open(url_server, "winRef", target="width=1300,height=700");
+}
+
+	
+// -------------------------------------------------
+
+
+async function get_number(x) {
+	return x[Math.round(x.length*Math.random())-1];
+}
+
+	  
+async function rand_perm(x, vec_len) {
+
+	var out = [];
+	while (out.length != vec_len) {
+		out = await get_number(x).then(async function(x_of_y) {
+			if (out.includes(x_of_y) == false && typeof x_of_y != "undefined") { 
+				out.push(x_of_y);
+			}
+			return [... new Set(out)]; // ensure that only unique values are stored in out
+		});
+	}
+	
+	return out;
+	
+}  // end of rand_perm
+	  
+// -------------------------------------------------
+
+async function flash_sequence_difficulty3(){
+
+	order = await rand_perm(squarelocation, 3)
+		.then(async function(order) { const val = await show_one_image_square(order.at(0)); return order; })
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(0)); return order;})
+		.then(async function(order) { const val = await show_one_image_square(order.at(1)); return order; })
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(1)); return order;})
+		.then(async function(order) { const val = await show_one_image_square(order.at(2)); return order; })
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(2)); return order; })
+		;
+
+	return order;
+} 
+
+
+	  
+async function flash_sequence_difficulty4(){
+
+	order = await rand_perm(squarelocation, 4)
+		.then(async function(order) { const val = await show_one_image_square(order.at(0)); return order; })
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(0)); return order;})
+		.then(async function(order) { const val = await show_one_image_square(order.at(1)); return order; })
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(1)); return order;})
+		.then(async function(order) { const val = await show_one_image_square(order.at(2)); return order; })
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(2)); return order; })
+		.then(async function(order) { const val = await show_one_image_square(order.at(3)); return order; })
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(3)); return order; })
+		;
+
+	return order;
+} 
+
+
+
+async function flash_sequence_difficulty5(){
+
+	order = await rand_perm(squarelocation, 5)
+		.then(async function(order) { const val = await show_one_image_square(order.at(0)); return order; })
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(0)); return order;})
+		.then(async function(order) { const val = await show_one_image_square(order.at(1)); return order; })
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(1)); return order;})
+		.then(async function(order) { const val = await show_one_image_square(order.at(2)); return order; })
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(2)); return order; })
+		.then(async function(order) { const val = await show_one_image_square(order.at(3)); return order; })
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(3)); return order; })
+		.then(async function(order) { const val = await show_one_image_square(order.at(4)); return order; })
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(4)); return order; })
+		;
+
+	return order;
+} 
+
+	  
+async function flash_sequence_difficulty6(){
+
+	order = await rand_perm(squarelocation, 6)
+		.then(async function(order) { const val = await show_one_image_square(order.at(0)); return order; })
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(0)); return order;})
+		.then(async function(order) { const val = await show_one_image_square(order.at(1)); return order; })
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(1)); return order;})
+		.then(async function(order) { const val = await show_one_image_square(order.at(2)); return order; })
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(2)); return order; })
+		.then(async function(order) { const val = await show_one_image_square(order.at(3)); return order; })
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(3)); return order; })
+		.then(async function(order) { const val = await show_one_image_square(order.at(4)); return order; })
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(4)); return order; })
+		.then(async function(order) { const val = await show_one_image_square(order.at(5)); return order; })
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(5)); return order; })
+		;
+
+	return order;
+} 
+
+
+
+async function flash_sequence_difficulty7(){
+
+	order = await rand_perm(squarelocation, 7)
+		.then(async function(order) { const val = await show_one_image_square(order.at(0)); return order; })
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(0)); return order;})
+		.then(async function(order) { const val = await show_one_image_square(order.at(1)); return order; })
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(1)); return order;})
+		.then(async function(order) { const val = await show_one_image_square(order.at(2)); return order; })
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(2)); return order; })
+		.then(async function(order) { const val = await show_one_image_square(order.at(3)); return order; })
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(3)); return order; })
+		.then(async function(order) { const val = await show_one_image_square(order.at(4)); return order; })
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(4)); return order; })
+		.then(async function(order) { const val = await show_one_image_square(order.at(5)); return order; })
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(5)); return order; })
+		.then(async function(order) { const val = await show_one_image_square(order.at(6)); return order; })
+		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
+		.then(async function(order) { const val = await show_one_grey_square(order.at(6)); return order; })
+		;
+
+	return order;
+} 
+
+	  
+// -------------------------------------------------
+
+
+async function flash_sequence_when_clicked_on(val){
+	
+	await show_one_image_square(val)
+		.then(async (val) => { await new Promise(r => setTimeout(r, 200)); return val;})
+		.then(async function(val) { val = await show_one_grey_square(val); })
+		;
+
+} 
+	  
+// -------------------------------------------------
+	  
+async function show_one_image_square(val) {
+	
+	    const image = new Image();
+
+
+    try {
+      
+	    image.setAttribute('crossOrigin', "");
+	    image.setAttribute('headers', {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"});
+	    
+	    if (val == 0) {
+		image.onload = async () => { ctx0.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
+		image.src = "https://storage.googleapis.com/on-the-way2selfrespect/red.png";
+	    } else if (val == 1) {
+		image.onload = async () => { ctx1.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
+		image.src = "https://storage.googleapis.com/on-the-way2selfrespect/green.png";
+	    } else if (val == 2) {
+		image.onload = async () => { ctx2.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
+		image.src = "https://storage.googleapis.com/on-the-way2selfrespect/blue.png";
+	    } else if (val == 3) {
+		image.onload = async () => { ctx3.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
+		image.src = "https://storage.googleapis.com/on-the-way2selfrespect/cyan.png";
+	    } else if (val == 4) {
+		image.onload = async () => { ctx4.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
+		image.src = "https://storage.googleapis.com/on-the-way2selfrespect/yellow.png";
+	    } else if (val == 5) {
+		image.onload = async () => { ctx5.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
+		image.src = "https://storage.googleapis.com/on-the-way2selfrespect/magenta.png";
+	    } else {
+		image.onload = async () => { ctx6.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
+		image.src = "https://storage.googleapis.com/on-the-way2selfrespect/orange.png";
+	    }
+
+      } catch (error) {
+
+      // If it fails, load images from GitHub
+       if (val == 0) {
+		image.onload = async () => { ctx0.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
+		image.src = "red.png";
+	    } else if (val == 1) {
+		image.onload = async () => { ctx1.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
+		image.src = "green.png";
+	    } else if (val == 2) {
+		image.onload = async () => { ctx2.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
+		image.src = "blue.png";
+	    } else if (val == 3) {
+		image.onload = async () => { ctx3.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
+		image.src = "cyan.png";
+	    } else if (val == 4) {
+		image.onload = async () => { ctx4.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
+		image.src = "yellow.png";
+	    } else if (val == 5) {
+		image.onload = async () => { ctx5.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
+		image.src = "magenta.png";
+	    } else {
+		image.onload = async () => { ctx6.drawImage(image, 0, 0, canvasElement_width, canvasElement_height); };
+		image.src = "orange.png";
+	    }
+      }
+	return val;
+  
+}  // end of show_one_image_square
+
+// -------------------------------------------------
+
+
+async function show_one_grey_square(val) {
+	
+    // Draw image on canvas
+    if (val == 0) {
+	ctx0.fillStyle = '#999c98';  // Background square over image = blue
+	ctx0.fillRect(0, 0, canvasElement_width, canvasElement_height);
+    } else if (val == 1) {
+	ctx1.fillStyle = '#999c98';  // Background square over image = blue
+	ctx1.fillRect(0, 0, canvasElement_width, canvasElement_height);
+    } else if (val == 2) {
+	ctx2.fillStyle = '#999c98';  // Background square over image = blue
+	ctx2.fillRect(0, 0, canvasElement_width, canvasElement_height);
+    } else if (val == 3) {
+	ctx3.fillStyle = '#999c98';  // Background square over image = blue
+	ctx3.fillRect(0, 0, canvasElement_width, canvasElement_height);
+    } else if (val == 4) {
+	ctx4.fillStyle = '#999c98';  // Background square over image = blue
+	ctx4.fillRect(0, 0, canvasElement_width, canvasElement_height);
+    } else if (val == 5) {
+	ctx5.fillStyle = '#999c98';  // Background square over image = blue
+	ctx5.fillRect(0, 0, canvasElement_width, canvasElement_height);
+    } else {
+	ctx6.fillStyle = '#999c98';  // Background square over image = blue
+	ctx6.fillRect(0, 0, canvasElement_width, canvasElement_height);
+    }
+
+	return val;
+}  // end of show_one_grey_square
+
+// -------------------------------------------------
+
+
+async function show_onehalf_grey_square(val) {
+	
+    // Draw image on canvas
+    if (val == 0) {
+	ctx0.fillStyle = '#999c98';  // Background square over image = blue
+	ctx0.fillRect(0, 0, canvasElement_width, 50);
+    } else if (val == 1) {
+	ctx1.fillStyle = '#999c98';  // Background square over image = blue
+	ctx1.fillRect(0, 0, canvasElement_width, 50);
+    } else if (val == 2) {
+	ctx2.fillStyle = '#999c98';  // Background square over image = blue
+	ctx2.fillRect(0, 0, canvasElement_width, 50);
+    } else if (val == 3) {
+	ctx3.fillStyle = '#999c98';  // Background square over image = blue
+	ctx3.fillRect(0, 0, canvasElement_width, 50);
+    } else if (val == 4) {
+	ctx4.fillStyle = '#999c98';  // Background square over image = blue
+	ctx4.fillRect(0, 0, canvasElement_width, 50);
+    } else if (val == 5) {
+	ctx5.fillStyle = '#999c98';  // Background square over image = blue
+	ctx5.fillRect(0, 0, canvasElement_width, 50);
+    } else {
+	ctx6.fillStyle = '#999c98';  // Background square over image = blue
+	ctx6.fillRect(0, 0, canvasElement_width, 50);
+    }
+
+	return val;
+}  // end of show_onehalf_grey_square
+
+
+
+// -------------------------------------------------
+
+async function resetresponse() {
+
+	user_click = [];
+	await stop_listening_for_user_clicks().then(async function() {  await listen_for_user_clicks(); })
+}
+
+
+// -------------------------------------------------
+
+	
+// https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
+async function processEvent(event) {
+	
+    // When the user clicks the square, save value
+    const out = this.getAttribute("data-id");
+    const out1 = Number(out);
+    user_click.push( out1 );
+
+    // console.log('user_click.length: ', user_click.length);
+    // console.log('order.length: ', order.length);
+	
+    if (user_click.length == order.length){
+	    // Click on thhe invisible button
+	    await user_click_done();
+
+	    // Train the model every XX rounds
+	    if (run_it_count % 2){
+		    await train_flash_number_model();
+		    await train_presentation_time_interval_model();
+		    decide_to_predict = true;
+	     } else {
+		    decide_to_predict = false;
+	    }
+    }
+
+    // When the user clicks the square, flash the square and make the square full color
+    await flash_sequence_when_clicked_on(this.getAttribute("data-id"));
+}
+
+	  
+async function start_one_eventlister(val) {
+
+    // console.log("user_click in start_one_eventlister: ", user_click);  // user_click = []
+
+    // When the eventlister is turned on for each square, show image first then half of the square to hide image [seeing half or no image could be another spatial difficulty parameter]
+    await show_one_image_square(val)
+    .then(async (val) => { await new Promise(r => setTimeout(r, 200)); return val;})
+    .then(async function(val) { val = await show_onehalf_grey_square(val); return val; })
+    .then(function(val) {
+							       
+     	// Start an eventlister per canvas to evaluate user response
+	    if (val == 0) {
+		// canvasElement0.addEventListener("click", (event) => { user_click.push(val); }, false); // it duplicates each val by the number of time "run it" is pushed. This format apparently has no reference to the eventListener because no function is called (the processEvent allows javascript to track canvasElement0), so one can not remove it, thus it keeps running.
+		// OR
+		canvasElement0.addEventListener("click", processEvent, false);
+	    } else if (val == 1) {
+		canvasElement1.addEventListener("click", processEvent, false);
+	    } else if (val == 2) {
+		canvasElement2.addEventListener("click", processEvent, false);
+	    } else if (val == 3) {
+		canvasElement3.addEventListener("click", processEvent, false);
+	    } else if (val == 4) {
+		canvasElement4.addEventListener("click", processEvent, false);
+	    } else if (val == 5) {
+		canvasElement5.addEventListener("click", processEvent, false);
+	    } else {
+		canvasElement6.addEventListener("click", processEvent, false);
+	    }			       
+							       
+    });
+	
+    
+	
+}  // end of start_one_eventlister
+
+	  
+// -------------------------------------------------
+
+	  
+async function stop_one_eventlister(val) {
+
+    // console.log("user_click in stop_one_eventlister: ", user_click);
+	
+    // Start an eventlister per canvas to evaluate user response
+    if (val == 0) {
+	canvasElement0.removeEventListener("click", processEvent);
+    } else if (val == 1) {
+	canvasElement1.removeEventListener("click", processEvent);
+    } else if (val == 2) {
+	canvasElement2.removeEventListener("click", processEvent);
+    } else if (val == 3) {
+	canvasElement3.removeEventListener("click", processEvent);
+    } else if (val == 4) {
+	canvasElement4.removeEventListener("click", processEvent);
+    } else if (val == 5) {
+	canvasElement5.removeEventListener("click", processEvent);
+    } else {
+	canvasElement6.removeEventListener("click", processEvent);
+    }
+	
+}  // end of start_one_eventlister
+
+	  
+// -------------------------------------------------
+
+	
+async function download_data() {
+    
+    // ---------------------
+    // Puts array into csv format
+    const blob = new Blob([data], { type: 'text/csv;charset=utf-8;' });
+
+    // Create a url for the data object
+    const bloburl = URL.createObjectURL(blob);
+    // ---------------------
+
+    const link = document.createElement("a");
+    link.setAttribute("href", bloburl);
+
+    const filename = 'data.csv';
+    link.setAttribute("download", filename);
+	  
+    link.style.display = 'block';
+
+    // Download CSV here: blob:https://codesolutions2.github.io/2e7701d0-559c-4be8-87de-61c72fce9a96
+    // outp.innerHTML += 'Download CSV here: ' + bloburl + "<br/>";
+	
+    // document.body.appendChild(link);
+
+    // Automatic download of csv
+    link.click();  // to have the PC prompt where to save the file
+    // document.body.removeChild(link);
+
+    return bloburl;
+}
+	
+
+	
+</script>
+</body>
+</html>
