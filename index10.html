@@ -173,7 +173,7 @@ async function initialization_of_canvasElements() {
 	// ------------------------------------------
 	// GET self-respect messages from file 
 	// ------------------------------------------
-	console.log('decide_to_GET_messages_from_file: ', decide_to_GET_messages_from_file);
+	// console.log('decide_to_GET_messages_from_file: ', decide_to_GET_messages_from_file);
 	if (run_it_count == 0 || decide_to_GET_messages_from_file == true) {
 		
 		await GET_text_from_file_wo_auth_GitHub_RESTAPI_directurl()
@@ -1207,11 +1207,11 @@ async function processEvent(event) {
 	    // Click on thhe invisible button
 	    await user_click_done();
 
-	    console.log('run_it_count: ', run_it_count);
-	    console.log('run_it_count % 2: ', run_it_count % 2);
+	    // console.log('run_it_count: ', run_it_count);
+	    // console.log('run_it_count % 2: ', run_it_count % 2);
 	    
 	    // Train the model every XX rounds
-	    if (run_it_count % 2){
+	    if (run_it_count % 2 == 0){
 		    await train_flash_number_model();
 		    await train_presentation_time_interval_model();
 		    decide_to_predict = true;
@@ -1220,8 +1220,8 @@ async function processEvent(event) {
 	    }
 
 	    // GET self-respect messages from file when all the file messages are read
-	    console.log('run_it_count % 10: ', run_it_count % 10);
-	    if (run_it_count % 10){
+	    // console.log('run_it_count % 10: ', run_it_count % 10);
+	    if (run_it_count % 10 == 0){
 		    decide_to_GET_messages_from_file = true;
 	     } else {
 		    decide_to_GET_messages_from_file = false;
