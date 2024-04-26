@@ -1207,6 +1207,9 @@ async function processEvent(event) {
 	    // Click on thhe invisible button
 	    await user_click_done();
 
+	    console.log('run_it_count: ', run_it_count);
+	    console.log('run_it_count % 2: ', run_it_count % 2);
+	    
 	    // Train the model every XX rounds
 	    if (run_it_count % 2){
 		    await train_flash_number_model();
@@ -1217,6 +1220,7 @@ async function processEvent(event) {
 	    }
 
 	    // GET self-respect messages from file when all the file messages are read
+	    console.log('run_it_count % 10: ', run_it_count % 10);
 	    if (run_it_count % 10){
 		    decide_to_GET_messages_from_file = true;
 	     } else {
