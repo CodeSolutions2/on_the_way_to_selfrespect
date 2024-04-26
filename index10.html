@@ -168,21 +168,22 @@ async function initialization_of_canvasElements() {
 	}
 	// console.log("presentation_time_interval: ", presentation_time_interval);
 	// ------------------------------------------
-
-
-  // ------------------------------------------
+	
+	
+	// ------------------------------------------
 	// Get messages from file
 	// ------------------------------------------
-  if (decide_to_GET_messages_from_file == true) {
-    
-    await GET_text_from_file_wo_auth_GitHub_RESTAPI_directurl()
-  .then(async function(text_arr) { 
-    console.log('text_arr: ', text_arr);
-    message_arr = text_arr.split('\n\n');
-    console.log('message_arr: ', message_arr);
-  });
-
-  // ------------------------------------------
+	if (decide_to_GET_messages_from_file == true) {
+		
+		await GET_text_from_file_wo_auth_GitHub_RESTAPI_directurl()
+			.then(async function(text_arr) { 
+				console.log('text_arr: ', text_arr);
+				message_arr = text_arr.split('\n\n');
+				console.log('message_arr: ', message_arr);
+			});
+	}
+	
+	// ------------------------------------------
 	
 	canvasElement0.width = canvasElement_width;
 	canvasElement0.height = canvasElement_height;
