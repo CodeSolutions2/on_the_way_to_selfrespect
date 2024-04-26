@@ -1343,13 +1343,11 @@ async function download_data() {
 
 async function GET_text_from_file_wo_auth_GitHub_RESTAPI_directurl() {
   
-  var file_download_url = "https://raw.githubusercontent.com/CodeSolutions2/on_the_way_to_selfrespect/main/self_respect_messages.csv"; 
+  var file_download_url = "https://raw.githubusercontent.com/CodeSolutions2/on_the_way_to_selfrespect/main/self_respect_messages.txt"; 
   
 	return await fetch(file_download_url)
 		.then(res => res.text())
-		.then(data => { 
-			console.log('data: ', data); return data;
-		})
+		.then(data => { return data; })
 		.catch(error => { console.log(error); });
 }
 
