@@ -65,7 +65,7 @@ var decide_to_predict = false;
 var choice = 1; // 0=use csv file in repo, 1=use data array variable
 
 var url_server = "https://script.google.com/macros/s/AKfycbytCiSzc7qPehkC3h_Sj7QltSMCjusBvAG6GJQVpUfv/dev";
-var decide_to_GET_messages_from_file = true;
+var decide_to_GET_messages_from_file = false;
 var message_arr = [];
 
 // ----------------------------
@@ -173,7 +173,7 @@ async function initialization_of_canvasElements() {
 	// ------------------------------------------
 	// GET self-respect messages from file 
 	// ------------------------------------------
-	if (decide_to_GET_messages_from_file == true) {
+	if (run_it_count == 0 || decide_to_GET_messages_from_file == true) {
 		
 		await GET_text_from_file_wo_auth_GitHub_RESTAPI_directurl()
 			.then(async function(text_arr) { 
