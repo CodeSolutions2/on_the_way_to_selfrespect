@@ -173,6 +173,7 @@ async function initialization_of_canvasElements() {
 	// ------------------------------------------
 	// GET self-respect messages from file 
 	// ------------------------------------------
+	console.log('decide_to_GET_messages_from_file: ', decide_to_GET_messages_from_file);
 	if (run_it_count == 0 || decide_to_GET_messages_from_file == true) {
 		
 		await GET_text_from_file_wo_auth_GitHub_RESTAPI_directurl()
@@ -1216,12 +1217,12 @@ async function processEvent(event) {
 	    }
 
 	    // GET self-respect messages from file when all the file messages are read
-	    if (run_it_count % message_arr.length){
+	    if (run_it_count % 10){
 		    decide_to_GET_messages_from_file = true;
 	     } else {
 		    decide_to_GET_messages_from_file = false;
 	    }
-	    console.log('decide_to_GET_messages_from_file: ', decide_to_GET_messages_from_file);
+	    
     }
 
     // When the user clicks the square, flash the square and make the square full color
