@@ -1,6 +1,6 @@
 # on_the_way_to_selfrespect
 
-This JavaScript memorization game is a productivity tool to help users learn about self-respect and/or self-esteem. Unorganized activities that many people call 'fun' (like hanging out, chatroom, video games, etc..) do not always promise that participants will learn important life lessons like self-esteem and self-respect. Constantly engaging in unorganized activities without learning self-respect can create a vicious cycle where individuals do not know what self-respect is, nor understand how to treat themselves with respect and others with respect.
+A JavaScript memorization game productivity tool to help users learn about self-respect and/or self-esteem. Unorganized activities that many people call 'fun' (like hanging out, chatroom, video games, etc..) do not always promise that participants will learn important life lessons like self-esteem and self-respect. Constantly engaging in unorganized activities without learning self-respect can create a vicious cycle where individuals do not know what self-respect is, nor understand how to treat themselves with respect and others with respect.
 
 Self-respect is knowing that one can always "do better", learn, and achieve the necessary things in life to live in society responsibily and happily. 
 
