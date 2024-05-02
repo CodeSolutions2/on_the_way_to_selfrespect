@@ -1,6 +1,6 @@
 # on_the_way_to_selfrespect
 
-Unorganized activities that many people call 'fun' (like hanging out, chatroom, video games, etc..) do not always promise that participants will learn important life lessons like self-esteem and self-respect. Constantly engaging in unorganized activities without learning self-respect can create a vicious cycle where individuals do not know what self-respect is, nor understand how to treat themselves with respect and others with respect.
+This JavaScript memorization game is a productivity tool to help users learn about self-respect and/or self-esteem. Unorganized activities that many people call 'fun' (like hanging out, chatroom, video games, etc..) do not always promise that participants will learn important life lessons like self-esteem and self-respect. Constantly engaging in unorganized activities without learning self-respect can create a vicious cycle where individuals do not know what self-respect is, nor understand how to treat themselves with respect and others with respect.
 
 Self-respect is knowing that one can always "do better", learn, and achieve the necessary things in life to live in society responsibily and happily. 
 
@@ -15,4 +15,10 @@ This memorization game was made to help people to start to think about self-resp
 
 [Completed working version] https://CodeSolutions2.github.io/on_the_way_to_selfrespect/index10.html
 
-[Blog post] https://medium.com/@j622amilah/javascript-tensorflow-js-webapp-game-d17aa84422f0
+## Blog post 
+
+View an explanation of this webapp on my Medium Practicing DatScy blog: https://medium.com/@j622amilah/javascript-tensorflow-js-webapp-game-d17aa84422f0
+
+## Upwork
+
+[Available for purchase on Upwork](https://www.upwork.com/services/product/development-it-tensorflow-js-performance-prediction-javascript-video-game-development-1767599520868958208)
