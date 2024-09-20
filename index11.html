@@ -8,7 +8,6 @@
 <br><br>
 
 <button id="run_it_button" onclick="run_it()" style="display:block">Run a memory game round</button>
-<!-- <button id="download_data_button" onclick="download_data()" style="display:block">download_data</button> -->
 <button id="resetresponse_button" onclick="resetresponse()" style="display:none">resetresponse</button>	
 <button id="user_click_done_button" onclick="user_click_done()" style="display:none">DONE</button>
 
@@ -99,7 +98,6 @@ const denseLayer4_m0 = tf.layers.dense({units: 5, activation: 'softmax'});  // t
 const outputs_m0 = denseLayer4_m0.apply(denseLayer3_m0.apply(denseLayer2_m0.apply(denseLayer1_m0.apply(inputs_m0))));
 const flash_number_model = tf.model({inputs: inputs_m0, outputs: outputs_m0});
 
-	  
 // -------------------------------------------------
 	  
 // Load presentation_time_interval model Object when page loads
@@ -121,17 +119,14 @@ async function currentTime() {
 	return [hh, mm, ss];
 }
 			
-
 // -------------------------------------------------
 
 async function elapsedTime(startTime, endTime) {
 	return (endTime[0]*60*60 + endTime[1]*60 + endTime[2]) - (startTime[0]*60*60 + startTime[1]*60 + startTime[2]);
 	
 }
-			
 
 // -------------------------------------------------
-
 
 async function initialization_of_canvasElements() {
 
