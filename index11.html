@@ -3,6 +3,7 @@
 <head></head>
 <body>
 
+<!-- https://CodeSolutions2.github.io/on_the_way_to_selfrespect/index7.html -->
 <h1 style='text-align: center; margin-bottom: -35px;'>On the way to self-respect webapp</h1>
 <br><br>
 
@@ -322,10 +323,6 @@ async function run_it() {
 	// Remove all messages
 	outp.innerHTML = "";
 	
-	// ------------------------
-
-	// Remove inputs for self-respect message sharing 
-	document.getElementById("submit_button").style.display = "none";
 	// ------------------------
 
 	// Make canvas display setting visible
@@ -845,12 +842,6 @@ async function verify_user_clicks(){
 	// ------------------------
 
 	// ------------------------
-	// Make inputs visible for self-respect message sharing 
-	// ------------------------
-	document.getElementById("submit_button").style.display = "block";
-	// ------------------------
-
-	// ------------------------
 	// Make run a new game button visible
 	// ------------------------
 	document.getElementById("run_it_button").style.display = 'block';
@@ -862,9 +853,8 @@ async function verify_user_clicks(){
 	// ------------------------
 
 }
-	
-// -------------------------------------------------
 
+// -------------------------------------------------
 
 async function get_number(x) {
 	return x[Math.round(x.length*Math.random())-1];
