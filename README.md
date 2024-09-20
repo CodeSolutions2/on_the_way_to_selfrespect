@@ -9,7 +9,7 @@ Dictionary citations:
   
 When one thinks that they can not "do better", they think that they are a victim. Many "victim belivers" think that they deserve or it is allowable to use/hurt others that are "doing better in life" in order for them to "survive" (ie: acheive better life success). "Victim belivers" (ie: people with low self-respect/esteem) do not have confidence/belief in their ownselves, which is the definition of self-respect (to have belief and confidence in one's self), such that they can do better or acheive success all by themselves. 
 
-Thus, "Victim belivers"/low self-respect/esteem people disrespect themselves and they disrespect others. Please learn about self-respect such that everyone can suceed in life together, and the world can be a less violent place.
+Thus, "Victim belivers"/low self-respect/esteem people disrespect themselves and they disrespect others. Please learn about self-respect such that everyone can succeed in life together, and the world can be a less violent place.
 
 This memorization game was made to help people to start to think about self-respect.
 
