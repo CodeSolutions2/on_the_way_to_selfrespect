@@ -13,14 +13,14 @@ Thus, "Victim belivers"/low self-respect/esteem people disrespect themselves and
 
 This memorization game was made to help people to start to think about self-respect.
 
-[Completed working version] https://CodeSolutions2.github.io/on_the_way_to_selfrespect/index11.html
+[Completed working version] https://CodeSolutions2.github.io/on_the_way_to_selfrespect/index12.html
 
 ## Construction of JavaScript video game
   - View an explanation of this webapp on my Medium Practicing DatScy blog: https://medium.com/@j622amilah/javascript-tensorflow-js-webapp-game-d17aa84422f0
   - This video game contains two (3-dense layer) neural network categorical models to predict: [0] flash number (how many squares should flash at each round), and [1] presentation time interval (how long each square should flash). These variables are randomly choosen for the first round, and then for the following rounds the model uses your previous round performance to predict the next variable. In the beginning, without a lot of data, it will randomly predict flash number/presentation time interval. However, as the game progresses it will find associations of flash number/presentation time interval with how fast and accurately you responded. For example, if you responsed slow and inaccurate for 10 rounds and the last round, it will predict flash number/presentation time intervals where you previously responded slow and inaccurate for the next round, thus giving you a chance to change or maintain how you previously behaved. Each next round prediction is made by the previous round performance.
     - The following performance parameters are accumulated in a data array each round for model prediction: [round accuracy, total accuracy, round response time, presentation time interval, flash number. The data array is not saved, thus when you leave/refresh the url the data array will not remember your previous game performance.
     - At the end of each round, a "wisdom" message about how to have better self-respect is presented along with total and round performance.
-
+  - Round performance was calculated using two grading criteria about the quantity and sequence of squares that flashed, via flash_number: [0] the correct sequence (order of selection is important) AND [1] how many correct colors were clicked (order of selection is NOT important). Grading criteria [0] was targeted to reward players that are good at remembering spatial events/locations with or without object/color association. Grading criteria [1] was targeted to reward players that are good at remembering objects/lists.
       
 
 ## Upwork
