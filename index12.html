@@ -48,13 +48,11 @@
 </div>
 
 <!-- ---------------------------------------- -->
-
-<!-- div {padding: 10px;} /* Adds 7 pixels of space inside the div */ -->
 	
 <style>
 canvas {border: 1px solid black; position: absolute; display: inline-block; z-index: 1; top: 150px;}
 
-button { border: none; padding-top: 10px; padding-bottom: 10px; color: white; font-weight: bold; width: 200px; margin-bottom: 5px; border-radius: 5px; background: #1743b3 }
+button { border: 1px solid white; padding-top: 10px; padding-bottom: 10px; color: white; font-weight: bold; width: 200px; margin-bottom: 5px; border-radius: 5px; background: #1743b3 }
 
 .button_container_class { display: flex; flex-direction: row; justify-content: flex-start; gap: 20px; }
 	
@@ -865,7 +863,7 @@ async function verify_user_clicks(){
 	document.getElementById('results').style.display = "block";
 
 	// top left
-	document.getElementById('accuracy_explaination').innerHTML = 'Round performance was calculated using two grading criteria about the quantity and sequence of squares that flashed: <ol><li>correct sequence (order of selection is important).</li><li>quantity of correct colors were clicked (order of selection is NOT important).</li></ol>The first and second grading criteria give credit to good spatial and list memory players, respectively.' + '<br/>';
+	document.getElementById('accuracy_explaination').innerHTML = 'Round performance was calculated using two grading criteria about the quantity and sequence of squares that flashed: <ol><li>correct sequence (order of selection is important).</li><li>quantity of correct colors were clicked (order of selection is NOT important).</li></ol>The first and second grading criteria gives credit to good spatial and list memory players, respectively.' + '<br/>';
 	
 	// bottom left
 	// Print a small map of where the user is on their path to self-respect
