@@ -6,6 +6,7 @@
 <h1>On the way to self-respect webapp</h1>
 <ol type="A">
 	<li>Click on "Run a memory game round" to play.</li>
+	<li>During a game round, click on the same pattern that was presented, when the correct number of squares are clicked the round is evaluated.</li>
 	<li>During a game round, if you make an error clicking on the sequence, click on "Reset response" to and re-type your sequence response.</li>
 	<li>Click on "Restart a full game" when you would like to restart a full game.</li>
 </ol>
@@ -14,7 +15,7 @@
 
 <div id="button_container" align="left">
 	<button id="run_it_button" onclick="run_it()" style="display:block">Run a memory game round</button>
-	<button id="resetresponse_button" onclick="resetresponse()" style="display:none">Reset response</button>	
+	<button id="resetresponse_button" onclick="resetresponse()" style="display:none">Reset response</button>
 	<button id="restart_a_new_game" onclick="restart_a_new_game()" style="display:none">Restart a new game</button>
 </div>
 	
@@ -362,7 +363,6 @@ async function run_it() {
 	// -------------------------------------------------
 	
 	// Reset all text and results
-	// outp.innerHTML = "";
 	document.getElementById('canvas_container').style.display = "block";
 	document.getElementById('results').style.display = "none";
 
@@ -739,7 +739,7 @@ async function listen_for_user_clicks() {
 	startTime = await currentTime();
 	
 	await start_one_eventlister(0)
-		.then(async function() {outp.innerHTML = "Click on the same pattern that was presented, then click the 'DONE' button."; await start_one_eventlister(1); })
+		.then(async function() { await start_one_eventlister(1); })
 		.then(async function() { await start_one_eventlister(2); })
 		.then(async function() { await start_one_eventlister(3); })
 		.then(async function() { await start_one_eventlister(4); })
