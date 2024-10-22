@@ -21,7 +21,7 @@
 	
 <!-- ---------------------------------------- -->
 
-<div id="canvas_container" align="left"></div>
+<div id="canvas_container"></div>
 		
 <!-- ---------------------------------------- -->
 
@@ -85,10 +85,10 @@ th#webapp_output {width: 100%; }
 var squarelocation = [0, 1, 2, 3, 4, 5, 6];
 	  
 // Set the width and height of the canvas
-var canvasElement_width = 75;  // 150
+var canvasElement_width = 150;  // 150
 var canvasElement_height = canvasElement_width;
-var canvasTopStart = 75; // 150
-const space_btw_each_canvas = 17; // 40;
+var canvasTopStart = 150; // 150  //75
+const space_btw_each_canvas = 40; // 40;  //17
 	
 var user_click = [];
 var order = [];
@@ -286,7 +286,7 @@ async function initialization_of_canvasElements() {
 		// -----------------------------------
 		
 	} else if (square_config == 2) {
-		// 2: square
+		// 2: U
 		// -----------------------------------
 		// 1st row
 		canvasElement0.style.left = Number(0*canvasElement_width + space_btw_each_canvas)+'px';
@@ -313,14 +313,6 @@ async function initialization_of_canvasElements() {
 		canvasElement6.style.top = Number(2*canvasElement_width + canvasTopStart)+'px';
 		// -----------------------------------
 	}
-
-	canvasElement0.style.position = "absolute";
-	canvasElement1.style.position = "absolute";
-	canvasElement2.style.position = "absolute";
-	canvasElement3.style.position = "absolute";
-	canvasElement4.style.position = "absolute";
-	canvasElement5.style.position = "absolute";
-	canvasElement6.style.position = "absolute";
 
 	// Set a reference value for the canvasElement
 	canvasElement0.setAttribute("data-id", 0);
