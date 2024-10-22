@@ -789,7 +789,7 @@ async function verify_user_clicks(){
 	// console.log('IN verify_user_clicks: user_click - ', user_click);
 	const user_click_string = user_click.toString();
 	
-	round_accuracy = (accuracy0+accuracy1)/order.length;
+	round_accuracy = await (accuracy0+accuracy1)/order.length;
 	total_accuracy = (total_accuracy + round_accuracy)/2;
 
 	// Print to screen: user accuracy
