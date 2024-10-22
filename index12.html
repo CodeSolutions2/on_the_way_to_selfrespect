@@ -3,23 +3,70 @@
 <head></head>
 <body>
 
-<h1 style='text-align: center; margin-bottom: -35px;'>On the way to self-respect webapp</h1>
+<h1>On the way to self-respect webapp</h1>
+<ol type="A">
+	<li>Click on "Run a memory game round" to play.</li>
+	<li>During a game round, if you make an error clicking on the sequence, click on "Reset response" to and re-type your sequence response.</li>
+	<li>Click on "Restart a full game" when you would like to restart a full game.</li>
+</ol>
+
+<!-- ---------------------------------------- -->
+	
+<div id="canvas_container" align="left"></div>
+		
+<!-- ---------------------------------------- -->
+
+<!-- View two split window -->
+<div id="table_container" align="left">
+<table id="results">
+<tr>
+
+<th id="webapp_input">
+<h3>[Step 1] Explaination about game round results.</h3>
+<div id="accuracy_explaination"></div>
+<br><br>
+<div id="self_respect_map" style="font-family:courier; font-size:16px; height:300px; color: #27428f; display:none;"></div>
+	
 <br><br>
 
 <button id="run_it_button" onclick="run_it()" style="display:block">Run a memory game round</button>
-<button id="resetresponse_button" onclick="resetresponse()" style="display:none">resetresponse</button>	
-<button id="user_click_done_button" onclick="user_click_done()" style="display:none">DONE</button>
+<button id="resetresponse_button" onclick="resetresponse()" style="display:none">Reset response</button>	
+<button id="restart_a_new_game" onclick="restart_a_new_game()" style="display:none">Restart a new game</button>
 
-<!-- -------------------------- -->
+</th>
+	
+<!-- ---------------------------------------- -->
 
-<!-- Output text -->
-<div id="notification" style="font-family:courier;font-size:16px;height:300px; color: #27428f"></div>
-<div id="output" style="font-family:courier;font-size:20px;height:300px"></div>
+<th id="webapp_output">
+<h3>[Step 2] View game round results.</h3>
+<div id="game_round_results"></div>
+<br><br>
+<div id="self_wisdom_message"></div>
+</th>
+	
+</tr>
+</table>
+</div>
 
+<!-- ---------------------------------------- -->
 	
 <style>
-canvas {border: 1px solid black; position: absolute; display: inline-block; z-index: 1; top: 150px;},
-div {position: relative; z-index: 2;},
+canvas {border: 1px solid black; position: absolute; display: inline-block; z-index: 1; top: 150px;}
+	
+div {position: relative; z-index: 2;}
+div#accuracy_explaination { font-family:courier; font-size:16px; height:300px; color:#27428f; display:none; }
+div#self_respect_map { font-family:courier; font-size:16px; height:300px; color:#27428f; display:none; }
+div#game_round_results { font-family:courier; font-size:16px; height:300px; color:#27428f; display:none; }
+div#self_wisdom_message { font-family:courier; font-size:16px; height:300px; color:#27428f; display:none; }
+	
+table { vertical-align: top; border-collapse: collapse; position: relative; z-index: 0; border: 0px solid black; }
+table#results { text-align: left; width:500px; display:none; }
+	
+tr {vertical-align: top; border: 0px solid black; padding: 30px 30px; }
+
+th, td {vertical-align: top; border: 0px solid black; padding: 10px; }
+th#webapp_input {width: 100%; }
+th#webapp_output {width: 100%; }
 </style>
 
 
@@ -34,8 +81,6 @@ var squarelocation = [0, 1, 2, 3, 4, 5, 6];
 var canvasElement_width = 150;
 var canvasElement_height = canvasElement_width;
 var canvasTopStart = 150;
-
-const outp = document.getElementById('output');
 
 var user_click = [];
 var order = [];
@@ -123,7 +168,6 @@ async function currentTime() {
 
 async function elapsedTime(startTime, endTime) {
 	return (endTime[0]*60*60 + endTime[1]*60 + endTime[2]) - (startTime[0]*60*60 + startTime[1]*60 + startTime[2]);
-	
 }
 
 // -------------------------------------------------
@@ -279,14 +323,14 @@ async function initialization_of_canvasElements() {
 	canvasElement5.setAttribute("data-id", 5);
 	canvasElement6.setAttribute("data-id", 6);
 
-	// Add the canvas to the document body or any other desired element
-	document.body.appendChild(canvasElement0);
-	document.body.appendChild(canvasElement1);
-	document.body.appendChild(canvasElement2);
-	document.body.appendChild(canvasElement3);
-	document.body.appendChild(canvasElement4);
-	document.body.appendChild(canvasElement5);
-	document.body.appendChild(canvasElement6); 
+	// Add the canvas to the DOM
+	document.getElementById("canvas_container").appendChild(canvasElement0);
+	document.getElementById("canvas_container").appendChild(canvasElement1);
+	document.getElementById("canvas_container").appendChild(canvasElement2);
+	document.getElementById("canvas_container").appendChild(canvasElement3);
+	document.getElementById("canvas_container").appendChild(canvasElement4);
+	document.getElementById("canvas_container").appendChild(canvasElement5);
+	document.getElementById("canvas_container").appendChild(canvasElement6);
 
 	// Make all the canvas context objects a certain initial color
 	ctx0.fillStyle = '#999c98';  // Background square over image = blue
@@ -307,19 +351,21 @@ async function initialization_of_canvasElements() {
 	return flash_number;
 }
 
-
-
 // -------------------------------------------------
 
-	  
 async function run_it() {
 
 	// -------------------------------------------------
 	// Reset screen text after a previous run
 	// -------------------------------------------------
 	
-	// Remove all messages
-	outp.innerHTML = "";
+	// Reset all text and results
+	// outp.innerHTML = "";
+	document.getElementById('canvas_container').style.display = "block";
+	document.getElementById('results').style.display = "none";
+
+	document.getElementById("run_it_button").style.display = 'none';
+	document.getElementById("restart_a_new_game").style.display = 'none';
 	
 	// ------------------------
 
@@ -331,10 +377,6 @@ async function run_it() {
 	canvasElement4.style.display = "block";
 	canvasElement5.style.display = "block";
 	canvasElement6.style.display = "block";
-
-	// -------------------------------------------------
-
-	document.getElementById("run_it_button").style.display = 'none';
 
 	// -------------------------------------------------
 
@@ -352,8 +394,7 @@ async function run_it() {
 				order = await flash_sequence_difficulty7();
 			}
 		return order; })
-		.then(async function(order) { await listen_for_user_clicks(); return order; })
-		;
+		.then(async function(order) { await listen_for_user_clicks(); return order; });
 	
 	// -------------------------------------------------
 
@@ -365,8 +406,13 @@ async function run_it() {
 	return order;
 	
 }
-	  
 
+// -------------------------------------------------
+
+async function restart_a_full_game() {
+	window.location.href = window.location.href + '?nocache=';
+}
+	  
 // -------------------------------------------------
 
 async function user_click_done() {
@@ -380,7 +426,6 @@ async function user_click_done() {
 		.then(async function() { await verify_user_clicks(); });
 }
 
-	
 // -------------------------------------------------
 
 async function get_csvDataset() {
@@ -396,7 +441,7 @@ async function get_csvDataset() {
 			url_vec.push(file.download_url);
 		      }
 		    });
-		  }).catch(error => { outp.innerHTML += error; });
+		  }).catch(error => { console.log('error: ', error); });
 
    
 	const get_csvDataset_URLblob = url_vec[0];
@@ -518,7 +563,7 @@ async function csvDataset_2_dictionary(csvDataset, y_choices){
 		X.push(col0);
 		Y.push(col1);
 		
-	});  // end of forEach
+	});
 
 	// -------------------------------------------------
 	
@@ -605,7 +650,7 @@ async function predict_w_pretrained_flash_number_model() {
 	const result = flash_number_model.predict( xs_test );
 
 	// Get probability value as a number
-	const probability_array = await result.data(); // correct
+	const probability_array = await result.data();
 	// console.log('probability_array : ', probability_array);
 
 	// Index of maximum softmax probability 
@@ -671,7 +716,7 @@ async function predict_w_pretrained_presentation_time_interval_model() {
 	const result = presentation_time_interval_model.predict( xs_test );
 
 	// Get probability value as a number
-	const probability_array = await result.data(); // correct
+	const probability_array = await result.data();
 
 	// Index of maximum softmax probability 
 	const index = result.as1D().argMax().dataSync()[0];
@@ -789,17 +834,13 @@ async function verify_user_clicks(){
 	canvasElement4.style.display = "none";
 	canvasElement5.style.display = "none";
 	canvasElement6.style.display = "none";
-	// ------------------------
+	document.getElementById('canvas_container').style.display = "none";
 
 	// ------------------------
 	// Calculate accuracy
 	// ------------------------
 	const order_string = order.toString();
 	const user_click_string = user_click.toString();
-
-	// console.log('accuracy0: ', accuracy0);
-	// console.log('accuracy1: ', accuracy1);
-	// console.log('order.length: ', order.length);
 
 	// Scale round_accuracy from 0 to 1.
 	// accuracy0 has a number range from 0 to order.length/2.
@@ -813,46 +854,32 @@ async function verify_user_clicks(){
 
 
 	// ------------------------
-	// Print to screen: user accuracy
+	// Print explaination of accuracy calculation
 	// ------------------------
+	document.getElementById('results').style.display = "block";
 	
-	outp.innerHTML = '<hr />';
-	document.getElementById('notification').innerHTML += 'Round performance was calculated using two grading criteria about the quantity and sequence of squares that flashed: <ol><li>correct sequence (order of selection is important).</li><li>quantity of correct colors were clicked (order of selection is NOT important).</li></ol>The first and second grading criteria give credit to good spatial and list memory players, respectively.' + '<br/><hr />';
+	document.getElementById('accuracy_explaination').innerHTML = 'Round performance was calculated using two grading criteria about the quantity and sequence of squares that flashed: <ol><li>correct sequence (order of selection is important).</li><li>quantity of correct colors were clicked (order of selection is NOT important).</li></ol>The first and second grading criteria give credit to good spatial and list memory players, respectively.' + '<br/>';
+	
 
 	// ------------------------
-	
-	outp.innerHTML += '<ul><li>Spatial memory credit: ' + accuracy0/(order.length/2)*100 + '%</li><li>List memory credit: ' + accuracy1/(order.length/2)*100 + '%</li><li>Round accuracy: ' + round_accuracy + '</li><li>Total accuracy: ' + total_accuracy + '</li><ul/>';
-	
+	// Print game round results
 	// ------------------------
-	
-	
-	// ------------------------
-	// Save round data as an array
-	// ------------------------
-	data.push([round_accuracy, total_accuracy, response_time, presentation_time_interval, flash_number]+'\n'); 
-	// ------------------------
-
-	
-	// ------------------------
-	// Print accuracy results
-	// ------------------------
+	var sequence_pattern;
 	if (order_string === user_click_string) {
-		outp.innerHTML += "Correct: ";
+		sequence_pattern = "Correct: the pattern was " + order_string + ", you performed " + user_click_string + ".";
 	} else {
-		outp.innerHTML += "Incorrect: ";
+		sequence_pattern = "Incorrect: the pattern was " + order_string + ", you performed " + user_click_string + ".";
 	}
-	outp.innerHTML += "the pattern was " + order_string + ", you performed " + user_click_string + "</br><hr />";
-	// ------------------------
-
+	
+	document.getElementById('game_round_results').innerHTML = '<ul><li>' + sequence_pattern + '</li><li>Spatial memory credit: ' + accuracy0/(order.length/2)*100 + '%</li><li>List memory credit: ' + accuracy1/(order.length/2)*100 + '%</li><li>Round accuracy: ' + round_accuracy + '</li><li>Total accuracy: ' + total_accuracy + '</li><ul/>';
+	
 
 	// ------------------------
 	// Print a Self-respect Wisdom messages so that users learn self-respect (Goal of playing the game)
 	// ------------------------
 	const ind = run_it_count % message_arr.length; // allow messages to cycle wrt the length of the array
   	const selfRespect_wisdom_message_dict = Object.fromEntries(message_arr.map((key, index) => [index, key]));
-	
-	outp.innerHTML += "Self-respect wisdom message: " + selfRespect_wisdom_message_dict[ind] + "</br><hr />";
-	// ------------------------
+	document.getElementById('self_wisdom_message').innerHTML = "Self-respect wisdom message: " + selfRespect_wisdom_message_dict[ind] + "</br>";
 
 
 	// ------------------------
@@ -861,14 +888,22 @@ async function verify_user_clicks(){
 	var e_selection_val = Math.floor(Math.random() * 4);
 	var e_selection = ['⬆️', '👏', '🙌', '⭐', '💫'];
 		
-	outp.innerHTML += 'On-the-way-to-self-respect map: you have seen '  + run_it_count + ' self-respect message/s! You are on your way to self-respect! ' + e_selection.at(e_selection_val) + '</br><hr />';
+	document.getElementById('self_respect_map').innerHTML = 'On-the-way-to-self-respect map: you have seen '  + run_it_count + ' self-respect message/s! You are on your way to self-respect! ' + e_selection.at(e_selection_val) + '</br><hr />';
 	
 	// ------------------------
+	
+	// ------------------------
+	// Save round data as an array
+	// ------------------------
+	data.push([round_accuracy, total_accuracy, response_time, presentation_time_interval, flash_number]+'\n'); 
+	// ------------------------
+	
 
 	// ------------------------
 	// Make run a new game button visible
 	// ------------------------
 	document.getElementById("run_it_button").style.display = 'block';
+	document.getElementById("restart_a_new_game").style.display = 'block';
 	// ------------------------
 	
 	// Reset user_click
