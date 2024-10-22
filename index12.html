@@ -251,7 +251,7 @@ async function initialization_of_canvasElements() {
 	// console.log("square_config: ", square_config);
 
 	// ------------------------------------------
-	square_config = 1;
+	
 	if (square_config == 0) {
 		// 0: row
 		canvasElement0.style.left = Number(0*canvasElement_width + space_btw_each_canvas).toString()+'px';
@@ -283,10 +283,10 @@ async function initialization_of_canvasElements() {
 		canvasElement0.style.top = Number(0*canvasElement_width + canvasTopStart).toString()+'px';
 		// -----------------------------------
 		// 2nd row
-		canvasElement1.style.left = Number(1*canvasElement_width + canvasElement_width/2 + space_btw_each_canvas).toString()+'px';
+		canvasElement1.style.left = Number(canvasElement_width/2 + space_btw_each_canvas).toString()+'px';
 		canvasElement1.style.top = Number(1*canvasElement_width + canvasTopStart).toString()+'px';
     
-		canvasElement2.style.left = Number(canvasElement_width/2 + space_btw_each_canvas).toString()+'px';
+		canvasElement2.style.left = Number(2*canvasElement_width + canvasElement_width/2 + space_btw_each_canvas).toString()+'px'; 
 		canvasElement2.style.top = Number(1*canvasElement_width + canvasTopStart).toString()+'px';
 		// -----------------------------------
 		// 3rd row
