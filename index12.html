@@ -793,29 +793,37 @@ async function verify_user_clicks(){
 	// ------------------------
 	// Calculate accuracy
 	// ------------------------
-	// console.log('IN verify_user_clicks: order - ', order); // Array(3) [ 1, 5, 3 ]
 	const order_string = order.toString();
-	
 	const user_click_string = user_click.toString();
 
-	console.log('accuracy0: ', accuracy0);
-	console.log('accuracy1: ', accuracy1);
-	console.log('order.length: ', order.length);
+	// console.log('accuracy0: ', accuracy0);
+	// console.log('accuracy1: ', accuracy1);
+	// console.log('order.length: ', order.length);
 
 	// Scale round_accuracy from 0 to 1.
 	// accuracy0 has a number range from 0 to order.length/2.
 	// accuracy1 has a number range from 0 to order.length/2.
 	round_accuracy = await (accuracy0 + accuracy1)/order.length;
-	console.log('round_accuracy: ', round_accuracy);
+	// console.log('round_accuracy: ', round_accuracy);
 	
 	// total_accuracy is from 0 to 1, starting at 1. If round_accuracy is from 0 to 1, then divide by 2 to make updated total_accuracy from 0 to 1.
 	total_accuracy = await (total_accuracy + round_accuracy)/2;
-	console.log('total_accuracy: ', total_accuracy);
+	// console.log('total_accuracy: ', total_accuracy);
 
 	// Print to screen: user accuracy
 	outp.innerHTML = "";
+
+	// ------------------------
+	
+	outp.innerHTML += '<hr />';
+	outp.innerHTML += 'Round performance was calculated using two grading criteria about the quantity and sequence of squares that flashed: [0] correct sequence (order of selection is important) AND [1] quantity of correct colors were clicked (order of selection is NOT important). The first and second grading criteria give credit to good spatial and list memory players, respectively.';
+	outp.innerHTML += 'Spatial memory credit: ' + accuracy0 + ', List memory credit: ' + accuracy1 + '<br/>';
+	
+	// ------------------------
+	
 	outp.innerHTML += '<hr />';
 	outp.innerHTML += ' Round accuracy: ' + round_accuracy + ', Total accuracy: ' + total_accuracy + '<br/><hr />';
+	
 	// ------------------------
 	
 	
@@ -830,11 +838,12 @@ async function verify_user_clicks(){
 	// Print accuracy results
 	// ------------------------
 	if (order_string == user_click_string) {
-		// Correct 
-		outp.innerHTML += "Correct: the pattern was " + order_string + ", you performed " + user_click_string + "</br>";
+		outp.innerHTML += "Correct: ";
 	} else {
-		outp.innerHTML += "Incorrect: the pattern was " + order_string + ", you performed " + user_click_string + "</br>";
+		outp.innerHTML += "Incorrect: ";
 	}
+	outp.innerHTML += "the pattern was " + order_string + ", you performed " + user_click_string + "</br>";
+	
 	outp.innerHTML += '<hr />';
 	// ------------------------
 
@@ -845,14 +854,28 @@ async function verify_user_clicks(){
 	const ind = run_it_count % message_arr.length; // allow messages to cycle wrt the length of the array
   	const selfRespect_wisdom_message_dict = Object.fromEntries(message_arr.map((key, index) => [index, key]));
 	
-	outp.innerHTML += selfRespect_wisdom_message_dict[ind] + "</br><hr />";
+	outp.innerHTML += "Self-respect wisdom message: " + selfRespect_wisdom_message_dict[ind] + "</br><hr />";
 	// ------------------------
 
 
 	// ------------------------
 	// Print a small map of where the user is on their path to self-respect
 	// ------------------------
-	outp.innerHTML += 'On-the-way-to-self-respect map: you have seen '  + run_it_count + ' self-respect message/s! You are on your way to self-respect! ⬆️' + '</br><hr />';
+	var e_selection_val = Math.floor(Math.random() * 4);
+	if (e_selection_val  == 0) {
+		let e_selection = '⬆️';
+	} else if (e_selection_val  == 1) {
+		let e_selection = '👏';
+	} else if (e_selection_val  == 2) {
+		let e_selection = '🙌';
+	} else if (e_selection_val  == 3) {
+		let e_selection = '⭐';
+	} else {
+		let e_selection = '💫';
+	}
+	outp.innerHTML += 'On-the-way-to-self-respect map: you have seen '  + run_it_count + ' self-respect message/s! You are on your way to self-respect! ' + e_selection + '</br><hr />';
+
+	
 	// ------------------------
 
 	// ------------------------
