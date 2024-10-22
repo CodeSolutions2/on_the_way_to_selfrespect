@@ -138,7 +138,8 @@ async function initialization_of_canvasElements() {
 		flash_number = await predict_w_pretrained_flash_number_model();
 	} else {
 		// Random selection
-		flash_number = await rand_perm(y_choices_flash_number_model, 1).then(async function (flash_number_array) {  const flash_number_scalar = flash_number_array.at(0); return flash_number_scalar});
+		flash_number = await rand_perm(y_choices_flash_number_model, 1)
+			.then(async function (flash_number_array) {  const flash_number_scalar = flash_number_array.at(0); return flash_number_scalar});
 	}
 	// console.log("flash_number: ", flash_number);
 	// ------------------------------------------
@@ -152,7 +153,8 @@ async function initialization_of_canvasElements() {
 		presentation_time_interval = await predict_w_pretrained_presentation_time_interval_model();
 	} else {
 		// Random selection
-		presentation_time_interval = await rand_perm(y_choices_presentation_time_interval_model, 1).then(async function (presentation_time_interval_array) {  const presentation_time_interval_scalar = presentation_time_interval_array.at(0); return presentation_time_interval_scalar});
+		presentation_time_interval = await rand_perm(y_choices_presentation_time_interval_model, 1)
+			.then(async function (presentation_time_interval_array) {  const presentation_time_interval_scalar = presentation_time_interval_array.at(0); return presentation_time_interval_scalar});
 	}
 	// console.log("presentation_time_interval: ", presentation_time_interval);
 	// ------------------------------------------
@@ -189,7 +191,8 @@ async function initialization_of_canvasElements() {
 	canvasElement6.width = canvasElement_width;
 	canvasElement6.height = canvasElement_height;
 
-	square_config = await rand_perm([0, 1, 2], 1).then(async function (square_config_array) {  const square_config_scalar = square_config_array.at(0); return square_config_scalar});
+	square_config = await rand_perm([0, 1, 2], 1)
+		.then(async function (square_config_array) {  const square_config_scalar = square_config_array.at(0); return square_config_scalar});
 	// console.log("square_config: ", square_config);
 	
 	if (square_config == 0) {
@@ -361,13 +364,11 @@ async function run_it() {
 	
 	return order;
 	
-}  // end of run_it
+}
 	  
 
 // -------------------------------------------------
 
-	  
-// Exploit the onclick with the button
 async function user_click_done() {
 
 	// The first stop_one_eventlister has the correct user_click
@@ -381,7 +382,6 @@ async function user_click_done() {
 	
 // -------------------------------------------------
 
-	  
 async function get_csvDataset() {
 	
 	const repoOwner = 'CodeSolutions2';
@@ -403,7 +403,6 @@ async function get_csvDataset() {
     
 	return get_csvDataset_URLblob;
 }
-
 	
 // -------------------------------------------------
 
@@ -460,10 +459,7 @@ async function data_2_dictionary(data, y_choices, label_name){
 			Y.push(Number(nonempty_row[ys_ind[0]]));
 		}
 		
-	});  // end of forEach
-
-	// console.log('X: ', X);
-	// console.log('Y: ', Y)
+	});
 
 	// -------------------------------------------------
 	
@@ -473,7 +469,7 @@ async function data_2_dictionary(data, y_choices, label_name){
 	let Yencoded = [];
  	Y.forEach(async function(rowdata, index) {
 		Yencoded.push(y_choices_assignment[rowdata]);
-	});  // end of forEach
+	});
 
 	// -------------------------------------------------
 	
@@ -531,23 +527,23 @@ async function csvDataset_2_dictionary(csvDataset, y_choices){
 	let Yencoded = [];
  	Y.forEach(async function(rowdata, index) {
 		Yencoded.push(y_choices_assignment[rowdata]);
-	});  // end of forEach
+	});
 
 	// -------------------------------------------------
 	
 	// Transform to tensorflow.js
 	let rownum = X.length;
 	const xs = tf.tensor2d(X, [rownum, colnum]);  // this is size [ 34, 4 ]
-	console.log('xs: ', xs);
+	// console.log('xs: ', xs);
 
 	// -------------------------------------------------
 	
 	let ys = tf.tensor2d(Yencoded, [rownum, 1], 'int32').flatten();  // flatten the 2D tensor as a 1Dtensor
-	console.log('ys: ', ys);  // shape: Array [ 34 ]
+	// console.log('ys: ', ys);  // shape: Array [ 34 ]
 	
 	// ys needs to be in one-hot form, size [34, 5]
 	ys = tf.oneHot(ys, num_of_classes);  // Array [34, 5]
-	console.log('ys: ', ys);
+	// console.log('ys: ', ys);
 
 	// -------------------------------------------------
 	
@@ -561,8 +557,6 @@ async function csvDataset_2_dictionary(csvDataset, y_choices){
 async function train_flash_number_model() {
 
 	// Read dataset from location to tensorflow csvDataset object
-	// https://js.tensorflow.org/api/1.0.0/
-
 	if (choice == 0) {
 		// 0=use csv file in repo
 		await get_csvDataset()
@@ -573,12 +567,11 @@ async function train_flash_number_model() {
 			// console.log('dict_obj.xs: ', dict_obj.xs); // Array [34, 4]
 			// console.log('dict_obj.ys: ', dict_obj.ys); // Array [34, 5]
 			const history = await flash_number_model.fit(dict_obj.xs, dict_obj.ys, { batchSize: 1, epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { 
-			console.log(epoch + ', loss: ' + logs.loss + ', accuracy: ' + logs.acc); 
+			// console.log(epoch + ', loss: ' + logs.loss + ', accuracy: ' + logs.acc); 
 			} } });
 			// console.log('history: ', history);
 		})
-		.then(async function(history) { const saveResults = await flash_number_model.save('localstorage://flash_number_model');  })
-	;
+		.then(async function(history) { const saveResults = await flash_number_model.save('localstorage://flash_number_model');  });
 		
 	} else {
 		// 1=use data array variable
@@ -588,7 +581,7 @@ async function train_flash_number_model() {
 			// console.log('dict_obj.xs: ', dict_obj.xs); // Array [34, 4]
 			// console.log('dict_obj.ys: ', dict_obj.ys); // Array [34, 5]
 			const history = await flash_number_model.fit(dict_obj.xs, dict_obj.ys, { batchSize: 1, epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { 
-			console.log(epoch + ', loss: ' + logs.loss + ', accuracy: ' + logs.acc); 
+			// console.log(epoch + ', loss: ' + logs.loss + ', accuracy: ' + logs.acc); 
 			} } });
 			// console.log('history: ', history);
 		})
@@ -621,7 +614,7 @@ async function predict_w_pretrained_flash_number_model() {
 	const maxprob = probability_array[index];
 
 	const prediction = y_choices_flash_number_model[index];
-	console.log('prediction : ', prediction);
+	// console.log('prediction : ', prediction);
 	
 	return prediction;
 }
@@ -660,8 +653,7 @@ async function train_presentation_time_interval_model() {
 			const history = await presentation_time_interval_model.fit(dict_obj.xs, dict_obj.ys, { batchSize: 1, epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { console.log(epoch + ', loss: ' + logs.loss + ', accuracy: ' + logs.acc); } } });
 			// console.log('history: ', history);
 		})
-		.then(async function(history) { const saveResults = await presentation_time_interval_model.save('localstorage://presentation_time_interval_model');  })
-	;
+		.then(async function(history) { const saveResults = await presentation_time_interval_model.save('localstorage://presentation_time_interval_model');  });
 	}
 	
 }
@@ -691,7 +683,7 @@ async function predict_w_pretrained_presentation_time_interval_model() {
 	const maxprob = probability_array[index];
 
 	const prediction = y_choices_presentation_time_interval_model[index];
-	console.log('prediction : ', prediction);
+	// console.log('prediction : ', prediction);
 	
 	return prediction;
 }
@@ -713,8 +705,7 @@ async function listen_for_user_clicks() {
 		.then(async function() { await start_one_eventlister(4); })
 		.then(async function() { await start_one_eventlister(5); })
 		.then(async function() { await start_one_eventlister(6); })
-		.then(function() { document.getElementById("resetresponse_button").style.display = 'block'; })
-	;
+		.then(function() { document.getElementById("resetresponse_button").style.display = 'block'; });
 	
 }
 	  
@@ -733,8 +724,7 @@ async function stop_listening_for_user_clicks() {
 		.then(async function() { await stop_one_eventlister(5); })
 		.then(async function() { await stop_one_eventlister(6); })
 		.then(async () => { await new Promise(r => setTimeout(r, 200)); })
-		.then(function() { document.getElementById("resetresponse_button").style.display = "none"; })
-		;
+		.then(function() { document.getElementById("resetresponse_button").style.display = "none"; });
 
 	endTime = await currentTime();
 }
@@ -786,11 +776,24 @@ async function verify_user_clicks(){
 	// console.log('IN verify_user_clicks: order - ', order); // Array(3) [ 1, 5, 3 ]
 	const order_string = order.toString();
 	
-	// console.log('IN verify_user_clicks: user_click - ', user_click);
 	const user_click_string = user_click.toString();
+
+	console.log('accuracy0: ', accuracy0); 
+	console.log('accuracy1: ', accuracy1);
+	console.log('order.length: ', order.length);
 	
 	round_accuracy = await (accuracy0+accuracy1)/order.length;
-	total_accuracy = (total_accuracy + round_accuracy)/2;
+	console.log('round_accuracy: ', round_accuracy);
+
+	// scale round_accuracy from 0 to 1
+	var out = (accuracy0*order.length + accuracy1*order.length) / order.length;
+	console.log('out: ', out);
+	
+
+	console.log('total_accuracy BEFORE: ', total_accuracy);
+	
+	total_accuracy = await (total_accuracy + round_accuracy)/2;
+	console.log('total_accuracy AFTER: ', total_accuracy);
 
 	// Print to screen: user accuracy
 	outp.innerHTML = "";
@@ -870,7 +873,7 @@ async function rand_perm(x, vec_len) {
 	
 	return out;
 	
-}  // end of rand_perm
+}
 	  
 // -------------------------------------------------
 
@@ -990,30 +993,24 @@ async function flash_sequence_difficulty7(){
 		.then(async function(order) { const val = await show_one_grey_square(order.at(5)); return order; })
 		.then(async function(order) { const val = await show_one_image_square(order.at(6)); return order; })
 		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
-		.then(async function(order) { const val = await show_one_grey_square(order.at(6)); return order; })
-		;
+		.then(async function(order) { const val = await show_one_grey_square(order.at(6)); return order; });
 
 	return order;
 } 
 
-	  
 // -------------------------------------------------
-
 
 async function flash_sequence_when_clicked_on(val){
 	
 	await show_one_image_square(val)
 		.then(async (val) => { await new Promise(r => setTimeout(r, 200)); return val;})
-		.then(async function(val) { val = await show_one_grey_square(val); })
-		;
+		.then(async function(val) { val = await show_one_grey_square(val); });
 
 } 
-
 
 // -------------------------------------------------
 	  
 async function show_one_image_square(val) {
-	
 	    
             const image = new Image();
 	    image.setAttribute('crossOrigin', "");
@@ -1044,7 +1041,7 @@ async function show_one_image_square(val) {
 
 	return val;
   
-}  // end of show_one_image_square
+}
 
 // -------------------------------------------------
 
@@ -1076,10 +1073,9 @@ async function show_one_grey_square(val) {
     }
 
 	return val;
-}  // end of show_one_grey_square
+}
 
 // -------------------------------------------------
-
 
 async function show_onehalf_grey_square(val) {
 	
@@ -1108,7 +1104,7 @@ async function show_onehalf_grey_square(val) {
     }
 
 	return val;
-}  // end of show_onehalf_grey_square
+}
 
 
 
@@ -1123,24 +1119,16 @@ async function resetresponse() {
 
 // -------------------------------------------------
 
-	
-// https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
 async function processEvent(event) {
 	
     // When the user clicks the square, save value
     const out = this.getAttribute("data-id");
     const out1 = Number(out);
     user_click.push( out1 );
-
-    // console.log('user_click.length: ', user_click.length);
-    // console.log('order.length: ', order.length);
 	
     if (user_click.length == order.length){
 	    // Click on thhe invisible button
 	    await user_click_done();
-
-	    // console.log('run_it_count: ', run_it_count);
-	    // console.log('run_it_count % 2: ', run_it_count % 2);
 	    
 	    // Train the model every XX rounds
 	    if (run_it_count % 2 == 0){
@@ -1152,7 +1140,6 @@ async function processEvent(event) {
 	    }
 
 	    // GET self-respect messages from file when all the file messages are read
-	    // console.log('run_it_count % 10: ', run_it_count % 10);
 	    if (run_it_count % 10 == 0){
 		    decide_to_GET_messages_from_file = true;
 	     } else {
@@ -1167,8 +1154,6 @@ async function processEvent(event) {
 
 	  
 async function start_one_eventlister(val) {
-
-    // console.log("user_click in start_one_eventlister: ", user_click);  // user_click = []
 
     // When the eventlister is turned on for each square, show image first then half of the square to hide image [seeing half or no image could be another spatial difficulty parameter]
     await show_one_image_square(val)
@@ -1197,17 +1182,11 @@ async function start_one_eventlister(val) {
 							       
     });
 	
-    
-	
-}  // end of start_one_eventlister
-
+} 
 	  
 // -------------------------------------------------
 
-	  
 async function stop_one_eventlister(val) {
-
-    // console.log("user_click in stop_one_eventlister: ", user_click);
 	
     // Start an eventlister per canvas to evaluate user response
     if (val == 0) {
@@ -1226,17 +1205,9 @@ async function stop_one_eventlister(val) {
 	canvasElement6.removeEventListener("click", processEvent);
     }
 	
-}  // end of start_one_eventlister
+}
 
-	  
 // -------------------------------------------------
-
-	
-
-
-
-// ----------------------------------------------------
-
 
 async function GET_text_from_file_wo_auth_GitHub_RESTAPI_directurl() {
   
@@ -1247,7 +1218,6 @@ async function GET_text_from_file_wo_auth_GitHub_RESTAPI_directurl() {
 		.then(data => { return data; })
 		.catch(error => { console.log(error); });
 }
-
 
 // ----------------------------------------------------
 
