@@ -3,7 +3,6 @@
 <head></head>
 <body>
 
-<!-- https://CodeSolutions2.github.io/on_the_way_to_selfrespect/index7.html -->
 <h1 style='text-align: center; margin-bottom: -35px;'>On the way to self-respect webapp</h1>
 <br><br>
 
@@ -33,7 +32,7 @@ var squarelocation = [0, 1, 2, 3, 4, 5, 6];
 // Set the width and height of the canvas
 var canvasElement_width = 150;
 var canvasElement_height = canvasElement_width;
-var canvasTopStart = 150; // 350;
+var canvasTopStart = 150;
 
 const outp = document.getElementById('output');
 
@@ -50,7 +49,7 @@ var response_time = 0;
 var accuracy0 = 0;
 var accuracy1 = 0;
 var round_accuracy = 0;
-var total_accuracy = 0;
+var total_accuracy = 1;
 
 var startTime = []; 
 var endTime = [];
@@ -163,7 +162,7 @@ async function initialization_of_canvasElements() {
 	// ------------------------------------------
 	// GET self-respect messages from file 
 	// ------------------------------------------
-	// console.log('decide_to_GET_messages_from_file: ', decide_to_GET_messages_from_file);
+	
 	if (run_it_count == 0 || decide_to_GET_messages_from_file == true) {
 		
 		await GET_text_from_file_wo_auth_GitHub_RESTAPI_directurl()
@@ -614,7 +613,6 @@ async function predict_w_pretrained_flash_number_model() {
 	const maxprob = probability_array[index];
 
 	const prediction = y_choices_flash_number_model[index];
-	// console.log('prediction : ', prediction);
 	
 	return prediction;
 }
@@ -778,18 +776,13 @@ async function verify_user_clicks(){
 	
 	const user_click_string = user_click.toString();
 
-	console.log('accuracy0: ', accuracy0); 
-	console.log('accuracy1: ', accuracy1);
+	console.log('accuracy0: ', accuracy0);  // it is a number range from 0 to order.length/2
+	console.log('accuracy1: ', accuracy1);  // it is a number range from 0 to order.length/2
 	console.log('order.length: ', order.length);
 	
 	round_accuracy = await (accuracy0+accuracy1)/order.length;
 	console.log('round_accuracy: ', round_accuracy);
-
-	// scale round_accuracy from 0 to 1
-	var out = (accuracy0*order.length + accuracy1*order.length) / order.length;
-	console.log('out: ', out);
 	
-
 	console.log('total_accuracy BEFORE: ', total_accuracy);
 	
 	total_accuracy = await (total_accuracy + round_accuracy)/2;
