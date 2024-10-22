@@ -245,7 +245,7 @@ async function initialization_of_canvasElements() {
 
 	// ------------------------------------------
 	
-	square_config = await Math.floor(Math.random() * 2);
+	square_config = await Math.floor(Math.random() * 3);
 	console.log("square_config: ", square_config);
 
 	// ------------------------------------------
@@ -301,7 +301,7 @@ async function initialization_of_canvasElements() {
 		canvasElement6.style.top = Number(2*canvasElement_width + canvasTopStart)+'px';
 		// -----------------------------------
 		
-	} else if (square_config == 2) {
+	} else {
 		// 2: U (square)
 		// -----------------------------------
 		// 1st row
