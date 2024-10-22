@@ -245,7 +245,7 @@ async function initialization_of_canvasElements() {
 
 	square_config = await rand_perm([0, 1, 2], 1)
 		.then(async function (square_config_array) {  const square_config_scalar = square_config_array.at(0); return square_config_scalar});
-	// console.log("square_config: ", square_config);
+	console.log("square_config: ", square_config);
 	
 	if (square_config == 0) {
 		// 0: row
