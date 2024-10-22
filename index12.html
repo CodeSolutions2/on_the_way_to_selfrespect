@@ -727,8 +727,8 @@ async function calculate_sequence_selection_correct() {
 
 	// Determining the correct sequence that was selected (order of selection is important): accuracy0 is from 0 to order.length
 	
-	console.log('order: ', order);
-	console.log('user_click: ', user_click);
+	// console.log('order: ', order);
+	// console.log('user_click: ', user_click);
 
 	// order and user_click are arrays. 
 	// turn the arrays to a string. Compare if the two strings are exactly the same.
@@ -746,7 +746,7 @@ async function calculate_sequence_selection_correct() {
 		});
 		accuracy0 = count/2;
 	}
-	console.log("accuracy0: ", accuracy0);
+	// console.log("accuracy0: ", accuracy0);
 	
 	return accuracy0;
 }
@@ -759,16 +759,16 @@ async function calculate_color_selection_correct() {
 	
 	// order and user_click are arrays. Combine the arrays into one array.
 	var combined_arr = order.concat(user_click);
-	console.log('combined_arr: ', combined_arr);
+	// console.log('combined_arr: ', combined_arr);
 	
 	// Since one can only select one color per round, color selection does not repeat.
 	// If the set of user_click is equivalent to combined, it means that the user selected the same colors as order, regardless of order.
 	const combined  = [... new Set(combined_arr)];
-	console.log('combined: ', combined);
+	// console.log('combined: ', combined);
 
 	const num_of_colors_that_were_not_correctly_clicked_on = combined.length - user_click.length;
 	accuracy1 = (order.length - num_of_colors_that_were_not_correctly_clicked_on)/2;
-	console.log('accuracy1: ', accuracy1);
+	// console.log('accuracy1: ', accuracy1);
 	
 	return accuracy1;
 }
