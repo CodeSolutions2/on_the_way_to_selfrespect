@@ -372,6 +372,7 @@ async function user_click_done() {
 
 	// The first stop_one_eventlister has the correct user_click
 	return await stop_listening_for_user_clicks()
+		// This gave enough time for the the global variable accuracy0 and accuracy1 to update
 		.then(async function() { accuracy0 = await calculate_sequence_selection_correct(); })
 		.then(async function() { accuracy1 = await calculate_color_selection_correct(); })
 		.then(async function() { response_time = await elapsedTime(startTime, endTime); })
@@ -617,9 +618,7 @@ async function predict_w_pretrained_flash_number_model() {
 	return prediction;
 }
 
-
 // -------------------------------------------------
-
 	
 async function train_presentation_time_interval_model() {
 
@@ -658,9 +657,7 @@ async function train_presentation_time_interval_model() {
 	
 }
 	
-
 // -------------------------------------------------
-
 
 async function predict_w_pretrained_presentation_time_interval_model() {
 
@@ -685,11 +682,8 @@ async function predict_w_pretrained_presentation_time_interval_model() {
 	
 	return prediction;
 }
-
 	  
 // -------------------------------------------------
-
-	  
 
 async function listen_for_user_clicks() {
 
@@ -726,25 +720,57 @@ async function stop_listening_for_user_clicks() {
 }
 	  
 // -------------------------------------------------
+// There are two equal grading criteria for flash_number: [0] the correct sequence (accuracy0) AND [1] how many correct colors were clicked (accuracy1)
+// -------------------------------------------------
 
-async function calculate_color_selection_correct(){
+async function calculate_sequence_selection_correct() {
 
-	// Points for the squares selected, order is not important
-	const combined  = [... new Set(order.concat(user_click))];
+	// Determining the correct sequence that was selected (order of selection is important): accuracy0 is from 0 to order.length
 	
-	return (flash_number - (combined.length-user_click.length))/2; // Max is half of flash_number
+	console.log('order: ', order);
+	console.log('user_click: ', user_click);
+
+	// order and user_click are arrays. 
+	// turn the arrays to a string. Compare if the two strings are exactly the same.
+	if (order.toString() === user_click.toString()) {
+		// If order selection is correct
+		accuracy0 = order.length/2; // the maximum value is half of flash_number because there are two grading criteria.
+	} else {
+		// If order selection is not correct
+		// count how many user_clicks were sequentially correct
+		var count = 0;
+		order.map((val, ind) => {
+			if (val == user_click.at(ind)) {
+				count = count + 1;
+			}
+		});
+		accuracy0 = count/2;
+	}
+	console.log("accuracy0: ", accuracy0);
+	
+	return accuracy0;
 }
 
 // -------------------------------------------------
 
-async function calculate_sequence_selection_correct(){
+async function calculate_color_selection_correct() {
 
-	// Points for the correct order
-	if (order.toString() == user_click.toString()) {
-		accuracy0 = flash_number/2; // Max is half of flash_number
-	}
+	// Determining the correct colors that were selected (order of selection is not important): accuracy1 is from 0 to order.length
 	
-	return accuracy0;
+	// order and user_click are arrays. Combine the arrays into one array.
+	var combined_arr = order.concat(user_click);
+	console.log('combined_arr: ', combined_arr);
+	
+	// Since one can only select one color per round, color selection does not repeat.
+	// If the set of user_click is equivalent to combined, it means that the user selected the same colors as order, regardless of order.
+	const combined  = [... new Set(combined_arr)];
+	console.log('combined: ', combined);
+
+	const num_of_colors_that_were_not_correctly_clicked_on = combined.length - user_click.length;
+	accuracy1 = (order.length - num_of_colors_that_were_not_correctly_clicked_on)/2;
+	console.log('accuracy1: ', accuracy1);
+	
+	return accuracy1;
 }
 
 // -------------------------------------------------
@@ -764,7 +790,6 @@ async function verify_user_clicks(){
 	canvasElement6.style.display = "none";
 	// ------------------------
 
-	
 	// ------------------------
 	// Calculate accuracy
 	// ------------------------
@@ -773,24 +798,25 @@ async function verify_user_clicks(){
 	
 	const user_click_string = user_click.toString();
 
-	console.log('accuracy0: ', accuracy0);  // it is a number range from 0 to order.length/2
-	console.log('accuracy1: ', accuracy1);  // it is a number range from 0 to order.length/2
+	console.log('accuracy0: ', accuracy0);
+	console.log('accuracy1: ', accuracy1);
 	console.log('order.length: ', order.length);
-	
-	round_accuracy = await (accuracy0+accuracy1)/order.length;
+
+	// Scale round_accuracy from 0 to 1.
+	// accuracy0 has a number range from 0 to order.length/2.
+	// accuracy1 has a number range from 0 to order.length/2.
+	round_accuracy = await (accuracy0 + accuracy1)/order.length;
 	console.log('round_accuracy: ', round_accuracy);
 	
-	console.log('total_accuracy BEFORE: ', total_accuracy);
-	
+	// total_accuracy is from 0 to 1, starting at 1. If round_accuracy is from 0 to 1, then divide by 2 to make updated total_accuracy from 0 to 1.
 	total_accuracy = await (total_accuracy + round_accuracy)/2;
-	console.log('total_accuracy AFTER: ', total_accuracy);
+	console.log('total_accuracy: ', total_accuracy);
 
 	// Print to screen: user accuracy
 	outp.innerHTML = "";
 	outp.innerHTML += '<hr />';
 	outp.innerHTML += ' Round accuracy: ' + round_accuracy + ', Total accuracy: ' + total_accuracy + '<br/><hr />';
 	// ------------------------
-
 	
 	
 	// ------------------------
@@ -839,7 +865,6 @@ async function verify_user_clicks(){
 	user_click = [];
 
 	// ------------------------
-
 }
 
 // -------------------------------------------------
@@ -1025,7 +1050,6 @@ async function show_one_image_square(val) {
 	    }
 
 	return val;
-  
 }
 
 // -------------------------------------------------
