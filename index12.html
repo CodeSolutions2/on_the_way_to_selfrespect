@@ -13,7 +13,8 @@
 <!-- -------------------------- -->
 
 <!-- Output text -->
-<div id="output" style="font-family:courier;font-size:24px;height:300px"></div>
+<div id="notification" style="font-family:courier;font-size:16px;height:300px; color: #27428f"></div>
+<div id="output" style="font-family:courier;font-size:20px;height:300px"></div>
 
 	
 <style>
@@ -816,15 +817,11 @@ async function verify_user_clicks(){
 	// ------------------------
 	
 	outp.innerHTML = '<hr />';
-	outp.innerHTML += 'Round performance was calculated using two grading criteria about the quantity and sequence of squares that flashed: <ol><li>correct sequence (order of selection is important).</li><li>quantity of correct colors were clicked (order of selection is NOT important).</li></ol>The first and second grading criteria give credit to good spatial and list memory players, respectively.' + '<br/><hr />';
+	document.getElementById('notification').innerHTML += 'Round performance was calculated using two grading criteria about the quantity and sequence of squares that flashed: <ol><li>correct sequence (order of selection is important).</li><li>quantity of correct colors were clicked (order of selection is NOT important).</li></ol>The first and second grading criteria give credit to good spatial and list memory players, respectively.' + '<br/><hr />';
 
 	// ------------------------
 	
-	outp.innerHTML += '<ul><li>Spatial memory credit: ' + accuracy0/(order.length/2)*100 + '%</li><li>List memory credit: ' + accuracy1 + '%</li><li>Round accuracy: ' + round_accuracy + '</li><li>Total accuracy: ' + total_accuracy + '</li><ul/><hr />';
-	
-	// ------------------------
-	
-	// outp.innerHTML += ' Round accuracy: ' + round_accuracy + ', Total accuracy: ' + total_accuracy + '<br/><hr />';
+	outp.innerHTML += '<ul><li>Spatial memory credit: ' + accuracy0/(order.length/2)*100 + '%</li><li>List memory credit: ' + accuracy1/(order.length/2)*100 + '%</li><li>Round accuracy: ' + round_accuracy + '</li><li>Total accuracy: ' + total_accuracy + '</li><ul/>';
 	
 	// ------------------------
 	
