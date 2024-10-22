@@ -810,18 +810,20 @@ async function verify_user_clicks(){
 	total_accuracy = await (total_accuracy + round_accuracy)/2;
 	// console.log('total_accuracy: ', total_accuracy);
 
+
+	// ------------------------
 	// Print to screen: user accuracy
-	outp.innerHTML = "";
+	// ------------------------
+	
+	outp.innerHTML = '<hr />';
+	outp.innerHTML += 'Round performance was calculated using two grading criteria about the quantity and sequence of squares that flashed: <ol><li>correct sequence (order of selection is important).</li><li>quantity of correct colors were clicked (order of selection is NOT important).</li></ol><br/>The first and second grading criteria give credit to good spatial and list memory players, respectively.' + '<br/><hr />';
 
 	// ------------------------
 	
-	outp.innerHTML += '<hr />';
-	outp.innerHTML += 'Round performance was calculated using two grading criteria about the quantity and sequence of squares that flashed: [0] correct sequence (order of selection is important) AND [1] quantity of correct colors were clicked (order of selection is NOT important). The first and second grading criteria give credit to good spatial and list memory players, respectively.';
-	outp.innerHTML += 'Spatial memory credit: ' + accuracy0 + ', List memory credit: ' + accuracy1 + '<br/>';
+	outp.innerHTML += 'Spatial memory credit: ' + accuracy0 + ', List memory credit: ' + accuracy1 + '<br/><hr />';
 	
 	// ------------------------
 	
-	outp.innerHTML += '<hr />';
 	outp.innerHTML += ' Round accuracy: ' + round_accuracy + ', Total accuracy: ' + total_accuracy + '<br/><hr />';
 	
 	// ------------------------
@@ -837,14 +839,12 @@ async function verify_user_clicks(){
 	// ------------------------
 	// Print accuracy results
 	// ------------------------
-	if (order_string == user_click_string) {
+	if (order_string === user_click_string) {
 		outp.innerHTML += "Correct: ";
 	} else {
 		outp.innerHTML += "Incorrect: ";
 	}
-	outp.innerHTML += "the pattern was " + order_string + ", you performed " + user_click_string + "</br>";
-	
-	outp.innerHTML += '<hr />';
+	outp.innerHTML += "the pattern was " + order_string + ", you performed " + user_click_string + "</br><hr />";
 	// ------------------------
 
 
@@ -862,19 +862,9 @@ async function verify_user_clicks(){
 	// Print a small map of where the user is on their path to self-respect
 	// ------------------------
 	var e_selection_val = Math.floor(Math.random() * 4);
-	if (e_selection_val  == 0) {
-		let e_selection = '⬆️';
-	} else if (e_selection_val  == 1) {
-		let e_selection = '👏';
-	} else if (e_selection_val  == 2) {
-		let e_selection = '🙌';
-	} else if (e_selection_val  == 3) {
-		let e_selection = '⭐';
-	} else {
-		let e_selection = '💫';
-	}
-	outp.innerHTML += 'On-the-way-to-self-respect map: you have seen '  + run_it_count + ' self-respect message/s! You are on your way to self-respect! ' + e_selection + '</br><hr />';
-
+	var e_selection = ['⬆️', '👏', '🙌', '⭐', '💫'];
+		
+	outp.innerHTML += 'On-the-way-to-self-respect map: you have seen '  + run_it_count + ' self-respect message/s! You are on your way to self-respect! ' + e_selection.at(e_selection_val) + '</br><hr />';
 	
 	// ------------------------
 
