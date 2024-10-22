@@ -634,7 +634,7 @@ async function train_presentation_time_interval_model() {
 			// console.log('dict_obj.xs: ', dict_obj.xs); // Array [34, 4]
 			// console.log('dict_obj.ys: ', dict_obj.ys); // Array [34, 5]
 			const history = await presentation_time_interval_model.fit(dict_obj.xs, dict_obj.ys, { batchSize: 1, epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { 
-			console.log(epoch + ', loss: ' + logs.loss + ', accuracy: ' + logs.acc); 
+			// console.log(epoch + ', loss: ' + logs.loss + ', accuracy: ' + logs.acc); 
 			} } });
 			// console.log('history: ', history);
 		})
@@ -648,7 +648,9 @@ async function train_presentation_time_interval_model() {
 		.then(async function(dict_obj) { 
 			// console.log('dict_obj.xs: ', dict_obj.xs); // Array [34, 4]
 			// console.log('dict_obj.ys: ', dict_obj.ys); // Array [34, 5]
-			const history = await presentation_time_interval_model.fit(dict_obj.xs, dict_obj.ys, { batchSize: 1, epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { console.log(epoch + ', loss: ' + logs.loss + ', accuracy: ' + logs.acc); } } });
+			const history = await presentation_time_interval_model.fit(dict_obj.xs, dict_obj.ys, { batchSize: 1, epochs: 10, callbacks: { onEpochEnd: async (epoch, logs) => { 
+				// console.log(epoch + ', loss: ' + logs.loss + ', accuracy: ' + logs.acc); 
+			} } });
 			// console.log('history: ', history);
 		})
 		.then(async function(history) { const saveResults = await presentation_time_interval_model.save('localstorage://presentation_time_interval_model');  });
@@ -672,7 +674,6 @@ async function predict_w_pretrained_presentation_time_interval_model() {
 
 	// Get probability value as a number
 	const probability_array = await result.data(); // correct
-	// console.log('probability_array : ', probability_array);
 
 	// Index of maximum softmax probability 
 	const index = result.as1D().argMax().dataSync()[0];
@@ -681,7 +682,6 @@ async function predict_w_pretrained_presentation_time_interval_model() {
 	const maxprob = probability_array[index];
 
 	const prediction = y_choices_presentation_time_interval_model[index];
-	// console.log('prediction : ', prediction);
 	
 	return prediction;
 }
@@ -707,9 +707,7 @@ async function listen_for_user_clicks() {
 	
 }
 	  
-
 // -------------------------------------------------
-
 
 async function stop_listening_for_user_clicks() {
 	 
@@ -726,7 +724,6 @@ async function stop_listening_for_user_clicks() {
 
 	endTime = await currentTime();
 }
-
 	  
 // -------------------------------------------------
 
@@ -865,7 +862,6 @@ async function rand_perm(x, vec_len) {
 	}
 	
 	return out;
-	
 }
 	  
 // -------------------------------------------------
@@ -881,8 +877,7 @@ async function flash_sequence_difficulty3(){
 		.then(async function(order) { const val = await show_one_grey_square(order.at(1)); return order;})
 		.then(async function(order) { const val = await show_one_image_square(order.at(2)); return order; })
 		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
-		.then(async function(order) { const val = await show_one_grey_square(order.at(2)); return order; })
-		;
+		.then(async function(order) { const val = await show_one_grey_square(order.at(2)); return order; });
 
 	return order;
 } 
@@ -903,8 +898,7 @@ async function flash_sequence_difficulty4(){
 		.then(async function(order) { const val = await show_one_grey_square(order.at(2)); return order; })
 		.then(async function(order) { const val = await show_one_image_square(order.at(3)); return order; })
 		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
-		.then(async function(order) { const val = await show_one_grey_square(order.at(3)); return order; })
-		;
+		.then(async function(order) { const val = await show_one_grey_square(order.at(3)); return order; });
 
 	return order;
 } 
@@ -928,8 +922,7 @@ async function flash_sequence_difficulty5(){
 		.then(async function(order) { const val = await show_one_grey_square(order.at(3)); return order; })
 		.then(async function(order) { const val = await show_one_image_square(order.at(4)); return order; })
 		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
-		.then(async function(order) { const val = await show_one_grey_square(order.at(4)); return order; })
-		;
+		.then(async function(order) { const val = await show_one_grey_square(order.at(4)); return order; });
 
 	return order;
 } 
@@ -955,8 +948,7 @@ async function flash_sequence_difficulty6(){
 		.then(async function(order) { const val = await show_one_grey_square(order.at(4)); return order; })
 		.then(async function(order) { const val = await show_one_image_square(order.at(5)); return order; })
 		.then(async (order) => { await new Promise(r => setTimeout(r, presentation_time_interval)); return order;})
-		.then(async function(order) { const val = await show_one_grey_square(order.at(5)); return order; })
-		;
+		.then(async function(order) { const val = await show_one_grey_square(order.at(5)); return order; });
 
 	return order;
 } 
