@@ -85,12 +85,10 @@ th#webapp_output {width: 100%; }
 var squarelocation = [0, 1, 2, 3, 4, 5, 6];
 	  
 // Set the width and height of the canvas
-var canvasElement_width = 150;  // 150 // 75
+var canvasElement_width = 120;  // 150 // 75
 var canvasElement_height = canvasElement_width;
 var canvasTopStart = 0;
-const space_btw_each_canvas = 40;
-
-console.log("150/40", 150/40);
+const space_btw_each_canvas = canvasElement_width * 3.75;
 	
 var user_click = [];
 var order = [];
@@ -248,7 +246,7 @@ async function initialization_of_canvasElements() {
 	// ------------------------------------------
 	
 	square_config = await Math.floor(Math.random() * 3);
-	console.log("square_config: ", square_config);
+	// console.log("square_config: ", square_config);
 
 	// ------------------------------------------
 	
@@ -478,9 +476,6 @@ async function data_2_dictionary(data, y_choices, label_name){
 	let ys_ind = [];
 	
 	data.forEach(async function(rowdata, index) {
-
-		// console.log('rowdata: ', rowdata);
-		// console.log('index: ', index);
 
 		// Remove all \n from the string rowdata
 		rowdata = rowdata.replace(/\n/g, '');
@@ -787,9 +782,6 @@ async function stop_listening_for_user_clicks() {
 async function calculate_sequence_selection_correct() {
 
 	// Determining the correct sequence that was selected (order of selection is important): accuracy0 is from 0 to order.length
-	
-	// console.log('order: ', order);
-	// console.log('user_click: ', user_click);
 
 	// order and user_click are arrays. 
 	// turn the arrays to a string. Compare if the two strings are exactly the same.
@@ -1280,7 +1272,6 @@ async function GET_text_from_file_wo_auth_GitHub_RESTAPI_directurl() {
 }
 
 // ----------------------------------------------------
-
 
 </script>
 </body>
