@@ -406,12 +406,11 @@ async function run_it() {
 	// -------------------------------------------------
 	
 	return order;
-	
 }
 
 // -------------------------------------------------
 
-async function restart_a_full_game() {
+async function restart_a_new_game() {
 	window.location.href = window.location.href + '?nocache=';
 }
 	  
@@ -564,7 +563,6 @@ async function csvDataset_2_dictionary(csvDataset, y_choices){
 		// Put in Object correctly
 		X.push(col0);
 		Y.push(col1);
-		
 	});
 
 	// -------------------------------------------------
@@ -856,16 +854,25 @@ async function verify_user_clicks(){
 
 
 	// ------------------------
-	// Print explaination of accuracy calculation
+	// Print results
 	// ------------------------
 	document.getElementById('results').style.display = "block";
-	
+	document.getElementById('accuracy_explaination').style.display = "block";
+	document.getElementById('self_respect_map').style.display = "block";
+	document.getElementById('game_round_results').style.display = "block";
+	document.getElementById('self_wisdom_message').style.display = "block";
+
+
+	// top left
 	document.getElementById('accuracy_explaination').innerHTML = 'Round performance was calculated using two grading criteria about the quantity and sequence of squares that flashed: <ol><li>correct sequence (order of selection is important).</li><li>quantity of correct colors were clicked (order of selection is NOT important).</li></ol>The first and second grading criteria give credit to good spatial and list memory players, respectively.' + '<br/>';
 	
+	// bottom left
+	// Print a small map of where the user is on their path to self-respect
+	var e_selection_val = Math.floor(Math.random() * 4);
+	var e_selection = ['⬆️', '👏', '🙌', '⭐', '💫'];
+	document.getElementById('self_respect_map').innerHTML = 'On-the-way-to-self-respect map: you have seen '  + run_it_count + ' self-respect message/s! You are on your way to self-respect! ' + e_selection.at(e_selection_val) + '</br><hr />';
 
-	// ------------------------
-	// Print game round results
-	// ------------------------
+	// top right
 	var sequence_pattern;
 	if (order_string === user_click_string) {
 		sequence_pattern = "Correct: the pattern was " + order_string + ", you performed " + user_click_string + ".";
@@ -875,24 +882,11 @@ async function verify_user_clicks(){
 	
 	document.getElementById('game_round_results').innerHTML = '<ul><li>' + sequence_pattern + '</li><li>Spatial memory credit: ' + accuracy0/(order.length/2)*100 + '%</li><li>List memory credit: ' + accuracy1/(order.length/2)*100 + '%</li><li>Round accuracy: ' + round_accuracy + '</li><li>Total accuracy: ' + total_accuracy + '</li><ul/>';
 	
-
-	// ------------------------
+	// bottom right
 	// Print a Self-respect Wisdom messages so that users learn self-respect (Goal of playing the game)
-	// ------------------------
 	const ind = run_it_count % message_arr.length; // allow messages to cycle wrt the length of the array
   	const selfRespect_wisdom_message_dict = Object.fromEntries(message_arr.map((key, index) => [index, key]));
 	document.getElementById('self_wisdom_message').innerHTML = "Self-respect wisdom message: " + selfRespect_wisdom_message_dict[ind] + "</br>";
-
-
-	// ------------------------
-	// Print a small map of where the user is on their path to self-respect
-	// ------------------------
-	var e_selection_val = Math.floor(Math.random() * 4);
-	var e_selection = ['⬆️', '👏', '🙌', '⭐', '💫'];
-		
-	document.getElementById('self_respect_map').innerHTML = 'On-the-way-to-self-respect map: you have seen '  + run_it_count + ' self-respect message/s! You are on your way to self-respect! ' + e_selection.at(e_selection_val) + '</br><hr />';
-	
-	// ------------------------
 	
 	// ------------------------
 	// Save round data as an array
